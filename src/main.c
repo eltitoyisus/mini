@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:46:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/03/29 10:03:08 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:38:44 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv, char **envp)
 		line = readline("AM33< ");
 		if (!line)
 		{
-			printf("exit\n");
+			write(1, "\n", 1);
 			break;
 		}
 		if (*line)

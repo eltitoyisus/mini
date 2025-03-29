@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 09:06:18 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/03/29 12:03:43 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:38:16 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void fork_and_exec(char *command, char **envp)
 			free(path);
 		}
 		else
-			ft_putstr_fd(args[0], STDERR_FILENO);
+			write(2, "Command not found\n", 18);
 		freeresources(args);
 		exit(EXIT_FAILURE);
 	}

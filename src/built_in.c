@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 10:12:50 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/03/29 12:08:29 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:37:42 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int	exec_echo(char **args)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
+		write(1, args[i], ft_strlen(args[i]));
 		if (args[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
+			write(1, " ", 1);
 		i++;
 	}
 	if (newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		write(1, "\n", 1);
 	return (1);
 }
 
@@ -41,7 +41,7 @@ int	exec_pwd(void)
 	char	cwd[1024];
 	
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		write(1, cwd, ft_strlen(cwd));
 	else
 		perror("pwd");
 	return (1);
@@ -53,13 +53,13 @@ int	exec_env(char **envp)
 	
 	i = 0;
 	while (envp[i])
-		ft_putendl_fd(envp[i++], STDOUT_FILENO);
+		write(1, envp[i], ft_strlen(envp[i]));
 	return (1);
 }
 
 int	exec_exit(void)
 {
-	ft_putendl_fd("exit", STDOUT_FILENO);
+	write(1, "exit\n", 5);
 	exit(0);
 	return (1);
 }

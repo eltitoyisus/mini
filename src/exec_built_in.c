@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 12:07:09 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/03/29 12:07:26 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/03/29 12:35:09 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int is_builtin(char *command)
 		ft_strncmp(command, "env", 4) == 0 ||
 		ft_strncmp(command, "exit", 5) == 0)
 		return (1);
-	
 	return (0);
 }
 
@@ -42,6 +41,12 @@ int	exec_builtin(char **args, char **envp)
 		return (exec_env(envp));
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (exec_exit());
+	else if (ft_strncmp(args[0], "export", 6) == 0)
+		return (exec_export(args));
+	else if (ft_strncmp(args[0], "unset", 6) == 0)
+		return (exec_unset(args));
+	else if (ft_strncmp(args[0], "cd", 3) == 0)
+		return (exec_cd(args));
 	return (0);
 }
 
