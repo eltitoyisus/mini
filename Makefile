@@ -12,11 +12,14 @@
 
 CC = cc
 FLAGS = -Werror -Wall -Wextra
+LDFLAGS = -lreadline -lhistory
 NAME = minishell
 RM = rm -rf
+SRC_DIR = src/
 
-SRC = main.c	\
-		utils.c
+SRC = $(SRC_DIR)main.c	\
+		$(SRC_DIR)utils.c \
+		$(SRC_DIR)error.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -26,7 +29,7 @@ libft/libft.a:
 	@$(MAKE) -C libft
 
 $(NAME): $(OBJ) libft/libft.a
-	@$(CC) $(FLAGS) $(OBJ) libft/libft.a -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJ) libft/libft.a -o $(NAME) $(LDFLAGS)
 
 %.o: %.c
 	@$(CC) $(FLAGS) -c $< -o $@
