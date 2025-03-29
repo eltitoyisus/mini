@@ -6,7 +6,7 @@
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/26 10:24:33 by jramos-a          #+#    #+#              #
-#    Updated: 2025/03/26 10:24:33 by jramos-a         ###   ########.fr        #
+#    Updated: 2025/03/29 12:07:44 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,13 @@ NAME = minishell
 RM = rm -rf
 SRC_DIR = src/
 
-SRC = $(SRC_DIR)main.c	\
-		$(SRC_DIR)utils.c \
-		$(SRC_DIR)error.c
+SRC = $(SRC_DIR)main.c				\
+		$(SRC_DIR)utils.c 			\
+		$(SRC_DIR)error.c			\
+		$(SRC_DIR)exec_command.c	\
+		$(SRC_DIR)built_in.c		\
+		$(SRC_DIR)exec_built_in.c
+
 
 OBJ = $(SRC:.c=.o)
 

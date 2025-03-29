@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.h                                             :+:      :+:    :+:   */
+/*   built_in.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 10:45:44 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/03/29 12:04:35 by jramos-a         ###   ########.fr       */
+/*   Created: 2025/03/29 12:08:41 by jramos-a          #+#    #+#             */
+/*   Updated: 2025/03/29 12:09:22 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL
-# define MINISHELL
-
+#ifndef BUILT_IN_H
+# define BUILT_IN_H
 # include "headers.h"
-void base_error(void);
-void exec_command(char *command, char **envp);
-char *get_path(char **envp, char *command);
-int is_builtin(char *command);
-int exec_builtin(char **args, char **envp);
-void fork_and_exec(char *command, char **envp);
-void freeresources(char **args);
-char *find_path(char **envp);
-char *try_executable_path(char **paths, char *command);
+# include "main.h"
 
-
+int	exec_echo(char **args);
+int	exec_pwd(void);
+int	exec_env(char **envp);
+int	exec_exit(void);
+int	is_builtin(char *command);
+int	exec_builtin(char **args, char **envp);
 
 #endif
