@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:46:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/03/29 12:38:44 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/13 10:26:49 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,3 @@ int main(int argc, char **argv, char **envp)
 	clear_history();
 	return (0);
 }
-
-
-/*
-
-manual de bash
-https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
-
-automata para parseo
-
-
-
-*/
