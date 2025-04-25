@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/26 10:24:33 by jramos-a          #+#    #+#              #
-#    Updated: 2025/03/29 12:07:44 by jramos-a         ###   ########.fr        #
+#    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
+#    Updated: 2025/04/25 13:55:12 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,10 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)error.c			\
 		$(SRC_DIR)exec_command.c	\
 		$(SRC_DIR)built_in.c		\
-		$(SRC_DIR)exec_built_in.c
+		$(SRC_DIR)built_in_env.c	\
+		$(SRC_DIR)exec_built_in.c	\
+		$(SRC_DIR)pipes.c			\
+		$(SRC_DIR)redirection.c
 
 
 OBJ = $(SRC:.c=.o)
