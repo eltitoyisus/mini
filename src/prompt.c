@@ -1,42 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/28 22:17:25 by daniel-cast      ###   ########.fr       */
+/*   Created: 2025/04/28 21:51:47 by daniel-cast       #+#    #+#             */
+/*   Updated: 2025/04/28 22:16:43 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int main(int argc, char **argv, char **envp)
+char	*ft_prompt(void)
 {
-	(void)argc;
-	(void)argv;
-	char *line;
-	char *user;
+	char	*user;
 
-	user = ft_prompt();
-	using_history();
+	user = "\033[44;97m@CRIPTOSHELL\033[0m\033[38;5;82m";
+	user = ft_strjoin(user, "\033[0m \033[38;5;82m");
+	user = ft_strjoin(user, "-");
+	user = ft_strjoin(user, getenv("PWD"));
+	user = ft_strjoin(user, " ~ \033[0;0m");
 
-	while (1)
-	{
-		line = readline(COLOR "Watermelon% " RESET);
-		if (!line)
-		{
-			write(1, "\n", 1);
-			break;
-		}
-		if (*line)
-		{
-			add_history(line);
-			exec_command(line, envp);
-		}
-		free(line);
-	}
-	clear_history();
-	return (0);
+	return (user);
 }
