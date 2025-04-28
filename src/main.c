@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/21 20:03:23 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:51:50 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **envp)
 
 	while (1)
 	{
-		line = readline(COLOR "Watermelon% " RESET);
+		line = readline(COLOR "CriptoShell% " RESET);
 		if (!line)
 		{
 			write(1, "\n", 1);

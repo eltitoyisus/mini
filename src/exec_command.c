@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/25 16:33:25 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/27 09:23:01 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,8 @@
 
 char *find_path(char **envp)
 {
-	char *env_path;
-	int i;
-
-	env_path = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
-			env_path = envp[i] + 5;
-			break ;
-		}
-		i++;
-	}
-	return (env_path);
+	(void)envp;
+	return (getenv("PATH"));
 }
 
 char *try_executable_path(char **paths, char *command)
@@ -82,11 +69,10 @@ void fork_and_exec(char *command, char **envp)
 		if (path)
 		{
 			execve(path, args, envp);
-			perror("execve");
 			free(path);
 		}
 		else
-			write(2, "Command not found\n", 18);
+			printf("Command not found\n");
 		free_args(args);
 		exit(EXIT_FAILURE);
 	}
@@ -95,23 +81,24 @@ void fork_and_exec(char *command, char **envp)
 	free_args(args);
 }
 
-void free_args(char **args)
-{
-	int i = 0;
-	while (args[i])
-		free(args[i++]);
-	free(args);
-}
-
 void exec_command(char *command, char **envp)
 {
 	char **args = ft_split(command, ' ');
 	if (!args)
+		return;
+	if (is_pipe(args))
 	{
-		perror("ft_split");
+		free_args(args);
+		handle_pipes(command, envp);
 		return;
 	}
-	if (is_builtin(args[0]))
+	else if (has_redirection(args))
+	{
+		free_args(args);
+		handle_redirs(command, envp);
+		return;
+	}		
+	else if (is_builtin(args[0]))
 	{
 		if (exec_builtin(args, envp))
 		{
@@ -127,4 +114,3 @@ void exec_command(char *command, char **envp)
 	}
 	free_args(args);
 }
-

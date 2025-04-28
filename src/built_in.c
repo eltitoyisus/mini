@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/24 14:35:36 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:37:51 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ int exec_cd(char **args)
 int	exec_exit(void)
 {
 	write(1, "exit\n", 5);
-	exit(0); // change for SIGQUIT
+	exit(0);
 	return (1);
 }
