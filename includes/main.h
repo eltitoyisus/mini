@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/27 09:27:23 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:43:50 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,20 @@ int env_export(char **argv, char **envp);
 int	echo_var(char **argv, char **envp);
 
 // REDIRECTION
-int do_redir(char *command, char **envp);
-int open_redir(char *filename, char *type);
-int handle_redirs(char *command, char **envp);
 int has_redirection(char **args);
-int exec_redir(char **args, char **envp, int fd);
 int handle_redir_error(char **args);
+t_reds *parse_redirection(char **args);
+int open_redir(t_reds *redir);
+int exec_redir(char **args, char **envp, t_reds *redir);
+int do_redir(char *command, char **envp);
+int handle_redirs(char *command, char **envp);
 
 // PIPES
 int is_pipe(char **args);
-char **split_args(char **argv, int pipe_pos);
-void pipe_command(char **args, char **envp);
+char	***split_command(char **args, int num_cmds);
+int	count_pipes(char **args);
+void	pipe_command(char **args, char **envp);
+void	execute_pipe_chain(t_pipe *pipe_info, char ***cmds, char **envp);
 int do_pipe(char **argv, char **envp);
 int handle_pipes(char *command, char **envp);
 

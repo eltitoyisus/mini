@@ -17,76 +17,113 @@ int has_redirection(char **args)
 	int i = 0;
 	while (args[i])
 	{
-		if (ft_strncmp(args[i], ">", 2) == 0
-			|| ft_strncmp(args[i], ">>", 3) == 0)
+		if (!ft_strncmp(args[i], ">", 2) || !ft_strncmp(args[i], ">>", 3)
+			|| !ft_strncmp(args[i], "<", 2) || !ft_strncmp(args[i], "<<", 3))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-int open_redir(char *filename, char *type)
-{
-	int fd;
-
-	if (ft_strncmp(type, ">>", 3) == 0)
-		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		return (0);
-	return (fd);
-}
-
 int handle_redir_error(char **args)
 {
 	free_args(args);
-	fprintf(stderr, "Invalid redirection syntax\n");
+	printf(stderr, "Invalid redirection syntax\n");
 	return (1);
 }
 
-int exec_redir(char **args, char **envp, int fd)
+t_reds *parse_redirection(char **args)
+{
+	t_reds *redir;
+	int i = 0;
+
+	redir = malloc(sizeof(t_reds));
+	if (!redir)
+		return NULL;
+	while (args[i])
+	{
+		if (!ft_strncmp(args[i], ">", 2) || !ft_strncmp(args[i], ">>", 3)
+			|| !ft_strncmp(args[i], "<", 2) || !ft_strncmp(args[i], "<<", 3))
+		{
+			redir->type = ft_strdup(args[i]);
+			redir->file = ft_strdup(args[i + 1]);
+			args[i] = NULL;
+			return redir;
+		}
+		i++;
+	}
+	free(redir);
+	return NULL;
+}
+
+int open_redir(t_reds *redir)
+{
+	int fd;
+
+	if (!redir || !redir->file || !redir->type)
+		return (-1);
+	if (!ft_strncmp(redir->type, ">>", 3))
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (!ft_strncmp(redir->type, ">", 2))
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (!ft_strncmp(redir->type, "<", 2))
+		fd = open(redir->file, O_RDONLY);
+	else
+		return (-1); // aqui implementare el heredoc
+	return fd;
+}
+
+int exec_redir(char **args, char **envp, t_reds *redir)
 {
 	pid_t pid = fork();
 
 	if (pid < 0)
 	{
 		perror("fork");
-		close(fd);
-		free_args(args);
 		return (1);
 	}
 	if (pid == 0)
 	{
-		if (dup2(fd, STDOUT_FILENO) == -1)
-			perror("dup2");
-		close(fd);
+		if (!ft_strncmp(redir->type, ">", 2) ||
+			!ft_strncmp(redir->type, ">>", 3))
+			dup2(redir->fd, STDOUT_FILENO);
+		else if (!ft_strncmp(redir->type, "<", 2))
+			dup2(redir->fd, STDIN_FILENO);
+		close(redir->fd);
 		execve(get_path(envp, args[0]), args, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	close(fd);
-	free_args(args);
+	close(redir->fd);
 	waitpid(pid, NULL, 0);
-	return (0);
+	return 0;
 }
 
 int do_redir(char *command, char **envp)
 {
-	char **args;
-	int pos, fd;
+	char **args = ft_split(command, ' ');
+	t_reds *redir;
+	int result;
 
-	args = ft_split(command, ' ');
 	if (!args)
-		return (1);
-	pos = has_redirection(args);
-	if (!pos || !args[pos + 1])
+		return 1;
+	redir = parse_redirection(args);
+	if (!redir)
 		return handle_redir_error(args);
-	fd = open_redir(args[pos + 1], args[pos]);
-	if (fd < 0)
-		return (1);
-	args[pos] = NULL;
-	return exec_redir(args, envp, fd);
+	redir->fd = open_redir(redir);
+	if (redir->fd < 0)
+	{
+		perror("open");
+		free_args(args);
+		free(redir);
+		return 1;
+	}
+	result = exec_redir(args, envp, redir);
+	free_args(args);
+	free(redir->file);
+	free(redir->type);
+	free(redir);
+	return result;
 }
 
 int handle_redirs(char *command, char **envp)
@@ -94,12 +131,13 @@ int handle_redirs(char *command, char **envp)
 	char **args;
 	int result;
 
-	result = 0;
 	args = ft_split(command, ' ');
 	if (!args)
 		return 1;
 	if (has_redirection(args))
 		result = do_redir(command, envp);
+	else
+		result = 0;
 	free_args(args);
-	return (result);
+	return result;
 }

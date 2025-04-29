@@ -6,48 +6,77 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/25 10:11:40 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:00:00 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int is_pipe(char **args)
+int	is_pipe(char **args)
 {
-	int i = 0;
+	int	i = 0;
+
 	while (args[i])
 	{
 		if (ft_strncmp(args[i], "|", 2) == 0)
-			return (i);
+			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-char **split_args(char **argv, int pipe_pos)
+int	count_pipes(char **args)
 {
-	int count = 0;
-	int i = 0;
-	char **right_args;
+	int	i = 0;
+	int	count = 0;
 
-	while (argv[pipe_pos + 1 + count])
-		count++;
-	right_args = malloc(sizeof(char *) * (count + 1));
-	if (!right_args)
-		return NULL;
-	while (i < count)
+	while (args[i])
 	{
-		right_args[i] = ft_strdup(argv[pipe_pos + 1 + i]);
+		if (ft_strncmp(args[i], "|", 2) == 0)
+			count++;
 		i++;
 	}
-	right_args[i] = NULL;
-	argv[pipe_pos] = NULL;
-	return right_args;
+	return (count);
 }
 
-void pipe_command(char **args, char **envp)
+char	***split_command(char **args, int num_cmds)
 {
-	char *path;
+	char	***commands;
+	int		i = 0, j = 0, k = 0, start = 0, len;
+
+	commands = malloc(sizeof(char **) * (num_cmds + 1));
+	if (!commands)
+		return (NULL);
+	while (args[j])
+	{
+		if (ft_strncmp(args[j], "|", 2) == 0 || args[j + 1] == NULL)
+		{
+			if (args[j + 1] == NULL)
+				len = j - start + 1;
+			else
+				len = j - start;
+			commands[k] = malloc(sizeof(char *) * (len + 1));
+			if (!commands[k])
+				return (NULL);
+			i = 0;
+			while (i < len)
+			{
+				commands[k][i] = ft_strdup(args[start + i]);
+				i++;
+			}
+			commands[k][i] = NULL;
+			k++;
+			start = j + 1;
+		}
+		j++;
+	}
+	commands[k] = NULL;
+	return (commands);
+}
+
+void	pipe_command(char **args, char **envp)
+{
+	char	*path;
 
 	if (is_builtin(args[0]))
 	{
@@ -61,74 +90,100 @@ void pipe_command(char **args, char **envp)
 		execve(path, args, envp);
 		free(path);
 	}
-	fprintf(stderr, "Command not found: %s\n", args[0]);
+	printf(stderr, "Command not found: %s\n", args[0]);
 	exit(EXIT_FAILURE);
 }
 
-static int first_process(char **argv, char **envp, int *pipe_fd)
+static void	init_pipe(t_pipe *pipe_info)
 {
-	pid_t pid;
+	pipe_info->pipefd[0] = -1;
+	pipe_info->pipefd[1] = -1;
+	pipe_info->pipe_count = 0;
+	pipe_info->pipe_pos = -1;
+	pipe_info->pipe_in = -1;
+	pipe_info->pipe_out = -1;
+	pipe_info->red = NULL;
+}
 
-	pid = fork();
-	if (pid == 0)
+void	execute_pipe_chain(t_pipe *pipe_info, char ***cmds, char **envp)
+{
+	int	i = 0;
+	int	fd_prev = -1;
+	int	fd[2];
+
+	while (i < pipe_info->pipe_count)
 	{
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		pipe_command(argv, envp);
+		if (i < pipe_info->pipe_count - 1)
+			if (pipe(fd) == -1)
+				exit(EXIT_FAILURE);
+		pipe_info->pids[i] = fork();
+		if (pipe_info->pids[i] == 0)
+		{
+			if (i > 0)
+			{
+				dup2(fd_prev, STDIN_FILENO);
+				close(fd_prev);
+			}
+			if (i < pipe_info->pipe_count - 1)
+			{
+				dup2(fd[1], STDOUT_FILENO);
+				close(fd[0]);
+				close(fd[1]);
+			}
+			pipe_command(cmds[i], envp);
+		}
+		if (i > 0)
+			close(fd_prev);
+		if (i < pipe_info->pipe_count - 1)
+		{
+			fd_prev = fd[0];
+			close(fd[1]);
+		}
+		i++;
 	}
-	return pid;
-}
-
-static int second_process(char **args, char **envp, int *pipe_fd)
-{
-	pid_t pid;
-
-	pid = fork();
-	if (pid == 0)
+	i = 0;
+	while (i < pipe_info->pipe_count)
 	{
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[1]);
-		close(pipe_fd[0]);
-		pipe_command(args, envp);
+		waitpid(pipe_info->pids[i], NULL, 0);
+		i++;
 	}
-	return pid;
 }
 
-int do_pipe(char **argv, char **envp)
+int	do_pipe(char **argv, char **envp)
 {
-	int pipe_fd[2], status;
-	char **right_args;
-	pid_t pid1, pid2;
-	int pipe_pos = is_pipe(argv);
+	t_pipe	pipe_info;
+	char	***all_cmds;
+	int		i = 0;
 
-	if (!pipe_pos || !argv[pipe_pos + 1])
-		return (fprintf(stderr, "Invalid pipe syntax\n"), 1);
-	if (pipe(pipe_fd) == -1)
-		return (perror("pipe"), 1);
-	right_args = split_args(argv, pipe_pos);
-	if (!right_args)
-		return (close(pipe_fd[0]), close(pipe_fd[1]), 1);
-	pid1 = first_process(argv, envp, pipe_fd);
-	pid2 = second_process(right_args, envp, pipe_fd);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-	free_args(right_args);
-	waitpid(pid1, &status, 0);
-	waitpid(pid2, &status, 0);
-	return 0;
+	init_pipe(&pipe_info);
+	pipe_info.pipe_count = count_pipes(argv) + 1;
+	pipe_info.pids = malloc(sizeof(pid_t) * pipe_info.pipe_count);
+	if (!pipe_info.pids)
+		return (NULL);
+	all_cmds = split_command(argv, pipe_info.pipe_count);
+	if (!all_cmds)
+		return (NULL);
+	execute_pipe_chain(&pipe_info, all_cmds, envp);
+	while (i < pipe_info.pipe_count)
+	{
+		free_args(all_cmds[i]);
+		i++;
+	}
+	free(all_cmds);
+	free(pipe_info.pids);
+	return (0);
 }
 
-int handle_pipes(char *command, char **envp)
+int	handle_pipes(char *command, char **envp)
 {
-	char **args;
-	int result = 0;
+	char	**args;
+	int		result = 0;
 
 	args = ft_split(command, ' ');
 	if (!args)
-		return 1;
+		return (1);
 	if (is_pipe(args))
 		result = do_pipe(args, envp);
 	free_args(args);
-	return result;
+	return (result);
 }

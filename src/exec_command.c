@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/27 09:23:01 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:38:13 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ void exec_command(char *command, char **envp)
 		handle_pipes(command, envp);
 		return;
 	}
-	else if (has_redirection(args))
+	if (has_redirection(args))
 	{
 		free_args(args);
 		handle_redirs(command, envp);
 		return;
-	}		
-	else if (is_builtin(args[0]))
+	}
+	if (is_builtin(args[0]))
 	{
 		if (exec_builtin(args, envp))
 		{
@@ -106,11 +106,6 @@ void exec_command(char *command, char **envp)
 			return;
 		}
 	}
-	else
-	{
-		free_args(args);
-		fork_and_exec(command, envp);
-		return;
-	}
 	free_args(args);
+	fork_and_exec(command, envp);
 }
