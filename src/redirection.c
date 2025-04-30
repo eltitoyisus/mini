@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 10:14:41 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:01:08 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ int open_redir(t_reds *redir)
 	else if (ft_strncmp(redir->type, "<", 2) == 0)
 		fd = open(redir->file, O_RDONLY);
 	else if (ft_strncmp(redir->type, "<<", 3) == 0)
-		heredoc();
+		fd = heredoc(redir->file);
 	else
 		return (-1);
 	return (fd);
 }
 
-void heredoc()
+int heredoc(char *delimiter)
 {
 	char *line;
 	int fd;
@@ -83,25 +83,30 @@ void heredoc()
 	fd = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		printf("invalid syntax\n");
-		return;
+		perror("heredoc: open");
+		return (-1);
 	}
 	while (1)
 	{
 		line = readline("theredoc> ");
-		if (!line || ft_strncmp(line, "EOF", 3) == 0)
+		if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+		{
+			free(line);
 			break;
+		}
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}
 	close(fd);
-	free(line);
+	return (open("heredoc.tmp", O_RDONLY));
 }
+
 
 int exec_redir(char **args, char **envp, t_reds *redir)
 {
 	pid_t pid = fork();
+	char *path;
 
 	if (pid < 0)
 	{
@@ -113,10 +118,29 @@ int exec_redir(char **args, char **envp, t_reds *redir)
 		if (ft_strncmp(redir->type, ">", 2) == 0 ||
 			ft_strncmp(redir->type, ">>", 3) == 0)
 			dup2(redir->fd, STDOUT_FILENO);
-		else if (ft_strncmp(redir->type, "<", 2) == 0)
+		else if (ft_strncmp(redir->type, "<", 2) == 0 ||
+				ft_strncmp(redir->type, "<<", 3) == 0)
 			dup2(redir->fd, STDIN_FILENO);
 		close(redir->fd);
-		execve(get_path(envp, args[0]), args, envp);
+		if (args && args[0])
+		{
+			path = get_path(envp, args[0]);
+			if (path)
+			{
+				execve(path, args, envp);
+				free(path);
+			}
+		}
+		if (ft_strncmp(redir->type, "<<", 3) == 0 || ft_strncmp(redir->type, "<", 2) == 0)
+		{
+			char *cat_args[] = {"cat", NULL};
+			char *cat_path = get_path(envp, "cat");
+			if (cat_path)
+			{
+				execve(cat_path, cat_args, envp);
+				free(cat_path);
+			}
+		}
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}

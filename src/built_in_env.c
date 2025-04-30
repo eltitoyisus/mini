@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:04:02 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/24 14:37:53 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:22:34 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,22 @@ int env_export(char **argv, char **envp)
 	char *new_var;
 	
 	i = 0;
-	if (!argv[1] || !envp)	
+	if (!argv[1] || !envp)    
 		return (0);
 	new_var = ft_strdup(argv[1]);
 	if (!new_var)
 		return (0);
 	while (envp[i])
+	{
+		// Check if variable already exists
+		if (ft_strncmp(envp[i], argv[1], ft_strchr(argv[1], '=') - argv[1]) == 0)
+		{
+			free(envp[i]);  // Free existing variable before replacing
+			envp[i] = new_var;
+			return (1);
+		}
 		i++;
+	}
 	envp[i] = new_var;
 	envp[i + 1] = NULL;
 	return (1);

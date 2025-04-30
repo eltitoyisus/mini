@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 13:08:28 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:21:50 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,19 @@ int	exec_echo(char **args, char **envp)
 int	exec_pwd(void)
 {
 	char	cwd[1024];
-	
+
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		write(1, cwd, ft_strlen(cwd));
 	write(1, "\n", 1);
 	return (1);
 }
 
-int exec_cd(char **args)
+int exec_cd(char **args, t_sh *sh)
 {
+	char *tmp;
+	char *new_prompt;
+	char *cwd;
+
 	if (!args[1])
 	{
 		write(1, "cd: error\n", 11);
@@ -63,12 +67,39 @@ int exec_cd(char **args)
 	}
 	if (chdir(args[1]) != 0)
 		return (0);
+	
+	// Free old prompt
+	if (sh->prompt)
+		free(sh->prompt);
+	
+	// Get current working directory
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (0);
+	
+	// Create new prompt with proper memory management
+	new_prompt = ft_strdup("\033[44;97m@MINISHELL\033[0m \033[38;5;82m");
+	tmp = new_prompt;
+	new_prompt = ft_strjoin(new_prompt, "-");
+	free(tmp);
+	
+	tmp = new_prompt;
+	new_prompt = ft_strjoin(new_prompt, cwd);
+	free(tmp);
+	free(cwd);  // Free the allocated cwd
+	
+	tmp = new_prompt;
+	new_prompt = ft_strjoin(new_prompt, " ~ \033[0;0m");
+	free(tmp);
+	
+	sh->prompt = new_prompt;
 	return (1);
 }
+
 
 int	exec_exit(void)
 {
 	write(1, "exit\n", 5);
-	exit(0);
+	exit(0); // change for SIGQUIT
 	return (1);
 }

@@ -1,0 +1,102 @@
+{
+   readline_keymap_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_make_bare_keymap
+   fun:rl_generic_bind
+}
+
+{
+   readline_bind_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_make_bare_keymap
+   fun:rl_generic_bind
+   fun:rl_bind_keyseq_if_unbound_in_map
+   fun:rl_initialize
+   fun:readline
+}
+
+{
+   readline_parse_and_bind_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:rl_make_bare_keymap
+   fun:rl_generic_bind
+   fun:rl_parse_and_bind
+   fun:rl_initialize
+   fun:readline
+}
+
+{
+   tinfo_setupterm_malloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so*
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+}
+
+{
+   tinfo_setupterm_realloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so*
+   fun:_nc_read_termtype
+   fun:_nc_read_entry2
+   fun:_nc_setupterm
+   fun:tgetent_sp
+   fun:_rl_init_terminal_io
+   fun:rl_initialize
+   fun:readline
+}
+
+{
+   readline_add_history
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:add_history
+   fun:main
+}
+
+{
+   libreadline_still_reachable_1
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:readline
+}
+{
+   libtinfo_still_reachable_1
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:readline
+}
+{
+   libreadline_still_reachable_2
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:readline
+}
+{
+   libtinfo_still_reachable_2
+   Memcheck:Leak
+   fun:strdup
+   ...
+   fun:readline
+}

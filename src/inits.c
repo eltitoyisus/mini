@@ -30,6 +30,8 @@ t_pipe	*init_pipe(void)
 	t_pipe	*pipe_info;
 
 	pipe_info = malloc(sizeof(t_pipe));
+	if (!pipe_info)
+		return (NULL);
 	pipe_info->pipefd[0] = -1;
 	pipe_info->pipefd[1] = -1;
 	pipe_info->pipe_count = 0;
@@ -37,6 +39,7 @@ t_pipe	*init_pipe(void)
 	pipe_info->pipe_in = -1;
 	pipe_info->pipe_out = -1;
 	pipe_info->red = NULL;
+	pipe_info->pids = NULL;
 	return (pipe_info);
 }
 
@@ -48,4 +51,3 @@ t_built	*init_built(void)
 	built->name = NULL;
 	return (built);
 }
-

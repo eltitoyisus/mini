@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 13:07:37 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:04:44 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,27 @@ int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	char *line;
+	t_sh	*sh;
 
+	ft_signals();
+	sh = shell_factory();
 	while (1)
 	{
-		line = readline(COLOR "Cripto$hell% " RESET);
-		if (!line)
+		sh->input = readline(sh->prompt);
+		if (!sh->input)
 		{
-			write(1, "\n", 1);
+			write(1, "exit\n", 5);
 			break;
 		}
-		if (*line)
+		if (sh->input)
 		{
-			add_history(line);
-			exec_command(line, envp);
+			add_history(sh->input);
+			parse_comm(sh, envp);
+			exec_command(sh->input, envp, sh);
 		}
-		free(line);
+		free(sh->input);
 	}
 	rl_clear_history();
+	free_shell(sh);
 	return (0);
 }

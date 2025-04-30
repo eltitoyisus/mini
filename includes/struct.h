@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 13:10:05 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:29:29 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,29 @@
 #define STRUCT_H
 
 # include "../includes/main.h"
+
+enum e_type_token // TIPOS DE TOKENS
+{
+	BUILT,
+	CMD,
+	PIPE,
+	RED,
+	ARG,
+};
+
+enum e_type_red // TIPOS DE REDIRECCIONES --> CON SUS O_FLAGS CORRESPONDIENTES DEPENDIENDO DE LO QUE NECESITEMOS.
+{
+	OUTFILE_APPEND,
+	OUTFILE_TRUNCATE,
+	INFILE,
+	HEREDOC,
+};
+
+enum e_admissions // PERMISOS PARA FILES O FLAGS!
+{
+	APPEND,
+	TRUNCATE,
+};
 
 typedef struct s_built
 {
@@ -26,6 +49,7 @@ typedef struct s_reds
 	char	*type;
 	int		fd;
 }	t_reds;
+
 
 typedef struct s_pipe
 {
@@ -45,7 +69,6 @@ typedef struct s_cmd
 	char	*path;
 	char	*cmd;
 	char	*args;
-	t_pipe	w_pipe;
 }	t_cmd;
 
 
@@ -54,6 +77,8 @@ typedef struct s_node
 	t_cmd	*cmd;
 	t_built	*built;
 	t_reds	*red;
+	t_pipe	*w_pipe;
+	char	*arg;
 	struct s_node	*next;
 }	t_node;
 
@@ -62,6 +87,7 @@ typedef struct s_sh
 	t_node	*node;
 	char	*input;
 	char	*prompt;
+	char	*pwd;
 }	t_sh;
 
 #endif
