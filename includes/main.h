@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 11:33:08 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 16:04:23 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 
 # include "headers.h"
 # include "struct.h"
+
+// PARSE
+void	parse_comm(t_sh *sh, char **env);
+
+// SIGNALS
+void	ft_signals(void);
+void	ctrl_c(int sign);
 
 // SHELL FACTORY OR INITS
 

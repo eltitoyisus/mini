@@ -3,34 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/17 19:50:04 by marvin            #+#    #+#             */
-/*   Updated: 2024/10/17 19:50:04 by marvin           ###   ########.fr       */
+/*   Created: 2024/09/18 18:47:35 by dacastil          #+#    #+#             */
+/*   Updated: 2024/10/09 17:32:11 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
+#include <stdio.h>
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+int	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	i;
-	size_t	len;
+	size_t	j;
 
 	i = 0;
-	len = 0;
-	if (!dst || !src)
-		return (0);
-	while (src[len])
-		len++;
+	j = 0;
+	while (src[j] != '\0')
+	{
+		j++;
+	}
 	if (size == 0)
-		return (len);
-	while (i < size - 1 && src[i])
+		return (j);
+	while (i < (size - 1) && src[i] != '\0')
 	{
 		dst[i] = src[i];
 		i++;
 	}
-	if (size > 0)
-		dst[i] = '\0';
-	return (len);
+	dst[i] = '\0';
+	return (j);
 }
+/*
+int main()
+{
+
+	char dst[20] = "";
+	const char src[] = "Adios";
+	size_t n = 4;
+
+	printf("%d\n", ft_strlcpy(dst, src, n));
+	return 0;
+}
+*/

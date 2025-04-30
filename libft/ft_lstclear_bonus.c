@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 17:37:20 by dacastil          #+#    #+#             */
-/*   Updated: 2024/10/01 18:29:39 by dacastil         ###   ########.fr       */
+/*   Created: 2024/12/11 12:35:03 by dacastil          #+#    #+#             */
+/*   Updated: 2024/12/13 16:39:27 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include <stdlib.h>
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	size_t	strlng;
-	char	*subst;
+	t_list	*temp;
 
-	strlng = ft_strlen(s);
-	if (start >= strlng)
+	if (!lst || !del)
+		return ;
+	while (*lst != NULL)
 	{
-		return (ft_strdup(""));
+		temp = (*lst)->next;
+		del((*lst)->content);
+		free(*lst);
+		*lst = temp;
 	}
-	if (len > (strlng - start))
-	{
-		len = (strlng - start);
-	}
-	subst = (char *)malloc((len + 1) * sizeof(char));
-	if (!subst)
-	{
-		return (NULL);
-	}
-	ft_strlcpy(subst, (s + start), (len + 1));
-	return (subst);
 }

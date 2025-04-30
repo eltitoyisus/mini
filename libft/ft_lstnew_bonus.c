@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 17:37:20 by dacastil          #+#    #+#             */
-/*   Updated: 2024/10/01 18:29:39 by dacastil         ###   ########.fr       */
+/*   Created: 2024/12/09 18:49:07 by dacastil          #+#    #+#             */
+/*   Updated: 2024/12/13 16:04:10 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include <stdlib.h>
 #include "libft.h"
+#include <stdlib.h>
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+t_list	*ft_lstnew(void const *content)
 {
-	size_t	strlng;
-	char	*subst;
+	t_list	*new_node;
 
-	strlng = ft_strlen(s);
-	if (start >= strlng)
+	new_node = (t_list *)malloc(sizeof(t_list));
+	if (!new_node)
 	{
-		return (ft_strdup(""));
-	}
-	if (len > (strlng - start))
-	{
-		len = (strlng - start);
-	}
-	subst = (char *)malloc((len + 1) * sizeof(char));
-	if (!subst)
-	{
+		free(new_node);
 		return (NULL);
 	}
-	ft_strlcpy(subst, (s + start), (len + 1));
-	return (subst);
+	new_node->content = (void *)content;
+	new_node->next = NULL;
+	return (new_node);
 }

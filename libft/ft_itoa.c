@@ -3,53 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/20 15:45:32 by marvin            #+#    #+#             */
-/*   Updated: 2024/10/23 10:12:25 by jramos-a         ###   ########.fr       */
+/*   Created: 2024/09/28 16:05:07 by dacastil          #+#    #+#             */
+/*   Updated: 2024/10/14 12:27:01 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stddef.h>
+#include <stdlib.h>
 
-static int	ft_len(int n)
+//hacer funcion para long del int!!
+
+static int	lngnmb(int n)
 {
-	int	len;
+	int	i_nmb;
 
-	len = 0;
-	if (n <= 0)
-		len = 1;
-	while (n)
+	i_nmb = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+		i_nmb++;
+	while (n != 0)
 	{
-		n /= 10;
-		len++;
+		n = (n / 10);
+		i_nmb++;
 	}
-	return (len);
+	return (i_nmb);
 }
 
 char	*ft_itoa(int n)
 {
-	char		*result;
-	int			len;
-	long int	num;
+	int				i_nmb;
+	char			*cad;
+	unsigned int	num;
 
-	num = n;
-	len = ft_len(num);
-	result = (char *)malloc((len + 1) * sizeof(char));
-	if (!result)
+	i_nmb = lngnmb (n);
+	if (n < 0)
+		num = -n;
+	else
+		num = n;
+	cad = (char *)malloc(i_nmb + 1);
+	if (!cad)
 		return (NULL);
-	result[len] = '\0';
-	if (num < 0)
+	cad[i_nmb] = '\0';
+	while (0 < i_nmb)
 	{
-		result[0] = '-';
-		num = -num;
+		cad[i_nmb - 1] = (num % 10) + ('0');
+		num = num / 10;
+		i_nmb--;
 	}
-	else if (num == 0)
-		result[0] = '0';
-	while (num)
-	{
-		result[--len] = ((num % 10) + '0');
-		num /= 10;
-	}
-	return (result);
+	if (n < 0)
+		cad[0] = '-';
+	return (cad);
 }

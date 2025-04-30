@@ -6,7 +6,7 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/04/30 11:24:40 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/04/30 16:05:00 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)prompt.c			\
 		$(SRC_DIR)inits.c			\
 		$(SRC_DIR)factory.c			\
+		$(SRC_DIR)signals.c			\
+		$(SRC_DIR)parse.c			\
 
 
 OBJ = $(SRC:.c=.o)

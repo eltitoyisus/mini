@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 11:33:34 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 13:58:52 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int exec_cd(char **args, t_sh *sh)
 	}
 	if (chdir(args[1]) != 0)
 		return (0);
-	sh->pwd = getcwd(NULL, 0);
 	sh->prompt = "\033[44;97m@MINISHELL\033[0m \033[38;5;82m";
 	sh->prompt = ft_strjoin(sh->prompt, "-");
 	sh->prompt = ft_strjoin(sh->prompt, getcwd(NULL, 0));
