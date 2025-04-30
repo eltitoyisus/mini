@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/29 16:48:07 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:10:05 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_reds
 	char	*type;
 	int		fd;
 }	t_reds;
-
 
 typedef struct s_pipe
 {

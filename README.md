@@ -3,17 +3,11 @@
 
 TO DO EXEC
 
-do a propper echo
-
-pipes
-
-redirections
+handle multiple redirections
 
 commands ctrl+d | ctrl+c | ctrl+\
 
 echo $?
 
-
 TO DO PARSE
-
 

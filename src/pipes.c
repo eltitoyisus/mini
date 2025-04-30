@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/29 19:00:00 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 08:36:55 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	pipe_command(char **args, char **envp)
 		execve(path, args, envp);
 		free(path);
 	}
-	printf(stderr, "Command not found: %s\n", args[0]);
+	printf("Command not found: %s\n", args[0]);
 	exit(EXIT_FAILURE);
 }
 
@@ -159,10 +159,10 @@ int	do_pipe(char **argv, char **envp)
 	pipe_info.pipe_count = count_pipes(argv) + 1;
 	pipe_info.pids = malloc(sizeof(pid_t) * pipe_info.pipe_count);
 	if (!pipe_info.pids)
-		return (NULL);
+		return (-1);
 	all_cmds = split_command(argv, pipe_info.pipe_count);
 	if (!all_cmds)
-		return (NULL);
+		return (-1);
 	execute_pipe_chain(&pipe_info, all_cmds, envp);
 	while (i < pipe_info.pipe_count)
 	{

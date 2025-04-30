@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/29 11:43:50 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:09:54 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int open_redir(t_reds *redir);
 int exec_redir(char **args, char **envp, t_reds *redir);
 int do_redir(char *command, char **envp);
 int handle_redirs(char *command, char **envp);
+void heredoc();
 
 // PIPES
 int is_pipe(char **args);

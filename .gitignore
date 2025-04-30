@@ -54,3 +54,4 @@ dkms.conf
 # OTHERS
 minishell
 .vscode
+heredoc.tmp

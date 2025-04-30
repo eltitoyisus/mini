@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/25 10:11:23 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:14:41 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int has_redirection(char **args)
 	int i = 0;
 	while (args[i])
 	{
-		if (!ft_strncmp(args[i], ">", 2) || !ft_strncmp(args[i], ">>", 3)
-			|| !ft_strncmp(args[i], "<", 2) || !ft_strncmp(args[i], "<<", 3))
+		if (ft_strncmp(args[i], ">", 2) == 0 || ft_strncmp(args[i], ">>", 3) == 0
+			|| ft_strncmp(args[i], "<", 2) == 0 || ft_strncmp(args[i], "<<", 3) == 0)
 			return (1);
 		i++;
 	}
@@ -28,7 +28,7 @@ int has_redirection(char **args)
 int handle_redir_error(char **args)
 {
 	free_args(args);
-	printf(stderr, "Invalid redirection syntax\n");
+	printf("Invalid redirection syntax\n");
 	return (1);
 }
 
@@ -42,8 +42,8 @@ t_reds *parse_redirection(char **args)
 		return NULL;
 	while (args[i])
 	{
-		if (!ft_strncmp(args[i], ">", 2) || !ft_strncmp(args[i], ">>", 3)
-			|| !ft_strncmp(args[i], "<", 2) || !ft_strncmp(args[i], "<<", 3))
+		if (ft_strncmp(args[i], ">", 2) == 0 || ft_strncmp(args[i], ">>", 3) == 0
+			|| ft_strncmp(args[i], "<", 2) == 0 || ft_strncmp(args[i], "<<", 3) == 0)
 		{
 			redir->type = ft_strdup(args[i]);
 			redir->file = ft_strdup(args[i + 1]);
@@ -53,7 +53,7 @@ t_reds *parse_redirection(char **args)
 		i++;
 	}
 	free(redir);
-	return NULL;
+	return (NULL);
 }
 
 int open_redir(t_reds *redir)
@@ -62,15 +62,41 @@ int open_redir(t_reds *redir)
 
 	if (!redir || !redir->file || !redir->type)
 		return (-1);
-	if (!ft_strncmp(redir->type, ">>", 3))
+	if (ft_strncmp(redir->type, ">>", 3) == 0)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (!ft_strncmp(redir->type, ">", 2))
+	else if (ft_strncmp(redir->type, ">", 2) == 0)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (!ft_strncmp(redir->type, "<", 2))
+	else if (ft_strncmp(redir->type, "<", 2) == 0)
 		fd = open(redir->file, O_RDONLY);
+	else if (ft_strncmp(redir->type, "<<", 3) == 0)
+		heredoc();
 	else
-		return (-1); // aqui implementare el heredoc
-	return fd;
+		return (-1);
+	return (fd);
+}
+
+void heredoc()
+{
+	char *line;
+	int fd;
+
+	fd = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		printf("invalid syntax\n");
+		return;
+	}
+	while (1)
+	{
+		line = readline("theredoc> ");
+		if (!line || ft_strncmp(line, "EOF", 3) == 0)
+			break;
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	close(fd);
+	free(line);
 }
 
 int exec_redir(char **args, char **envp, t_reds *redir)
@@ -84,10 +110,10 @@ int exec_redir(char **args, char **envp, t_reds *redir)
 	}
 	if (pid == 0)
 	{
-		if (!ft_strncmp(redir->type, ">", 2) ||
-			!ft_strncmp(redir->type, ">>", 3))
+		if (ft_strncmp(redir->type, ">", 2) == 0 ||
+			ft_strncmp(redir->type, ">>", 3) == 0)
 			dup2(redir->fd, STDOUT_FILENO);
-		else if (!ft_strncmp(redir->type, "<", 2))
+		else if (ft_strncmp(redir->type, "<", 2) == 0)
 			dup2(redir->fd, STDIN_FILENO);
 		close(redir->fd);
 		execve(get_path(envp, args[0]), args, envp);
@@ -113,7 +139,7 @@ int do_redir(char *command, char **envp)
 	redir->fd = open_redir(redir);
 	if (redir->fd < 0)
 	{
-		perror("open");
+		printf("Invalid syntax\n");
 		free_args(args);
 		free(redir);
 		return 1;

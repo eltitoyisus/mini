@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/28 10:51:50 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:07:37 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	char *line;
-	using_history();
 
 	while (1)
 	{
-		line = readline(COLOR "CriptoShell% " RESET);
+		line = readline(COLOR "Cripto$hell% " RESET);
 		if (!line)
 		{
 			write(1, "\n", 1);
@@ -34,6 +33,6 @@ int main(int argc, char **argv, char **envp)
 		}
 		free(line);
 	}
-	clear_history();
+	rl_clear_history();
 	return (0);
 }
