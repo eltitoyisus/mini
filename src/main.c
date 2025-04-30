@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 10:12:51 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 10:59:00 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,26 @@ int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	char	*line;
-	char	*user;
+	t_sh	*sh;
 
-	user = ft_prompt();
+	sh = shell_factory();
+	sh->prompt = ft_prompt();
 	using_history();
 
 	while (1)
 	{
-		line = readline(user);
-		if (!line)
+		sh->input = readline(sh->prompt);
+		if (!sh->input)
 		{
 			write(1, "\n", 1);
 			break;
 		}
-		if (*line)
+		if (sh->input)
 		{
-			add_history(line);
-			exec_command(line, envp);
+			add_history(sh->input);
+			exec_command(sh->input, envp);
 		}
-		free(line);
+		free(sh->input);
 	}
 	clear_history();
 	return (0);
