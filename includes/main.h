@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/28 22:17:05 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 10:11:31 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int tokenize(char *linea, char *delim, char **tokens, int max_tokens);
 void process_redirs(char **args, char **redir);
 
 // SAFE
-void *safe_malloc(size_t size, bool calloc_flag);
-void *safe_realloc(void *ptr, size_t old_size, size_t new_size);
-void safe_getcwd(char *buf, size_t size);
-void safe_chdir(const char *path);
-void safe_close(int fd);
-int safe_open(const char *path, t_open_flags flags);
-void safe_dup2(int oldfd, int newfd);
+// void *safe_malloc(size_t size, bool calloc_flag);
+// void *safe_realloc(void *ptr, size_t old_size, size_t new_size);
+// void safe_getcwd(char *buf, size_t size);
+// void safe_chdir(const char *path);
+// void safe_close(int fd);
+// int safe_open(const char *path, t_open_flags flags);
+// void safe_dup2(int oldfd, int newfd);
 
 #endif

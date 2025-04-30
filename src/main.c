@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/28 22:17:25 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 10:12:51 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	char *line;
-	char *user;
+	char	*line;
+	char	*user;
 
 	user = ft_prompt();
 	using_history();
 
 	while (1)
 	{
-		line = readline(COLOR "Watermelon% " RESET);
+		line = readline(user);
 		if (!line)
 		{
 			write(1, "\n", 1);

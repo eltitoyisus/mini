@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/28 22:15:03 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 10:13:17 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_pipe
 {
 	pid_t	*pids; // Mejor pensamos los pipes como si fueran multiples desde el inicio mi OPINION.
 	int		*pipefd[2];
-	t_reds
+	t_reds	*rds;
 }	t_pipe;
 
 typedef struct s_reds // REDIRECCIONES
