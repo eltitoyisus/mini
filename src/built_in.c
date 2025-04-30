@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/24 14:35:36 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:33:34 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ int	exec_echo(char **args, char **envp)
 int	exec_pwd(void)
 {
 	char	cwd[1024];
-	
+
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		write(1, cwd, ft_strlen(cwd));
 	write(1, "\n", 1);
 	return (1);
 }
 
-int exec_cd(char **args)
+int exec_cd(char **args, t_sh *sh)
 {
 	if (!args[1])
 	{
@@ -63,6 +63,11 @@ int exec_cd(char **args)
 	}
 	if (chdir(args[1]) != 0)
 		return (0);
+	sh->pwd = getcwd(NULL, 0);
+	sh->prompt = "\033[44;97m@MINISHELL\033[0m \033[38;5;82m";
+	sh->prompt = ft_strjoin(sh->prompt, "-");
+	sh->prompt = ft_strjoin(sh->prompt, getcwd(NULL, 0));
+	sh->prompt = ft_strjoin(sh->prompt, " ~ \033[0;0m");
 	return (1);
 }
 

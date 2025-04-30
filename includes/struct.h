@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 10:44:38 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 11:32:29 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ enum e_type // TIPOS DE TOKENS
 	CMD,
 	BUILT,
 	W_PIPE,
-	REDS;
+	REDS,
 };
 
 enum e_admissions // PERMISOS PARA FILES O FLAGS!
@@ -60,7 +60,7 @@ typedef struct s_cmd
 	char	*path;
 	char	*cmd;
 	char	*args;
-	t_pipe	w_pipe;
+	t_pipe	*w_pipe;
 }	t_cmd;
 
 
@@ -77,6 +77,7 @@ typedef struct s_sh
 	t_node	*node;
 	char	*input;
 	char	*prompt;
+	char	*pwd;
 }	t_sh;
 
 #endif

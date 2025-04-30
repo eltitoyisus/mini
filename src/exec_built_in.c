@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:08 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/24 09:41:29 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:31:04 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int is_builtin(char *command)
 	return (0);
 }
 
-int	exec_builtin(char **args, char **envp)
+int	exec_builtin(char **args, char **envp, t_sh *sh)
 {
 	if (!args || !args[0])
 		return (0);
@@ -38,7 +38,7 @@ int	exec_builtin(char **args, char **envp)
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (exec_exit());
 	else if (ft_strncmp(args[0], "cd", 3) == 0)
-		return (exec_cd(args));
+		return (exec_cd(args, sh));
 	else if (ft_strncmp(args[0], "env", 4) == 0)
 		return (exec_env(envp));
 	else if (ft_strncmp(args[0], "export", 6) == 0)

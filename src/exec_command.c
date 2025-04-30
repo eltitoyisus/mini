@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/25 16:33:25 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/04/30 11:29:22 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void free_args(char **args)
 	free(args);
 }
 
-void exec_command(char *command, char **envp)
+void exec_command(char *command, char **envp, t_sh *sh)
 {
 	char **args = ft_split(command, ' ');
 	if (!args)
@@ -113,7 +113,7 @@ void exec_command(char *command, char **envp)
 	}
 	if (is_builtin(args[0]))
 	{
-		if (exec_builtin(args, envp))
+		if (exec_builtin(args, envp, sh))
 		{
 			free_args(args);
 			return;

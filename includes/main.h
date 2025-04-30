@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 10:11:31 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/04/30 11:33:08 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 
 # include "headers.h"
 # include "struct.h"
+
+// SHELL FACTORY OR INITS
+
+t_sh	*shell_factory(void);
+t_node	*node_factory(void);
+t_cmd	*cmd_factory(void);
+
+t_built	*init_built(void);
+t_pipe	*init_pipe(void);
+t_reds	*init_redir(void);
 
 // PROMPT
 char	*ft_prompt(void);
@@ -25,17 +35,17 @@ char *try_executable_path(char **paths, char *command);
 char *get_path(char **envp, char *command);
 void fork_and_exec(char *command, char **envp);
 void free_args(char **args);
-void exec_command(char *command, char **envp);
+void exec_command(char *command, char **envp, t_sh *sh);
 
 // BUILT INS
 int	exec_echo(char **args, char **envp);
 int	exec_pwd(void);
-int exec_cd(char **args);
+int exec_cd(char **args, t_sh *sh);
 int	exec_exit(void);
 
 // EXEC BUILT INS
 int is_builtin(char *command);
-int	exec_builtin(char **args, char **envp);
+int	exec_builtin(char **args, char **envp, t_sh *sh);
 int	exec_env(char **envp);
 
 // ENV

@@ -6,12 +6,12 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/04/30 10:36:16 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/04/30 11:24:40 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-FLAGS = -Werror -Wall -Wextra
+FLAGS = -Werror -Wall -Wextra -g3
 LDFLAGS = -lreadline -lhistory
 NAME = minishell
 RM = rm -rf
@@ -23,7 +23,9 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)built_in.c		\
 		$(SRC_DIR)built_in_env.c	\
 		$(SRC_DIR)exec_built_in.c	\
-		$(SRC_DIR)prompt.c
+		$(SRC_DIR)prompt.c			\
+		$(SRC_DIR)inits.c			\
+		$(SRC_DIR)factory.c			\
 
 
 OBJ = $(SRC:.c=.o)
