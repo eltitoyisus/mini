@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 16:04:23 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/01 16:34:16 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 
 # include "headers.h"
 # include "struct.h"
+
+// UTILS TO EVERYTHING
+int		ft_error(char *msg, int ret);
+void	free_words(char **words);
+
+// FTs DE LISTAS
+void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.
+void	ft_lstclear_sh(t_sh *sh, t_node *temp); // Adaptada para la mini.
+
+// FREES OF LIST OR NODES
+void	destroy_node(t_node *node);
+void	free_built(t_built *built);
+void	free_cmd(t_cmd *cmd);
+void	free_red(t_reds *red);
+void	free_pipe(t_pipe *w_pipe);
 
 // PARSE
 void	parse_comm(t_sh *sh, char **env);

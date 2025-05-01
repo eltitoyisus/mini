@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 16:01:03 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/01 16:26:26 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_pipe
 {
 	pid_t	*pids;
 	int		pipefd[2];
-	t_reds	*red;
 	int		pipe_count;
 	int		pipe_pos;
 	int		pipe_in;

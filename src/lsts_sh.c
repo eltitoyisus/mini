@@ -1,30 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   lsts_sh.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 20:18:31 by dacastil          #+#    #+#             */
-/*   Updated: 2025/05/01 15:02:37 by daniel-cast      ###   ########.fr       */
+/*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
+/*   Updated: 2025/05/01 16:32:59 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/main.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	ft_lstadd_back_sh(t_sh *sh)
 {
-	t_list	*last;
+	t_node *new;
+	t_node	*last;
 
-	if (!lst || !new)
+	new = node_factory();
+	if (!sh->node || !new)
 		return ;
-	if (*lst == NULL)
+	if (sh->node == NULL)
 	{
-		*lst = new;
+		sh->node = new;
 		return ;
 	}
-	last = *lst;
+	last = sh->node;
 	while (last->next != NULL)
 		last = last->next;
 	last->next = new;
+}
+
+void	ft_lstclear_sh(t_sh *sh, t_node *temp)
+{
+	sh->node = temp;
+	if (!temp || !sh->node)
+		return ;
+	while (sh->node != NULL)
+	{
+		temp = sh->node->next;
+		destroy_node(sh->node);
+		sh->node = temp;
+	}
 }

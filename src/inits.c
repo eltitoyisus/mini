@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/04/30 11:26:05 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/01 16:33:18 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ t_pipe	*init_pipe(void)
 	pipe_info->pipe_pos = -1;
 	pipe_info->pipe_in = -1;
 	pipe_info->pipe_out = -1;
-	pipe_info->red = NULL;
 	return (pipe_info);
 }
 

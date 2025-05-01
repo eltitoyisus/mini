@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 20:18:31 by dacastil          #+#    #+#             */
-/*   Updated: 2025/05/01 15:02:37 by daniel-cast      ###   ########.fr       */
+/*   Created: 2025/05/01 14:53:26 by daniel-cast       #+#    #+#             */
+/*   Updated: 2025/05/01 16:33:07 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/main.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+int ft_error(char *msg, int ret)
 {
-	t_list	*last;
-
-	if (!lst || !new)
-		return ;
-	if (*lst == NULL)
-	{
-		*lst = new;
-		return ;
-	}
-	last = *lst;
-	while (last->next != NULL)
-		last = last->next;
-	last->next = new;
+	write(2, msg, ft_strlen(msg));
+	return (ret);
 }
+
+void free_words(char **words)
+{
+	int i;
+
+	i = 0;
+	if (!words)
+		return;
+	while (words[i])
+	{
+		free(words[i]);
+		i++;
+	}
+	free(words);
+}
+
+
+
+// DESPUÉS IMPLEMENTARÉ ESTO QUE SERA NECESARIO DESPUÉS, AÚN NO.
