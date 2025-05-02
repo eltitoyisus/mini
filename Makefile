@@ -6,7 +6,7 @@
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/04/30 19:13:27 by jramos-a         ###   ########.fr        #
+#    Updated: 2025/05/02 12:39:55 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,11 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)factory.c			\
 		$(SRC_DIR)signals.c			\
 		$(SRC_DIR)parse.c			\
+		$(SRC_DIR)lsts_sh.c			\
+		$(SRC_DIR)frees.c			\
 		$(SRC_DIR)pipes.c			\
 		$(SRC_DIR)redirection.c		\
-		$(SRC_DIR)free_shell.c
+		$(SRC_DIR)utils.c
 
 OBJ = $(SRC:.c=.o)
 

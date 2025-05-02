@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 19:10:19 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:52:05 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,33 @@ int	count_pipes(char **args)
 	return (count);
 }
 
-char	***split_command(char **args, int num_cmds)
+static void free_commands(char ***commands, int k)
 {
-	char	***commands;
-	int		i = 0, j = 0, k = 0, start = 0, len;
+	int i = 0;
+	int j;
+
+	while (i < k)
+	{
+		j = 0;
+		while (commands[i] && commands[i][j])
+		{
+			free(commands[i][j]);
+			j++;
+		}
+		free(commands[i]);
+		i++;
+	}
+	free(commands);
+}
+
+char ***split_command(char **args, int num_cmds)
+{
+	char ***commands;
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int start = 0;
+	int len;
 
 	commands = malloc(sizeof(char **) * (num_cmds + 1));
 	if (!commands)
@@ -57,11 +80,21 @@ char	***split_command(char **args, int num_cmds)
 				len = j - start;
 			commands[k] = malloc(sizeof(char *) * (len + 1));
 			if (!commands[k])
+			{
+				free_commands(commands, k);
 				return (NULL);
+			}
 			i = 0;
 			while (i < len)
 			{
 				commands[k][i] = ft_strdup(args[start + i]);
+				if (!commands[k][i])
+				{
+					while (--i >= 0)
+						free(commands[k][i]);
+					free_commands(commands, k + 1);
+					return (NULL);
+				}
 				i++;
 			}
 			commands[k][i] = NULL;
@@ -78,6 +111,11 @@ void pipe_command(char **args, char **envp)
 {
 	char *path;
 
+	if (!args || !args[0])
+	{
+		printf("Invalid command\n");
+		exit(EXIT_FAILURE);
+	}
 	if (is_builtin(args[0]))
 	{
 		if (exec_builtin(args, envp, NULL))
@@ -140,38 +178,34 @@ void	execute_pipe_chain(t_pipe *pipe_info, char ***cmds, char **envp)
 
 int do_pipe(char **argv, char **envp)
 {
-    t_pipe pipe_info;
-    char ***all_cmds;
-    int i = 0;
+	t_pipe pipe_info;
+	char ***all_cmds;
+	int i = 0;
 
-    pipe_info.pipe_count = count_pipes(argv) + 1;
-    pipe_info.pids = malloc(sizeof(pid_t) * pipe_info.pipe_count);
-    if (!pipe_info.pids)
-        return (-1);
-        
-    // Initialize other fields to avoid uninitialized memory
-    pipe_info.pipefd[0] = -1;
-    pipe_info.pipefd[1] = -1;
-    pipe_info.pipe_pos = -1;
-    pipe_info.pipe_in = -1;
-    pipe_info.pipe_out = -1;
-    pipe_info.red = NULL;
-    
-    all_cmds = split_command(argv, pipe_info.pipe_count);
-    if (!all_cmds)
-    {
-        free(pipe_info.pids);
-        return (-1);
-    }
-    execute_pipe_chain(&pipe_info, all_cmds, envp);
-    while (i < pipe_info.pipe_count)
-    {
-        free_args(all_cmds[i]);
-        i++;
-    }
-    free(all_cmds);
-    free(pipe_info.pids);
-    return (0);
+	pipe_info.pipe_count = count_pipes(argv) + 1;
+	pipe_info.pids = malloc(sizeof(pid_t) * pipe_info.pipe_count);
+	if (!pipe_info.pids)
+		return (-1);
+	pipe_info.pipefd[0] = -1;
+	pipe_info.pipefd[1] = -1;
+	pipe_info.pipe_pos = -1;
+	pipe_info.pipe_in = -1;
+	pipe_info.pipe_out = -1;
+	all_cmds = split_command(argv, pipe_info.pipe_count);
+	if (!all_cmds)
+	{
+		free(pipe_info.pids);
+		return (-1);
+	}
+	execute_pipe_chain(&pipe_info, all_cmds, envp);
+	while (i < pipe_info.pipe_count)
+	{
+		free_args(all_cmds[i]);
+		i++;
+	}
+	free(all_cmds);
+	free(pipe_info.pids);
+	return (0);
 }
 
 int	handle_pipes(char *command, char **envp)

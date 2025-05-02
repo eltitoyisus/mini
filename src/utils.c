@@ -6,16 +6,29 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 13:57:55 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/26 09:41:29 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:37:09 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-void free_args(char **args)
+int ft_error(char *msg, int ret)
 {
-	int i = 0;
-	while (args[i])
-		free(args[i++]);
-	free(args);
+	write(2, msg, ft_strlen(msg));
+	return (ret);
+}
+
+void free_words(char **words)
+{
+	int i;
+
+	i = 0;
+	if (!words)
+		return;
+	while (words[i])
+	{
+		free(words[i]);
+		i++;
+	}
+	free(words);
 }

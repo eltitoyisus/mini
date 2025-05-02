@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:08 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 18:27:30 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:49:48 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,14 @@ int	exec_builtin(char **args, char **envp, t_sh *sh)
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (exec_exit());
 	else if (ft_strncmp(args[0], "cd", 3) == 0)
+	{
+		if (!sh)
+		{
+			printf("cd: cannot change directory in a subprocess\n");
+			return 1;
+		}
 		return (exec_cd(args, sh));
+	}
 	else if (ft_strncmp(args[0], "env", 4) == 0)
 		return (exec_env(envp));
 	else if (ft_strncmp(args[0], "export", 6) == 0)

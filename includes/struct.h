@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 18:29:29 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:38:11 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_pipe
 {
 	pid_t	*pids;
 	int		pipefd[2];
-	t_reds	*red;
 	int		pipe_count;
 	int		pipe_pos;
 	int		pipe_in;

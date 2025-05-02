@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 19:58:44 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:40:58 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,23 @@
 # include "headers.h"
 # include "struct.h"
 
+// UTILS TO EVERYTHING
+int		ft_error(char *msg, int ret);
+void	free_words(char **words);
+
+// FTs DE LISTAS
+void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.
+void	ft_lstclear_sh(t_sh *sh, t_node *temp); // Adaptada para la mini.
+
+// FREES OF LIST OR NODES
+void	destroy_node(t_node *node);
+void	free_built(t_built *built);
+void	free_cmd(t_cmd *cmd);
+void	free_red(t_reds *red);
+void	free_pipe(t_pipe *w_pipe);
+
 // PARSE
 void	parse_comm(t_sh *sh, char **env);
-void info_to_struct(t_sh *sh, int type_token, char *token_str);
 
 // SIGNALS
 void	ft_signals(void);
@@ -82,7 +96,5 @@ int     handle_redirs(char *command, char **envp);
 // void safe_close(int fd);
 // int safe_open(const char *path, t_open_flags flags);
 // void safe_dup2(int oldfd, int newfd);
-
-void free_shell(t_sh *sh);
 
 #endif

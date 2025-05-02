@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 19:29:15 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:48:09 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,12 @@ void exec_command(char *command, char **envp, t_sh *sh)
 {
 	char **args;
 	
-	if (!command || !*command)
-		return;
 	args = ft_split(command, ' ');
+	if (!command || !*command)
+	{
+		free_args(args);
+		return ;
+	}
 	if (!args)
 	{
 		perror("ft_split");

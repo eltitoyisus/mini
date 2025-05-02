@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/04/30 16:05:51 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/02 12:47:55 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
-
-static void free_words(char **words)
-{
-	int i;
-	
-	i = 0;
-	if (!words)
-		return;
-	while (words[i])
-	{
-		free(words[i]);
-		i++;
-	}
-	free(words);
-}
 
 static int	other_cases(char *input)
 {
@@ -68,12 +53,6 @@ static int cases_builds(char *input)
 		result = CMD;
 	free_words(split_in);
 	return (result);
-}
-
-static int ft_error(char *msg, int ret)
-{
-	write(2, msg, ft_strlen(msg));
-	return (ret);
 }
 
 static int	cases_com(char *input, char **env)
@@ -151,6 +130,8 @@ void info_to_struct(t_sh *sh, int type_token, char *token_str)
 			free(sh->node->arg);
 		sh->node->arg = ft_strdup(token_str);
 	}
+	// Siempre que metamos la info del node que estemos creamos otro
+	ft_lstadd_back_sh(sh);
 }
 
 void parse_comm(t_sh *sh, char **env)
@@ -158,19 +139,27 @@ void parse_comm(t_sh *sh, char **env)
 	int		type_token;
 	char	**input_split;
 	int		i;
+	t_node	*temp;
 
 	if (!sh || !sh->input)
 		return;
 	i = 0;
+	temp = sh->node;
 	input_split = ft_split(sh->input, ' ');
 	if (!input_split)
 		return;
 	while (input_split[i])
 	{
-		type_token = n_token(input_split[i], env);
+		if (i != 0)
+		{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.
+			ft_lstadd_back_sh(sh); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
+			sh->node = sh->node->next;
+		}
+			type_token = n_token(input_split[i], env);
 		info_to_struct(sh, type_token, input_split[i]);
 		i++;
 	}
+	ft_lstclear_sh(sh, temp);
+	sh->node = node_factory();
 	free_words(input_split);
 }
-
