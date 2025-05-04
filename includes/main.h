@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:40:58 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:40:40 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,16 @@ int env_export(char **argv, char **envp);
 int	echo_var(char **argv, char **envp);
 
 // REDIRECTION
-void    redir_in(char *file_in);
-void redir_out(char *cmd_name, char **cmd_lst, char **envp, char *stdout_file, char *stderr_file);
+int has_redirection(char **args);
+int handle_redir_error(char **args);
+t_reds *parse_redirection(char **args);
+int open_redir(t_reds *redir);
 int heredoc(char *delimiter);
+void free_redirs(t_reds *head);
+int open_all_redirs(t_reds *head);
+int exec_redirs(char **args, char **envp, t_reds *redirs);
+int do_redir(char *command, char **envp);
+int handle_redirs(char *command, char **envp);
 
 // PIPES
 int     is_pipe(char **args);
@@ -96,5 +103,7 @@ int     handle_redirs(char *command, char **envp);
 // void safe_close(int fd);
 // int safe_open(const char *path, t_open_flags flags);
 // void safe_dup2(int oldfd, int newfd);
+
+void export_no_args(char **envp);
 
 #endif
