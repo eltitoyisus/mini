@@ -6,7 +6,7 @@
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/06 09:14:33 by jramos-a         ###   ########.fr        #
+#    Updated: 2025/05/06 10:06:47 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 libft/libft.a:
-	@$(MAKE) libft
+	@$(MAKE) -C libft
 
 $(NAME): $(OBJ) libft/libft.a
 	@$(CC) $(FLAGS) $(OBJ) libft/libft.a -o $(NAME) $(LDFLAGS)
