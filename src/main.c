@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/04/30 15:41:32 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/01 18:03:10 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (sh->input)
 		{
+			if (ft_strncmp("tx", sh->input, 2) == 0)
+				ft_tx();
 			add_history(sh->input);
 			parse_comm(sh, envp);
 			exec_command(sh->input, envp, sh);
