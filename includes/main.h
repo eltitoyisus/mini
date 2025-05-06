@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:40:58 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:44:27 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	exec_env(char **envp);
 int env_unset(char **argv, char **envp);
 int env_export(char **argv, char **envp);
 int	echo_var(char **argv, char **envp);
+char **inc_shlvl(char **envp);
 
 // REDIRECTION
 void    redir_in(char *file_in);

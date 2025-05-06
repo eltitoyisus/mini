@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 10:48:09 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:44:55 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ char *get_path(char **envp, char *command)
 	char **paths;
 	char *executable_path;
 
+	if (command[0] == '/' || (command[0] == '.' && command[1] == '/'))
+	{
+		if (access(command, X_OK) == 0)
+			return ft_strdup(command);
+		return NULL;
+	}
 	env_path = find_path(envp);
 	if (!env_path)
 		return (NULL);
@@ -88,7 +94,6 @@ void fork_and_exec(char *command, char **envp)
 		if (path)
 		{
 			execve(path, args, envp);
-			perror("execve");
 			free(path);
 		}
 		else
@@ -151,4 +156,28 @@ void exec_command(char *command, char **envp, t_sh *sh)
 		return;
 	}
 	free_args(args);
+}
+
+char **inc_shlvl(char **envp)
+{
+	int i = 0;
+	
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
+		{
+			int shlvl = ft_atoi(envp[i] + 6);
+			char *new_value = ft_itoa(shlvl + 1);
+			if (new_value)
+			{
+				char *new_var = ft_strjoin("SHLVL=", new_value);
+				free(new_value);
+				if (new_var)
+					envp[i] = new_var;
+			}
+			break;
+		}
+		i++;
+	}
+	return (envp);
 }

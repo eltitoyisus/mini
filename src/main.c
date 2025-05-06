@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:39:00 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:44:10 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	t_sh	*sh;
 
+	envp = inc_shlvl(envp);
 	ft_signals();
 	sh = shell_factory();
 	while (1)
