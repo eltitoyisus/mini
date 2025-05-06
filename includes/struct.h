@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:38:11 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:37:36 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_reds
 	char	*file;
 	char	*type;
 	int		fd;
+	struct	s_reds *next;
 }	t_reds;
 
 

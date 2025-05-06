@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:04:02 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 11:33:59 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:34:30 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,20 @@ int env_export(char **argv, char **envp)
 {
 	int i;
 	char *new_var;
-	
+
 	i = 0;
-	if (!argv[1] || !envp)
+	if (!envp)
 		return (0);
+
+	if (!argv[1])
+	{
+		while (envp[i])
+		{
+			export_no_args(&envp[i]);
+			i++;
+		}
+		return (1);
+	}
 	if (!ft_strchr(argv[1], '='))
 	{
 		printf("export: %s is not a valid variable\n", argv[1]);
@@ -70,10 +80,7 @@ int env_export(char **argv, char **envp)
 	}
 	new_var = ft_strdup(argv[1]);
 	if (!new_var)
-	{
-		free(new_var);
 		return (-1);
-	}
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], argv[1], ft_strchr(argv[1], '=') - argv[1]) == 0)
@@ -87,6 +94,27 @@ int env_export(char **argv, char **envp)
 	envp[i] = new_var;
 	envp[i + 1] = NULL;
 	return (1);
+}
+
+void export_no_args(char **envp)
+{
+	char *equals;
+	int i;
+
+	i = 0;
+	write(1, "declare -x ", 11);
+	equals = ft_strchr(envp[i], '=');
+	if (equals)
+	{
+		write(1, envp[i], equals - envp[i]);
+		write(1, "=\"", 2);
+		write(1, equals + 1, ft_strlen(equals + 1));
+		write(1, "\"", 1);
+	}
+	else
+		write(1, envp[i], ft_strlen(envp[i]));
+	write(1, "\n", 1);
+	i++;
 }
 
 int	echo_var(char **argv, char **envp)
