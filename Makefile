@@ -6,7 +6,7 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/01 16:36:48 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/05/01 18:04:18 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)lsts_sh.c			\
 		$(SRC_DIR)frees.c			\
 		$(SRC_DIR)utils.c			\
+		$(SRC_DIR)tx.c			\
 
 OBJ = $(SRC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 17:48:39 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/03 20:16:58 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/06 17:03:48 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	types(t_piece *p)
 				define_t1(piece[i]);
 			}
 
-			=
 			{
 			{
 				{'▓', '▓', '▓', ' '},

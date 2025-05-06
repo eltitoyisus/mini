@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 16:34:16 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/01 19:07:12 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include "headers.h"
 # include "struct.h"
+
+//TX
+void	ft_tx();
+void	save_info(t_tx *tx, int i, int j);
 
 // UTILS TO EVERYTHING
 int		ft_error(char *msg, int ret);

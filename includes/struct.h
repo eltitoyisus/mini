@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 16:26:26 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/01 19:50:01 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,22 @@ typedef struct s_sh
 	char	*prompt;
 	char	*pwd;
 }	t_sh;
+
+//	TETRIS DEJAMELO A MI JEJE
+
+typedef struct s_tx
+{
+	int		x;
+	int		y;
+	char	**matx;
+}	t_tx;
+
+typedef struct s_piece
+{
+	int	x;
+	int	y;
+	char	***piece;
+}	t_piece;
+
 
 #endif
