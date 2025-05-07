@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:52:05 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:37:51 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,9 +169,17 @@ void	execute_pipe_chain(t_pipe *pipe_info, char ***cmds, char **envp)
 		i++;
 	}
 	i = 0;
+	int status;
 	while (i < pipe_info->pipe_count)
 	{
-		waitpid(pipe_info->pids[i], NULL, 0);
+		waitpid(pipe_info->pids[i], &status, 0);
+		if (i == pipe_info->pipe_count - 1)
+		{
+			if (WIFEXITED(status))
+				last_signal_code(WEXITSTATUS(status));
+			else if (WIFSIGNALED(status))
+				last_signal_code(128 + WTERMSIG(status));
+		}
 		i++;
 	}
 }

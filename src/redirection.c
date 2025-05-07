@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/04 10:46:25 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:38:22 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int open_redir(t_reds *redir)
 	return (fd);
 }
 
+
+// add Ctrl+ c to close heredoc
 int heredoc(char *delimiter)
 {
 	char *line;
@@ -221,7 +223,13 @@ int exec_redirs(char **args, char **envp, t_reds *redirs)
 		current->fd = -1;
 		current = current->next;
 	}
-	waitpid(pid, NULL, 0);
+	int status;
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		last_signal_code(WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		last_signal_code(128 + WTERMSIG(status));
+	
 	return (0);
 }
 

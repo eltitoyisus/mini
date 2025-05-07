@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/06 09:50:18 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:57:29 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,12 @@ void fork_and_exec(char *command, char **envp)
 	args = ft_split(command, ' ');
 	if (!args)
 		return;
+
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		char *path = get_path(envp, args[0]);
 		if (path)
 		{
@@ -101,10 +104,18 @@ void fork_and_exec(char *command, char **envp)
 		free_args(args);
 		exit(EXIT_FAILURE);
 	}
-	else
+	else {
+		signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
+		ft_signals();
+		if (WIFSIGNALED(status))
+			last_signal_code(128 + WTERMSIG(status));
+		else if (WIFEXITED(status))
+			last_signal_code(WEXITSTATUS(status));
+	}
 	free_args(args);
 }
+
 
 void free_args(char **args)
 {
@@ -117,7 +128,7 @@ void free_args(char **args)
 void exec_command(char *command, char **envp, t_sh *sh)
 {
 	char **args;
-	
+
 	args = ft_split(command, ' ');
 	if (!command || !*command)
 	{
@@ -161,7 +172,7 @@ void exec_command(char *command, char **envp, t_sh *sh)
 char **inc_shlvl(char **envp)
 {
 	int i = 0;
-	
+
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
@@ -181,4 +192,3 @@ char **inc_shlvl(char **envp)
 	}
 	return (envp);
 }
-

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:15:33 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:46:24 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,24 @@ int	exec_echo(char **args, char **envp)
 	}
 	while (args[i])
 	{
-		if (echo_var(args, envp))
-			return (write(1, "\n", 1), 1);
-		// else if (echo_signal(args, envp))
-		// 	printf("!\n");
-		else
+		if (args[i] && ft_strncmp(args[i], "$?", 3) == 0)
 		{
-			write(1, args[i], ft_strlen(args[i]));
-			if (args[i + 1])
-				write(1, " ", 1);
+			char *exit_str = ft_itoa(last_signal_code(-1));
+			write(1, exit_str, ft_strlen(exit_str));
+			free(exit_str);
 		}
+		else if (args[i] && args[i][0] == '$')
+		{
+			if (echo_var(&args[i], envp))
+				;
+			else
+				write(1, args[i], ft_strlen(args[i]));
+		}
+		else
+			write(1, args[i], ft_strlen(args[i]));
+		
+		if (args[i + 1])
+			write(1, " ", 1);
 		i++;
 	}
 	if (newline)

@@ -6,11 +6,13 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:04:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 11:56:38 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:58:15 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
+
+static int g_exit_status = 0;
 
 void	ctrl_c(int sign)
 {
@@ -19,6 +21,9 @@ void	ctrl_c(int sign)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	// esto es para el codigo de salida de ctrl+c
+	g_exit_status = 130;
+
 }
 
 void	ft_signals(void)
@@ -36,18 +41,9 @@ void	ft_signals(void)
 	}
 }
 
-// int last_signal_code(char **argv, char **envp)
-// {
-// 	printf("a");
-// 	// esta funcion es para que al hacer exit me coja el codigo de salida
-// }
-
-// // esta funcion es solo para printear el codigo de salida
-
-// int echo_signal(char **args, char **envp) // estoy usando esta variable en exe_Echo en built_in.c
-// {
-// 	(void)args;
-// 	(void)envp;
-// 	printf("%s", last_signal_code());
-// 	return (1);
-// }
+int last_signal_code(int code)
+{
+	if (code >= 0)
+		g_exit_status = code;
+	return (g_exit_status);
+}

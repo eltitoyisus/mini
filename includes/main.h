@@ -5,12 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/06 09:44:27 by jramos-a         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/04 10:40:40 by jramos-a         ###   ########.fr       */
->>>>>>> 5c7de56b1efb800e6c4fc0d6143f629f0f9a29dd
+/*   Created: 2025/05/06 09:56:40 by jramos-a          #+#    #+#             */
+/*   Updated: 2025/05/07 19:38:47 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +106,7 @@ int     handle_redirs(char *command, char **envp);
 // void safe_dup2(int oldfd, int newfd);
 
 void export_no_args(char **envp);
+int last_signal_code(int code);
+void echo_signal(void);
 
 #endif
