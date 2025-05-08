@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 16:33:18 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 16:20:50 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_reds	*init_redir(void)
 	red = malloc(sizeof(t_reds));
 	red->fd = -1;
 	red->file = NULL;
-	red->type = NULL;
+	red->type = 0;
 	return (red);
 }
 

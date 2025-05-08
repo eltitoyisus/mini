@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:12:50 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/04/30 16:03:24 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 15:30:59 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ t_cmd	*cmd_factory(void)
 	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
-	cmd->args = NULL;
 	cmd->cmd = NULL;
-	cmd->line_cmd = NULL;
 	cmd->split_cmd = NULL;
 	return (cmd);
 }
@@ -33,12 +31,14 @@ t_node	*node_factory(void)
 	node->built = init_built();
 	node->red = init_redir();
 	node->w_pipe = init_pipe();
+	node->is_cmd = false;
 	node->arg = NULL;
+	node->head = NULL;
 	node->next = NULL;
 	return (node);
 }
 
-t_sh	*shell_factory(void)
+t_sh	*shell_factory(char **envp)
 {
 	t_sh	*sh;
 
@@ -46,5 +46,7 @@ t_sh	*shell_factory(void)
 	sh->prompt = ft_prompt();
 	sh->input = NULL;
 	sh->node = node_factory();
+	sh->node->head = sh->node;
+	sh->env = envp;
 	return (sh);
 }

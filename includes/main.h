@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 19:07:12 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 16:18:12 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ void	save_info(t_tx *tx, int i, int j);
 // UTILS TO EVERYTHING
 int		ft_error(char *msg, int ret);
 void	free_words(char **words);
+int		can_op(char *file);
 
 // FTs DE LISTAS
 void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.
-void	ft_lstclear_sh(t_sh *sh, t_node *temp); // Adaptada para la mini.
+void	ft_lstclear_sh(t_sh *sh); // Adaptada para la mini.
 
 // FREES OF LIST OR NODES
 void	destroy_node(t_node *node);
@@ -37,6 +38,12 @@ void	free_pipe(t_pipe *w_pipe);
 
 // PARSE
 void	parse_comm(t_sh *sh, char **env);
+void	info_to_struct(t_sh *sh, int type_token, char **input_s, int i);
+void	type_cmd_built(t_sh *sh, int token, char **input_s, int i);
+void	type_red_pipe(t_sh *sh, int token, char **input_s, int i);
+char	**add_flag(char *flag, char **split_cmd);
+int		find_cmd(t_sh *sh);
+
 
 // SIGNALS
 void	ft_signals(void);
@@ -44,7 +51,7 @@ void	ctrl_c(int sign);
 
 // SHELL FACTORY OR INITS
 
-t_sh	*shell_factory(void);
+t_sh	*shell_factory(char **envp);
 t_node	*node_factory(void);
 t_cmd	*cmd_factory(void);
 

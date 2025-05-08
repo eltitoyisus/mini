@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 19:50:01 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 16:30:42 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,19 @@ enum e_type_token // TIPOS DE TOKENS
 	PIPE,
 	RED,
 	ARG,
+	FLAG,
+	FILE
 };
 
 enum e_type_red // TIPOS DE REDIRECCIONES --> CON SUS O_FLAGS CORRESPONDIENTES DEPENDIENDO DE LO QUE NECESITEMOS.
 {
-	OUTFILE_APPEND,
-	OUTFILE_TRUNCATE,
+	OUTFILE,
 	INFILE,
-	HEREDOC,
+	DELIM,
+	HEREDOC, // "<<"
+	INRED, // "<"
+	OURED, // ">" ó ">>"
+
 };
 
 enum e_admissions // PERMISOS PARA FILES O FLAGS!
@@ -45,9 +50,11 @@ typedef struct s_built
 
 typedef struct s_reds
 {
-	char	*file;
-	char	*type;
+	char	*file; // NOMBRE DE ARCHIVO O DELIMITADOR
+	int		type; // TIPO DE RED O ARCHIVO
 	int		fd;
+	bool	is_quote;
+
 }	t_reds;
 
 
@@ -64,10 +71,8 @@ typedef struct s_pipe
 typedef struct s_cmd
 {
 	char	**split_cmd;
-	char	*line_cmd;
 	char	*path;
 	char	*cmd;
-	char	*args;
 }	t_cmd;
 
 
@@ -78,6 +83,8 @@ typedef struct s_node
 	t_reds	*red;
 	t_pipe	*w_pipe;
 	char	*arg;
+	bool	is_cmd;
+	struct s_node	*head;
 	struct s_node	*next;
 }	t_node;
 
@@ -87,6 +94,7 @@ typedef struct s_sh
 	char	*input;
 	char	*prompt;
 	char	*pwd;
+	char	**env;
 }	t_sh;
 
 //	TETRIS DEJAMELO A MI JEJE

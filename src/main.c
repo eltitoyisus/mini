@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 18:03:10 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 15:09:47 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(int argc, char **argv, char **envp)
 	t_sh	*sh;
 
 	ft_signals();
-	sh = shell_factory();
+	sh = shell_factory(envp);
 	sh->prompt = ft_prompt();
 	using_history();
 	while (1)

@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 16:32:59 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 15:26:36 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ void	ft_lstadd_back_sh(t_sh *sh)
 	last->next = new;
 }
 
-void	ft_lstclear_sh(t_sh *sh, t_node *temp)
+void	ft_lstclear_sh(t_sh *sh)
 {
-	sh->node = temp;
-	if (!temp || !sh->node)
+	sh->node = sh->node->head;
+	if (!sh->node->head || !sh->node)
 		return ;
 	while (sh->node != NULL)
 	{
-		temp = sh->node->next;
+		sh->node->head = sh->node->next;
 		destroy_node(sh->node);
-		sh->node = temp;
+		sh->node = sh->node->head;
 	}
 }

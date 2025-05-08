@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:15:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 16:29:24 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 15:11:56 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ void	free_built(t_built *built)
 
 void	free_cmd(t_cmd *cmd)
 {
-	if (cmd->args)
-		free(cmd->args);
 	if (cmd->cmd)
 		free(cmd->cmd);
-	if (cmd->line_cmd)
-		free(cmd->line_cmd);
 	if (cmd->path)
 		free(cmd->path);
 	if (cmd->split_cmd)

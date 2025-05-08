@@ -6,17 +6,20 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 16:35:28 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 16:13:31 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-static int	other_cases(char *input)
+static int	other_cases(char *input, char **input_split, int i)
 {
 	if (!ft_strncmp(input, "<", 1) || !ft_strncmp(input, ">", 1)
 		|| !ft_strncmp(input, "<<", 1) || !ft_strncmp(input, ">>", 1))
 		return (RED);
+	else if (!ft_strncmp(input_split[i - 1], "<", 1) && can_op(input) || !ft_strncmp(input_split[i - 1], ">", 1)
+		|| !ft_strncmp(input_split[i - 1], ">>", 2) || !ft_strncmp(input_split[i - 1], "<<", 2))
+		return (FILE);
 	else if (!ft_strncmp(input, "|", 1))
 		return (PIPE);
 	else
@@ -25,34 +28,29 @@ static int	other_cases(char *input)
 
 static int cases_builds(char *input)
 {
-	char **split_in;
-	int result;
-
-	split_in = ft_split(input, ' ');
-	if (!split_in)
+	if (ft_strncmp(input, "-", 1))
+		return (FLAG);
+	if (!input)
 		return (ARG);
-	if (!ft_strncmp(split_in[0], "pwd", 4))
-		result = BUILT;
-	else if (!ft_strncmp(split_in[0], "cd", 3))
-		result = BUILT;
-	else if (!ft_strncmp(split_in[0], "echo", 4))
-		result = BUILT;
-	else if (!ft_strncmp(split_in[0], "export", 6))
-		result = BUILT;
-	else if (!ft_strncmp(split_in[0], "unset", 5))
-		result = BUILT;
-	else if (!ft_strncmp(split_in[0], "env", 3))
-		result = BUILT;
-	else if (!ft_strncmp(split_in[0], "exit", 5))
+	if (!ft_strncmp(input, "pwd", 3))
+		return (BUILT);
+	else if (!ft_strncmp(input, "cd", 2))
+		return (BUILT);
+	else if (!ft_strncmp(input, "echo", 4))
+		return (BUILT);
+	else if (!ft_strncmp(input, "export", 6))
+		return (BUILT);
+	else if (!ft_strncmp(input, "unset", 5))
+		return (BUILT);
+	else if (!ft_strncmp(input, "env", 3))
+		return (BUILT);
+	else if (!ft_strncmp(input, "exit", 4))
 	{
-		printf("exit\n");
-		free_words(split_in);
-		exit(127);
+		free(input);
+		ft_error("exit", 127);
 	}
 	else
-		result = CMD;
-	free_words(split_in);
-	return (result);
+		return (CMD);
 }
 
 static int	cases_com(char *input, char **env)
@@ -60,6 +58,7 @@ static int	cases_com(char *input, char **env)
 	char	**split_com;
 	char	*executable_path;
 
+	// parse_cmd(char);
 	split_com = ft_split(input, ' ');
 	if (!split_com)
 		return (ft_error("ERROR: split failed\n", 1), ARG);
@@ -80,11 +79,13 @@ static int	cases_com(char *input, char **env)
 	return (ARG);
 }
 
-static int n_token(char *input, char **env)
+static int n_token(char *input, char **env, char **input_split, int i)
 {
 	int	value_token;
 
 	value_token = cases_builds(input);
+	if (value_token == FLAG)
+		return (FLAG);
 	if (value_token == BUILT)
 		return (BUILT);
 	value_token = cases_com(input, env);
@@ -92,43 +93,25 @@ static int n_token(char *input, char **env)
 		return (CMD);
 	else if (value_token == ARG)
 		return (ARG);
-	value_token = other_cases(input);
+	value_token = other_cases(input, input_split, i);
 	if (value_token == RED)
 		return (RED);
 	else if (value_token == PIPE)
 		return (PIPE);
+	else if (value_token == FILE)
+			return (FILE);
 	return (ARG);
 }
 
-void info_to_struct(t_sh *sh, int type_token, char *token_str)
+void info_to_struct(t_sh *sh, int type_token, char **input_s, int i)
 {
-	if (!sh || !sh->node || !token_str)
+	if (!sh || !sh->node || !input_s)
 		return;
-	if (type_token == BUILT)
+	type_cmd_built(sh, type_token, input_s, i);
+	type_red_pipe(sh, type_token, input_s, i);
+	if (type_token == ARG)
 	{
-		if (sh->node->built->name)
-			free(sh->node->built->name);
-		sh->node->built->name = ft_strdup(token_str);
-	}
-	else if (type_token == CMD)
-	{
-		if (sh->node->cmd->cmd)
-			free(sh->node->cmd->cmd);
-		sh->node->cmd->cmd = ft_strdup(token_str);
-	}
-	else if (type_token == RED)
-	{
-		if (sh->node->red->type)
-			free(sh->node->red->type);
-		sh->node->red->type = ft_strdup(token_str);
-	}
-	else if (type_token == PIPE)
-		sh->node->w_pipe->pipe_count += 1;
-	else if (type_token == ARG)
-	{
-		if (sh->node->arg)
-			free(sh->node->arg);
-		sh->node->arg = ft_strdup(token_str);
+		sh->node->arg = ft_strdup(input_s[i]);
 	}
 	// Siempre que metamos la info del node que estemos creamos otro
 	ft_lstadd_back_sh(sh);
@@ -139,27 +122,24 @@ void parse_comm(t_sh *sh, char **env)
 	int		type_token;
 	char	**input_split;
 	int		i;
-	t_node	*temp;
 
 	if (!sh || !sh->input)
 		return;
 	i = 0;
-	temp = sh->node;
 	input_split = ft_split(sh->input, ' ');
 	if (!input_split)
 		return;
-	while (input_split[i])
+	while (input_split[++i])
 	{
 		if (i != 0)
 		{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.
 			ft_lstadd_back_sh(sh); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
 			sh->node = sh->node->next;
 		}
-			type_token = n_token(input_split[i], env);
-		info_to_struct(sh, type_token, input_split[i]);
-		i++;
+			// input_split[i] = case_flag(sh, input_split, i, type_token);
+			type_token = n_token(input_split[i], env, input_split, i);
+		info_to_struct(sh, type_token, input_split, i);
 	}
-	sh->node = temp;
-	ft_lstclear_sh(sh, temp);
+	ft_lstclear_sh(sh);
 	free_words(input_split);
 }
