@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:23:12 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 16:54:54 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 00:23:06 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	id_red(char **input_s, int i)
 		return (HEREDOC);
 
 }
+
 
 int	id_file(char **input_s, int i)
 {
