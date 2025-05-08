@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 16:13:31 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 20:11:48 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static int	cases_com(char *input, char **env)
 	char	**split_com;
 	char	*executable_path;
 
-	// parse_cmd(char);
 	split_com = ft_split(input, ' ');
 	if (!split_com)
 		return (ft_error("ERROR: split failed\n", 1), ARG);
@@ -79,7 +78,7 @@ static int	cases_com(char *input, char **env)
 	return (ARG);
 }
 
-static int n_token(char *input, char **env, char **input_split, int i)
+static int	n_token(char *input, char **env, char **input_split, int i)
 {
 	int	value_token;
 
@@ -117,12 +116,38 @@ void info_to_struct(t_sh *sh, int type_token, char **input_s, int i)
 	ft_lstadd_back_sh(sh);
 }
 
-void parse_comm(t_sh *sh, char **env)
+
+
+void	ft_parse(t_parse *parse, t_sh *sh, char **env)
+{
+	char	**split_input;
+	int		i;
+
+	split_input = ft_split(sh->input, ' ');
+	i = 0;
+	while (parse != NULL)
+	{
+		if (i != 0)
+		{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.
+			ft_lstadd_back_parse(parse); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
+			parse = parse->next;
+		}
+		parse->line = split_input[i];
+		parse->type_token = n_token(split_input[i], env, split_input, i);
+		parse = parse->next;
+	}
+
+}
+
+void	parse_comm(t_sh *sh, char **env)
 {
 	int		type_token;
 	char	**input_split;
 	int		i;
+	t_parse	*parse;
 
+	parse = init_parse();
+	parse->head = parse;
 	if (!sh || !sh->input)
 		return;
 	i = 0;
@@ -136,8 +161,9 @@ void parse_comm(t_sh *sh, char **env)
 			ft_lstadd_back_sh(sh); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
 			sh->node = sh->node->next;
 		}
-			// input_split[i] = case_flag(sh, input_split, i, type_token);
-			type_token = n_token(input_split[i], env, input_split, i);
+		ft_parse(parse, sh, env);
+		// input_split[i] = case_flag(sh, input_split, i, type_token);
+		type_token = n_token(input_split[i], env, input_split, i);
 		info_to_struct(sh, type_token, input_split, i);
 	}
 	ft_lstclear_sh(sh);

@@ -6,11 +6,30 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 15:26:36 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 20:11:13 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
+
+void	ft_lstadd_back_parse(t_parse *parse)
+{
+	t_parse *new;
+	t_parse	*last;
+
+	new = init_parse();
+	if (!parse || !new)
+		return ;
+	if (parse == NULL)
+	{
+		parse = new;
+		return ;
+	}
+	last = parse;
+	while (last->next != NULL)
+		last = last->next;
+	last->next = new;
+}
 
 void	ft_lstadd_back_sh(t_sh *sh)
 {

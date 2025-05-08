@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/08 17:24:51 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 19:49:28 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,17 @@ typedef struct s_sh
 	char	**env;
 	int		pipe_count; // Numero de pipes mejor tenerlo aqui
 }	t_sh;
+
+typedef struct s_parse
+{
+	char	*line;
+	bool	is_flag;
+	bool	is_cmd;
+	int		type_token;
+	struct s_parse	*next;
+	struct s_parce	*head;
+}	t_parse;
+
 
 //	TETRIS DEJAMELO A MI JEJE
 

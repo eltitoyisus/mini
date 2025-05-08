@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/08 16:18:12 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 20:12:28 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		can_op(char *file);
 // FTs DE LISTAS
 void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.
 void	ft_lstclear_sh(t_sh *sh); // Adaptada para la mini.
+void	ft_lstadd_back_parse(t_parse *parse);
 
 // FREES OF LIST OR NODES
 void	destroy_node(t_node *node);
@@ -58,6 +59,7 @@ t_cmd	*cmd_factory(void);
 t_built	*init_built(void);
 t_pipe	*init_pipe(void);
 t_reds	*init_redir(void);
+t_parse	*init_parse(void);
 
 // PROMPT
 char	*ft_prompt(void);

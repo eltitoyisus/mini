@@ -6,13 +6,24 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 17:25:24 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 19:41:59 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-// inits
+t_parse	*init_parse(void)
+{
+	t_parse	*parse;
+
+	parse = malloc(sizeof(t_parse));
+	parse->is_cmd = false;
+	parse->is_flag = false;
+	parse->line = NULL;
+	parse->next = NULL;
+	parse->head = NULL;
+	return (parse);
+}
 
 t_reds	*init_redir(void)
 {
