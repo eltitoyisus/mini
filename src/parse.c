@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 20:11:48 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/08 23:19:52 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,46 @@ void info_to_struct(t_sh *sh, int type_token, char **input_s, int i)
 	// Siempre que metamos la info del node que estemos creamos otro
 	ft_lstadd_back_sh(sh);
 }
+void info_to_struct_2(t_parse *parse, t_sh *sh)
+{
+	if (!parse || !parse->line)
+		return;
+	type_cmd_built_2(sh, parse);
+	type_red_pipe_2(sh, parse);
+	if (parse->type_token == ARG)
+		sh->node->arg = ft_strdup(parse->line);
+	// Siempre que metamos la info del node que estemos creamos otro
+}
 
 
+void	bool_active(t_parse *parse)
+{
+	t_parse	*count;
+
+	count = parse->head;
+	while (count != NULL)
+	{
+		if (count->type_token == CMD)
+			count->is_cmd = true;
+		else if (parse->type_token == FLAG)
+			count->is_flag = true;
+		count = count->next;
+	}
+}
+
+void	ft_quotes(t_parse *parse)
+{
+	while (ft_strchr(parse->line, '\"'))
+		ft_strtrim(parse->line, '"');
+	while (ft_strchr(parse->line, '\"'))
+		ft_strtrim(parse->line, "'");
+}
+
+void	ft_controls(t_parse *parse)
+{
+	bool_active(parse);
+	ft_quotes(parse)
+}
 
 void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 {
@@ -134,6 +172,8 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		}
 		parse->line = split_input[i];
 		parse->type_token = n_token(split_input[i], env, split_input, i);
+		ft_controls(parse); // AQUI SE HARAN LAS IMPLEMENTACION QUE TENGO QUE INVESTIGAR PARA ASEGURARNOS BIEN QUE NO HALLAN ERRORES.
+		info_to_struct_2(parse, sh);
 		parse = parse->next;
 	}
 
