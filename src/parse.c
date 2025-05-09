@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 23:19:52 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 10:25:48 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,28 +102,31 @@ static int	n_token(char *input, char **env, char **input_split, int i)
 	return (ARG);
 }
 
-void info_to_struct(t_sh *sh, int type_token, char **input_s, int i)
-{
-	if (!sh || !sh->node || !input_s)
-		return;
-	type_cmd_built(sh, type_token, input_s, i);
-	type_red_pipe(sh, type_token, input_s, i);
-	if (type_token == ARG)
-	{
-		sh->node->arg = ft_strdup(input_s[i]);
-	}
-	// Siempre que metamos la info del node que estemos creamos otro
-	ft_lstadd_back_sh(sh);
-}
-void info_to_struct_2(t_parse *parse, t_sh *sh)
+// void info_to_struct(t_sh *sh, int type_token, char **input_s, int i)
+// {
+// 	if (!sh || !sh->node || !input_s)
+// 		return;
+// 	type_cmd_built(sh, type_token, input_s, i);
+// 	type_red_pipe(sh, type_token, input_s, i);
+// 	if (type_token == ARG)
+// 	{
+// 		sh->node->arg = ft_strdup(input_s[i]);
+// 	}
+// 	// Siempre que metamos la info del node que estemos creamos otro
+// 	ft_lstadd_back_sh(sh);
+// }
+void	info_to_struct_2(t_parse *parse, t_sh *sh, int i, char **split_input)
 {
 	if (!parse || !parse->line)
 		return;
-	type_cmd_built_2(sh, parse);
-	type_red_pipe_2(sh, parse);
+	type_cmd_built_2(sh, parse, i);
+	type_red_pipe_2(sh, parse, i, split_input);
 	if (parse->type_token == ARG)
+	{
 		sh->node->arg = ft_strdup(parse->line);
-	// Siempre que metamos la info del node que estemos creamos otro
+		sh->node->index_token_arg = i;
+	}
+		// Siempre que metamos la info del node que estemos creamos otro
 }
 
 
@@ -148,12 +151,16 @@ void	ft_quotes(t_parse *parse)
 		ft_strtrim(parse->line, '"');
 	while (ft_strchr(parse->line, '\"'))
 		ft_strtrim(parse->line, "'");
+	if (!ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '"'))
+		ft_menu_quote();
+	if (!ft_strchr(parse->line, '\'') && ft_strchr(parse->line, "'"))
+		ft_menu_quote();
 }
 
 void	ft_controls(t_parse *parse)
 {
 	bool_active(parse);
-	ft_quotes(parse)
+	ft_quotes(parse);
 }
 
 void	ft_parse(t_parse *parse, t_sh *sh, char **env)
@@ -173,39 +180,40 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		parse->line = split_input[i];
 		parse->type_token = n_token(split_input[i], env, split_input, i);
 		ft_controls(parse); // AQUI SE HARAN LAS IMPLEMENTACION QUE TENGO QUE INVESTIGAR PARA ASEGURARNOS BIEN QUE NO HALLAN ERRORES.
-		info_to_struct_2(parse, sh);
+		info_to_struct_2(parse, sh, i, split_input);
 		parse = parse->next;
+		i++;
 	}
 
 }
 
 void	parse_comm(t_sh *sh, char **env)
 {
-	int		type_token;
-	char	**input_split;
-	int		i;
+	// int		type_token;
+	// char	**input_split;
+	// int		i;
 	t_parse	*parse;
 
 	parse = init_parse();
 	parse->head = parse;
 	if (!sh || !sh->input)
 		return;
-	i = 0;
-	input_split = ft_split(sh->input, ' ');
-	if (!input_split)
-		return;
-	while (input_split[++i])
-	{
-		if (i != 0)
-		{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.
-			ft_lstadd_back_sh(sh); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
-			sh->node = sh->node->next;
-		}
+	// i = 0;
+	// input_split = ft_split(sh->input, ' ');
+	// if (!input_split)
+	// 	return;
+	// while (input_split[++i])
+	// {
+	// 	if (i != 0)
+	// 	{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.
+	// 		ft_lstadd_back_sh(sh); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
+	// 		sh->node = sh->node->next;
+	// 	}
 		ft_parse(parse, sh, env);
 		// input_split[i] = case_flag(sh, input_split, i, type_token);
-		type_token = n_token(input_split[i], env, input_split, i);
-		info_to_struct(sh, type_token, input_split, i);
-	}
+	// 	type_token = n_token(input_split[i], env, input_split, i);
+	// 	info_to_struct(sh, type_token, input_split, i);
+	// }
 	ft_lstclear_sh(sh);
-	free_words(input_split);
+	// free_words(input_split);
 }

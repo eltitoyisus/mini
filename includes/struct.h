@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/08 19:49:28 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 10:10:37 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ enum e_type_red // TIPOS DE REDIRECCIONES --> CON SUS O_FLAGS CORRESPONDIENTES D
 typedef struct s_built
 {
 	char	*name;
+	int		index_token;
 }	t_built;
 
 typedef struct s_reds
@@ -51,6 +52,7 @@ typedef struct s_reds
 	int		type; // TIPO DE RED O ARCHIVO
 	int		fd;
 	bool	is_quote;
+	int		index_token;
 
 }	t_reds;
 
@@ -58,6 +60,7 @@ typedef struct s_reds
 typedef struct s_pipe
 {
 	pid_t	*pids;
+	int		index_token;
 	int		pipefd[2];
 	int		pipe_pos;
 	int		pipe_in;
@@ -69,6 +72,7 @@ typedef struct s_cmd
 	char	**split_cmd;
 	char	*path;
 	char	*cmd;
+	int		index_token;
 }	t_cmd;
 
 
@@ -79,6 +83,7 @@ typedef struct s_node
 	t_reds	*red;
 	t_pipe	*w_pipe;
 	char	*arg;
+	int		index_token_arg;
 	bool	is_cmd;
 	bool	is_flag;
 	struct s_node	*head;
