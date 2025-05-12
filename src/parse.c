@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 10:25:48 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 10:31:32 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		parse = parse->next;
 		i++;
 	}
-
+	free_words(split_input);
 }
 
 void	parse_comm(t_sh *sh, char **env)

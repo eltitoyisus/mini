@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 10:24:08 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 16:58:48 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,13 @@ char	add_flag(t_sh *sh, char *flag)
 // TIPO DE ENTRADA DE INFORMACION PARA BUILTINS, COMANDO Y EL CASO DEL COMANDO CON LAS FLAGS
 // -----------------------------------------------------------------------------------------
 
+
+
 void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 {
+	int	j; // count_cmd
+
+	j = 0;
 	if (parse->type_token == BUILT)
 	{
 		sh->node->built->name = ft_strdup(parse->line);
@@ -63,19 +68,20 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	}
 	else if (parse->type_token == CMD)
 	{
+		if (j > 0)
+			ft_lstadd_back_cmd(sh);
 		sh->node->cmd->cmd = ft_strdup(parse->line);
 		sh->node->cmd->path = find_path(sh->env);
 		sh->node->is_cmd = true;
 		sh->node->cmd->split_cmd = ft_split(sh->node->cmd->cmd, ' ');
 		sh->node->cmd->index_token = i;
+		j++;
 	}
 	else if (parse->type_token == FLAG && find_cmd(sh)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
 	{
 		sh->node->is_flag = true;
 		add_flag(sh, parse->line); // ENTONCES USO UNA (HEAD DE REFERENCIA PARA BUSCAR SI ES UNA FLAG DE UN CMD Y LE AGREGO LA FLAG A EL SPLIT DEL COMANDO)
 	}
-
-
 }
 
 // void	type_cmd_built(t_sh *sh, int token, char **input_s, int i)

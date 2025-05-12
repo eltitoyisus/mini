@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/09 10:10:37 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/12 12:40:26 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,33 +39,15 @@ enum e_type_red // TIPOS DE REDIRECCIONES --> CON SUS O_FLAGS CORRESPONDIENTES D
 
 };
 
-typedef struct s_built
-{
-	char	*name;
-	int		index_token;
-}	t_built;
-
 typedef struct s_reds
 {
 	char	*file; // NOMBRE DE ARCHIVO O DELIMITADOR
 	char	*delim;
 	int		type; // TIPO DE RED O ARCHIVO
 	int		fd;
-	bool	is_quote;
-	int		index_token;
-
+	struct s_reds	*next;
 }	t_reds;
 
-
-typedef struct s_pipe
-{
-	pid_t	*pids;
-	int		index_token;
-	int		pipefd[2];
-	int		pipe_pos;
-	int		pipe_in;
-	int		pipe_out;
-}	t_pipe;
 
 typedef struct s_cmd
 {
@@ -73,21 +55,29 @@ typedef struct s_cmd
 	char	*path;
 	char	*cmd;
 	int		index_token;
+	t_reds	*red;
+	pid_t	*pids; // array de procesos
+	int		*pipefd[2]; // puntero de pipes
+	int		pipe_in;
+	int		pipe_out;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+	struct s_cmd	*head;
 }	t_cmd;
 
 
 typedef struct s_node
 {
 	t_cmd	*cmd;
-	t_built	*built;
-	t_reds	*red;
-	t_pipe	*w_pipe;
 	char	*arg;
-	int		index_token_arg;
+	int		n_cmd; // Número de comandos.
 	bool	is_cmd;
 	bool	is_flag;
+	bool	is_quote;
+	bool	is_built;
 	struct s_node	*head;
 	struct s_node	*next;
+	struct s_node	*prev;
 }	t_node;
 
 typedef struct s_sh
@@ -107,7 +97,7 @@ typedef struct s_parse
 	bool	is_cmd;
 	int		type_token;
 	struct s_parse	*next;
-	struct s_parce	*head;
+	struct s_parse	*head;
 }	t_parse;
 
 

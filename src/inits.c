@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 10:11:48 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 16:44:32 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_reds	*init_redir(void)
 	red->delim = NULL;
 	red->type = -1;
 	red->index_token = -1;
+	red->next = NULL;
 	return (red);
 }
 

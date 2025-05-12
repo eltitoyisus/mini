@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:12:50 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 10:12:36 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/09 16:44:59 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_cmd	*cmd_factory(void)
 	cmd->split_cmd = NULL;
 	cmd->path = NULL;
 	cmd->index_token = -1;
+	cmd->next = NULL;
+	cmd->head = NULL;
 	return (cmd);
 }
 
