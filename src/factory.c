@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:12:50 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 16:44:59 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/13 15:58:07 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ t_cmd	*cmd_factory(void)
 	cmd->cmd = NULL;
 	cmd->split_cmd = NULL;
 	cmd->path = NULL;
+	cmd->red = init_redir();
+	cmd->pids =	NULL;
+	cmd->pipefd[1] = -1;
+	cmd->pipefd[0] = -1;
+	cmd->pipe_in = 0;
+	cmd->pipe_out = 0;
 	cmd->index_token = -1;
 	cmd->next = NULL;
 	cmd->head = NULL;
@@ -32,13 +38,12 @@ t_node	*node_factory(void)
 
 	node = malloc(sizeof(t_node));
 	node->cmd = cmd_factory();
-	node->built = init_built();
-	node->red = init_redir();
-	node->w_pipe = init_pipe();
 	node->is_cmd = false;
 	node->is_flag = false;
+	node->is_quote = false;
+	node->is_built = false;
+	node->n_cmd = 1;
 	node->arg = NULL;
-	node->index_token_arg = -1;
 	node->head = NULL;
 	node->next = NULL;
 	return (node);

@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/12 12:40:26 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/13 15:50:24 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef struct s_cmd
 	int		index_token;
 	t_reds	*red;
 	pid_t	*pids; // array de procesos
-	int		*pipefd[2]; // puntero de pipes
+	int		pipefd[2]; // puntero de pipes
 	int		pipe_in;
 	int		pipe_out;
 	struct s_cmd	*next;

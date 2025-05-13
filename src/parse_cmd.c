@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 16:58:48 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/13 15:58:58 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	j = 0;
 	if (parse->type_token == BUILT)
 	{
-		sh->node->built->name = ft_strdup(parse->line);
-		sh->node->built->index_token = i;
+		sh->node->arg = ft_strdup(parse->line);
+		sh->node->is_built = true;
 	}
 	else if (parse->type_token == CMD)
 	{
@@ -113,21 +113,27 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i, char **input_s)
 {
 	if (parse->type_token == RED)
 	{
-		sh->node->red->type = id_red(input_s, i); // falta adaptarlo
-		sh->node->red->index_token = i;
+		sh->node->cmd->red->type = id_red(input_s, i); // falta adaptarlo
+		sh->node->cmd->red->index_token = i;
 	}
 	else if (parse->type_token == FILE)
 	{
-		sh->node->red->type = id_file(input_s, i); // falta adaptarlo
-		sh->node->red->index_token;
-		if (sh->node->red->type == DELIM)
-			sh->node->red->delim = ft_strdup(parse->line);
+		sh->node->cmd->red->type = id_file(input_s, i); // falta adaptarlo
+		sh->node->cmd->red->
+		sh->node->cmd->red->index_token;
+		if (sh->node->cmd->red->type == DELIM)
+			sh->node->cmd->red->delim = ft_strdup(parse->line);
 		else
-			sh->node->red->file = ft_strdup(parse->line);
+			sh->node->cmd->red->file = ft_strdup(parse->line);
 	}
 	else if (parse->type_token == PIPE)
-		sh->pipe_count += 1;
-		sh->node->w_pipe->index_token = i;
+		sh->node->n_cmd += 1;
+		if (sh->node->n_cmd == 2)
+			sh->node->cmd->pipe_in = i;
+		else
+			sh->node->cmd->pipe_out = i;
+		pipe(sh->node->cmd->pipefd);
+		ft_lstadd_back_cmd(sh->node->cmd);
 }
 
 // void	type_red_pipe(t_sh *sh, int token, char **input_s, int i)

@@ -6,26 +6,26 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 16:54:15 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/13 15:56:36 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-void	ft_lstadd_back_parse(t_node *node)
+void	ft_lstadd_back_cmd(t_cmd *cmd)
 {
 	t_cmd	*new;
-	t_node	*last;
+	t_cmd	*last;
 
 	new = cmd_factory();
-	if (!node->cmd || !new)
+	if (!cmd || !new)
 		return ;
-	if (node->cmd == NULL)
+	if (cmd == NULL)
 	{
-		node->cmd = new;
+		cmd = new;
 		return ;
 	}
-	last = node->cmd;
+	last = cmd;
 	while (last->next != NULL)
 		last = last->next;
 	last->next = new;

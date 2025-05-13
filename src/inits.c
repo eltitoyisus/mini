@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 16:44:32 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/13 15:23:12 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,33 +34,8 @@ t_reds	*init_redir(void)
 	red->file = NULL;
 	red->delim = NULL;
 	red->type = -1;
-	red->index_token = -1;
 	red->next = NULL;
 	return (red);
-}
-
-t_pipe	*init_pipe(void)
-{
-	t_pipe	*pipe_info;
-
-	pipe_info = malloc(sizeof(t_pipe));
-	pipe_info->pipefd[0] = -1;
-	pipe_info->pipefd[1] = -1;
-	pipe_info->pipe_pos = -1;
-	pipe_info->pipe_in = -1;
-	pipe_info->pipe_out = -1;
-	pipe_info->index_token = -1;
-	return (pipe_info);
-}
-
-t_built	*init_built(void)
-{
-	t_built	*built;
-
-	built = malloc(sizeof(t_built));
-	built->name = NULL;
-	built->index_token = -1;
-	return (built);
 }
 
 

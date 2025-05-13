@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 10:31:32 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/13 16:31:35 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,17 @@ void	bool_active(t_parse *parse)
 void	ft_quotes(t_parse *parse)
 {
 	while (ft_strchr(parse->line, '\"'))
+	{
 		ft_strtrim(parse->line, '"');
-	while (ft_strchr(parse->line, '\"'))
+		if (ft_strchr(parse->line, "\'"))
+			return ;
+	}
+	while (ft_strchr(parse->line, '\'') && !ft_strchr(parse->line, '"'))
+	{
 		ft_strtrim(parse->line, "'");
+		if (ft_strchr(parse->line, '\"'))
+			return ;
+	}
 	if (!ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '"'))
 		ft_menu_quote();
 	if (!ft_strchr(parse->line, '\'') && ft_strchr(parse->line, "'"))
