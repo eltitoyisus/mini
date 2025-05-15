@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/13 15:50:24 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 17:15:26 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct s_parse
 	bool	is_cmd;
 	int		type_token;
 	struct s_parse	*next;
+	struct s_parse	*prev;
 	struct s_parse	*head;
 }	t_parse;
 

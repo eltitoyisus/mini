@@ -6,34 +6,34 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:23:12 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/09 00:23:06 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 17:18:44 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int	id_red(char **input_s, int i)
+int	id_red(t_parse *parse)
 {
-	if (!ft_strncmp(input_s[i], "<", 1))
+	if (!ft_strncmp(parse->line, "<", 1))
 		return (INRED);
-	else if (!ft_strncmp(input_s[i], ">", 1))
+	else if (!ft_strncmp(parse->line, ">", 1))
 		return (OURED);
-	else if (!ft_strncmp(input_s[2], ">>", 2))
+	else if (!ft_strncmp(parse->line, ">>", 2))
 		return (D_OURED);
-	else if (!ft_strncmp(input_s[i], "<<", 2))
+	else if (!ft_strncmp(parse->line, "<<", 2))
 		return (HEREDOC);
 
 }
 
 
-int	id_file(char **input_s, int i)
+int	id_file(t_parse *parse)
 {
-	if (!ft_strncmp(input_s[i - 1], "<", 1) && can_op(input_s[i]))
+	if (!ft_strncmp(parse->prev->line, "<", 1) && can_op(parse->line))
 		return (INFILE);
-	if (!ft_strncmp(input_s[i - 1], ">", 1))
+	if (!ft_strncmp(parse->prev->line, ">", 1))
 		return (OUTFILE_TR);
-	if (!ft_strncmp(input_s[i - 1], ">>", 2))
+	if (!ft_strncmp(parse->prev->line, ">>", 2))
 		return (OUTFILE_APP);
-	if (!ft_strncmp(input_s[i - 1], "<<", 2))
+	if (!ft_strncmp(parse->prev->line, "<<", 2))
 		return (DELIM);
 }

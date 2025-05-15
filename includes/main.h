@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/13 15:57:31 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 17:19:19 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.
 void	ft_lstclear_sh(t_sh *sh); // Adaptada para la mini.
 void	ft_lstadd_back_parse(t_parse *parse);
 void	ft_lstadd_back_cmd(t_cmd *cmd);
+
+//IDENTIFIERS
+int	id_red(t_parse *parse);
+int	id_file(t_parse *parse);
 
 // FREES OF LIST OR NODES
 void	destroy_node(t_node *node);

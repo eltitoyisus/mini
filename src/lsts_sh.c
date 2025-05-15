@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/13 15:56:36 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 17:12:38 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	ft_lstadd_back_cmd(t_cmd *cmd)
 	while (last->next != NULL)
 		last = last->next;
 	last->next = new;
+	new->prev = last;
 }
 
 void	ft_lstadd_back_parse(t_parse *parse)
@@ -48,6 +49,7 @@ void	ft_lstadd_back_parse(t_parse *parse)
 	while (last->next != NULL)
 		last = last->next;
 	last->next = new;
+	new->prev = last;
 }
 
 void	ft_lstadd_back_sh(t_sh *sh)

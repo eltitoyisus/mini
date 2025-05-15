@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/13 15:23:12 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 16:46:44 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_parse	*init_parse(void)
 	parse->is_flag = false;
 	parse->line = NULL;
 	parse->next = NULL;
-	parse->head = NULL;
+	parse->prev = NULL;
+	parse->head = parse;
 	return (parse);
 }
 

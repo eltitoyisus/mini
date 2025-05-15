@@ -6,17 +6,16 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/15 13:27:10 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 17:20:51 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int	find_cmd(t_sh *sh)
+int	find_cmd(t_sh *sh, t_parse *parse)
 {
-	t_node	*node_count;
-	node_count = sh->node->head;
-
+	t_parse	*node_count;
+	node_count = parse->head;
 	while (node_count != NULL)
 	{
 		if (node_count->is_cmd == true)
@@ -26,29 +25,20 @@ int	find_cmd(t_sh *sh)
 	return (0);
 }
 
-char	add_flag(t_sh *sh, char *flag)
+void	add_flag(t_sh *sh, char *flag)
 {
 	int		i;
 	char	**new_split;
-	t_node	*node_count;
 
 	i = 1;
-	node_count = sh->node->head;
-	new_split = NULL;
-	while (node_count != NULL)
-	{
-		if (node_count->is_cmd == true)
-		{
-			new_split = node_count->cmd->split_cmd;
-			new_split[i] = malloc(ft_strlen(flag) * sizeof(char));
-			new_split[i] = flag;
-			new_split[++i] = NULL;
-			node_count->cmd->split_cmd = new_split;
-			free_words(new_split);
-			return ;
-		}
-		node_count = node_count->next;
-	}
+	new_split = sh->node->cmd->split_cmd;
+	new_split[i] = malloc(ft_strlen(flag) * sizeof(char));
+	new_split[i] = flag;
+	i += 1;
+	new_split[i] = NULL;
+	sh->node->cmd->split_cmd = new_split;
+	free_words(new_split);
+	return ;
 }
 
 // TIPO DE ENTRADA DE INFORMACION PARA BUILTINS, COMANDO Y EL CASO DEL COMANDO CON LAS FLAGS
@@ -77,7 +67,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 		sh->node->cmd->index_token = i;
 		j++;
 	}
-	else if (parse->type_token == FLAG && find_cmd(sh)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
+	else if (parse->type_token == FLAG && find_cmd(sh, parse)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
 	{
 		sh->node->is_flag = true;
 		add_flag(sh, parse->line); // ENTONCES USO UNA (HEAD DE REFERENCIA PARA BUSCAR SI ES UNA FLAG DE UN CMD Y LE AGREGO LA FLAG A EL SPLIT DEL COMANDO)
@@ -113,17 +103,18 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i, char **input_s)
 {
 	if (parse->type_token == RED)
 	{
-		sh->node->cmd->red->type = id_red(input_s, i); // falta adaptarlo
+		sh->node->cmd->red->type = id_red(parse); // falta adaptarlo
 	}
 	else if (parse->type_token == FILE)
 	{
-		sh->node->cmd->red->type = id_file(input_s, i); // falta adaptarlo
+		sh->node->cmd->red->type = id_file(parse); // falta adaptarlo
 		if (sh->node->cmd->red->type == DELIM)
 			sh->node->cmd->red->delim = ft_strdup(parse->line);
 		else
 			sh->node->cmd->red->file = ft_strdup(parse->line);
 	}
 	else if (parse->type_token == PIPE)
+	{
 		sh->node->n_cmd += 1;
 		if (sh->node->n_cmd == 2)
 			sh->node->cmd->pipe_in = i;
@@ -131,6 +122,7 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i, char **input_s)
 			sh->node->cmd->pipe_out = i;
 		pipe(sh->node->cmd->pipefd);
 		ft_lstadd_back_cmd(sh->node->cmd);
+	}
 }
 
 // void	type_red_pipe(t_sh *sh, int token, char **input_s, int i)
