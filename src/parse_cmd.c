@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/13 15:58:58 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 13:27:10 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,10 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i, char **input_s)
 	if (parse->type_token == RED)
 	{
 		sh->node->cmd->red->type = id_red(input_s, i); // falta adaptarlo
-		sh->node->cmd->red->index_token = i;
 	}
 	else if (parse->type_token == FILE)
 	{
 		sh->node->cmd->red->type = id_file(input_s, i); // falta adaptarlo
-		sh->node->cmd->red->
-		sh->node->cmd->red->index_token;
 		if (sh->node->cmd->red->type == DELIM)
 			sh->node->cmd->red->delim = ft_strdup(parse->line);
 		else

@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/13 16:31:35 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 15:54:06 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,17 @@ static int	n_token(char *input, char **env, char **input_split, int i)
 // }
 void	info_to_struct_2(t_parse *parse, t_sh *sh, int i, char **split_input)
 {
-	if (!parse || !parse->line)
-		return;
-	type_cmd_built_2(sh, parse, i);
-	type_red_pipe_2(sh, parse, i, split_input);
-	if (parse->type_token == ARG)
+	while (parse != NULL)
 	{
-		sh->node->arg = ft_strdup(parse->line);
-		sh->node->index_token_arg = i;
+		if (!parse || !parse->line)
+		return ;
+		type_cmd_built_2(sh, parse, i);
+		type_red_pipe_2(sh, parse, i, split_input);
+		if (parse->type_token == ARG)
+		{
+			sh->node->arg = ft_strdup(parse->line);
+		}
+		parse = parse->next;
 	}
 		// Siempre que metamos la info del node que estemos creamos otro
 }
@@ -147,21 +150,19 @@ void	bool_active(t_parse *parse)
 
 void	ft_quotes(t_parse *parse)
 {
-	while (ft_strchr(parse->line, '\"'))
+	while (ft_strchr(parse->line, '\"') && ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
 	{
 		ft_strtrim(parse->line, '"');
 		if (ft_strchr(parse->line, "\'"))
 			return ;
 	}
-	while (ft_strchr(parse->line, '\'') && !ft_strchr(parse->line, '"'))
+	while (ft_strchr(parse->line, '\'') && ft_strrchr(parse->line, '\'') != ft_strchr(parse->line, '\''))
 	{
 		ft_strtrim(parse->line, "'");
 		if (ft_strchr(parse->line, '\"'))
 			return ;
 	}
-	if (!ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '"'))
-		ft_menu_quote();
-	if (!ft_strchr(parse->line, '\'') && ft_strchr(parse->line, "'"))
+	if (ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\''))
 		ft_menu_quote();
 }
 
@@ -171,7 +172,8 @@ void	ft_controls(t_parse *parse)
 	ft_quotes(parse);
 }
 
-void	ft_parse(t_parse *parse, t_sh *sh, char **env)
+void
+ft_parse(t_parse *parse, t_sh *sh, char **env)
 {
 	char	**split_input;
 	int		i;
@@ -188,10 +190,10 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		parse->line = split_input[i];
 		parse->type_token = n_token(split_input[i], env, split_input, i);
 		ft_controls(parse); // AQUI SE HARAN LAS IMPLEMENTACION QUE TENGO QUE INVESTIGAR PARA ASEGURARNOS BIEN QUE NO HALLAN ERRORES.
-		info_to_struct_2(parse, sh, i, split_input);
-		parse = parse->next;
 		i++;
 	}
+	parse = parse->head;
+	info_to_struct_2(parse, sh, i, split_input);
 	free_words(split_input);
 }
 
