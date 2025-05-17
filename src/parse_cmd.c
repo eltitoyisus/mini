@@ -6,13 +6,13 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/15 17:20:51 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/16 15:07:03 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int	find_cmd(t_sh *sh, t_parse *parse)
+int	find_cmd(t_parse *parse)
 {
 	t_parse	*node_count;
 	node_count = parse->head;
@@ -59,7 +59,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	else if (parse->type_token == CMD)
 	{
 		if (j > 0)
-			ft_lstadd_back_cmd(sh);
+			ft_lstadd_back_cmd(sh->node->cmd);
 		sh->node->cmd->cmd = ft_strdup(parse->line);
 		sh->node->cmd->path = find_path(sh->env);
 		sh->node->is_cmd = true;
@@ -67,7 +67,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 		sh->node->cmd->index_token = i;
 		j++;
 	}
-	else if (parse->type_token == FLAG && find_cmd(sh, parse)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
+	else if (parse->type_token == FLAG && find_cmd(parse)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
 	{
 		sh->node->is_flag = true;
 		add_flag(sh, parse->line); // ENTONCES USO UNA (HEAD DE REFERENCIA PARA BUSCAR SI ES UNA FLAG DE UN CMD Y LE AGREGO LA FLAG A EL SPLIT DEL COMANDO)
@@ -99,15 +99,15 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 // TIPO DE ENTRADA DE INFORMACION PARA REDIRECCIONES, PIPE
 // -----------------------------------------------------------------------------------------
 
-void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i, char **input_s)
+void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i)
 {
 	if (parse->type_token == RED)
 	{
-		sh->node->cmd->red->type = id_red(parse); // falta adaptarlo
+		sh->node->cmd->red->type = id_red(parse);
 	}
-	else if (parse->type_token == FILE)
+	else if (parse->type_token == FILES)
 	{
-		sh->node->cmd->red->type = id_file(parse); // falta adaptarlo
+		sh->node->cmd->red->type = id_file(parse);
 		if (sh->node->cmd->red->type == DELIM)
 			sh->node->cmd->red->delim = ft_strdup(parse->line);
 		else

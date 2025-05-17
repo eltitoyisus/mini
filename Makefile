@@ -6,7 +6,7 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/01 18:04:18 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/05/16 15:07:55 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,10 +28,12 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)factory.c			\
 		$(SRC_DIR)signals.c			\
 		$(SRC_DIR)parse.c			\
+		$(SRC_DIR)parse_cmd.c		\
 		$(SRC_DIR)lsts_sh.c			\
 		$(SRC_DIR)frees.c			\
 		$(SRC_DIR)utils.c			\
-		$(SRC_DIR)tx.c			\
+		$(SRC_DIR)tx.c				\
+		$(SRC_DIR)identifiers.c		\
 
 OBJ = $(SRC:.c=.o)
 

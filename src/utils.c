@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:53:26 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/08 16:05:31 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/16 21:06:37 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int ft_error(char *msg, int ret)
 {
 	write(2, msg, ft_strlen(msg));
-	return (ret);
+	exit (ret);
 }
 
 void free_words(char **words)

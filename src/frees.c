@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:15:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/13 15:32:31 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/16 16:03:20 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void	free_red(t_reds *red)
 		close(red->fd);
 	if (red->file)
 		free(red->file);
-	if (red->type)
-		free(red->type);
+	red->type = -1;
 }
 
 void	destroy_node(t_node *node)
@@ -40,7 +39,21 @@ void	destroy_node(t_node *node)
 		free(node->arg);
 	if (node->cmd)
 		free_cmd(node->cmd);
+	node->n_cmd = 0;
 	free(node);
 }
 
+void	free_parse(t_parse *parse)
+{
+	parse->is_cmd = false;
+	parse->is_flag = false;
+	parse->type_token = 0;
+	free(parse);
+}
+
+// void	destroy_sh(t_sh *sh)
+// {
+// 	free_words(sh->env);
+// 	sh->
+// }
 

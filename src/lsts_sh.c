@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/15 17:12:38 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/16 16:02:16 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,29 @@ void	ft_lstadd_back_sh(t_sh *sh)
 	last->next = new;
 }
 
-void	ft_lstclear_sh(t_sh *sh)
+// void	ft_lstclear_sh(t_sh *sh)
+// {
+// 	sh->node = sh->node->head;
+// 	if (!sh->node->head || !sh->node)
+// 		return ;
+// 	while (sh->node != NULL)
+// 	{
+// 		sh->node->head = sh->node->next;
+// 		destroy_node(sh->node);
+// 		sh->node = sh->node->head;
+// 	}
+// }
+
+void	ft_lstclear_parse(t_parse *parse)
 {
-	sh->node = sh->node->head;
-	if (!sh->node->head || !sh->node)
+	printf("entra a clean\n");
+	if (!parse->head || !parse)
 		return ;
-	while (sh->node != NULL)
+	while (parse->next != NULL)
 	{
-		sh->node->head = sh->node->next;
-		destroy_node(sh->node);
-		sh->node = sh->node->head;
+		printf("entra al bucle de clear \n");
+		parse->head = parse->next;
+		free_parse(parse);
+		parse = parse->head;
 	}
 }
