@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/16 15:11:02 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/20 20:11:09 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i);
 // void	type_red_pipe(t_sh *sh, int token, char **input_s, int i);
 void	add_flag(t_sh *sh, char *flag);
 int		find_cmd(t_parse *parse);
+void	ft_quotes(t_parse *parse);
 
 
 // SIGNALS

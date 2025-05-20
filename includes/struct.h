@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/20 18:56:09 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/20 20:10:45 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ enum e_case_quotes
 {
 	SIMPLE,
 	DOUBLE,
+	ERROR
 };
 
 enum e_type_token // TIPOS DE TOKENS

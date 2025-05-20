@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:49:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/20 19:09:13 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/20 20:10:33 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	check_open(t_parse *parse)
 		if (parse->line[i] == '\'')
 		{
 			i++;
-			if (parse->line[i] == '\'')
+			if(parse->line[i] == '\'')
 				 return (1);
 		}
 		else if (parse->line[i] == '\"')
@@ -80,6 +80,7 @@ int	check_open(t_parse *parse)
 	}
 	return (0);
 }
+
 int	id_cases(t_parse *parse)
 {
 	if (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\"'))
@@ -88,20 +89,29 @@ int	id_cases(t_parse *parse)
 			return (SIMPLE);
 		else if (ft_strlen(ft_strchr(parse->line, '\'')) < ft_strlen(ft_strchr(parse->line, '\"')))
 			return (DOUBLE);
+		else
+			return (ERROR);
 	}
+	else if (ft_strchr(parse->line, '\''))
+		return (SIMPLE);
+	else if (ft_strchr(parse->line, '\"'))
+		return (DOUBLE);
+	else
+		return (ERROR);
 }
 
 void	ft_quotes(t_parse *parse)
 {
-	int	ch_op;
+	// int	ch_op;
 	int	case_q;
 	int	flag; // Esta flag lo que va a hacer es representar si se realizo bien el recorte de comillas, sean simples o dobles.
 
 	flag = 0;
-	ch_op = check_open(parse);
+	// ch_op = check_open(parse);
 	while(ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
 	{
 		case_q = id_cases(parse);
+		printf("sabes case of quotes --> %d", case_q);
 		if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
 			ft_error("sabes sale \n", 1);
 		printf("bucle infinito\n"); // Aqui estoy comparando longitudes de los punteros que devuelven quiere decir cual caracter esta mas cerca del inicio
@@ -112,6 +122,8 @@ void	ft_quotes(t_parse *parse)
 		if (flag == 1 || flag == 0)
 			break ;
 		// else if (flag == 1)
+
 		// 	break ;
 	}
 }
+

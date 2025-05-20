@@ -6,7 +6,7 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/16 15:07:55 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/05/20 20:11:42 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)utils.c			\
 		$(SRC_DIR)tx.c				\
 		$(SRC_DIR)identifiers.c		\
+		$(SRC_DIR)quotes.c
 
 OBJ = $(SRC:.c=.o)
 
