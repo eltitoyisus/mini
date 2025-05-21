@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:12:50 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/15 13:27:18 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/21 18:53:01 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ t_node	*node_factory(void)
 	node->is_built = false;
 	node->n_cmd = 1;
 	node->arg = NULL;
-	node->head = NULL;
-	node->next = NULL;
 	return (node);
 }
 
@@ -57,7 +55,6 @@ t_sh	*shell_factory(char **envp)
 	sh->prompt = ft_prompt();
 	sh->input = NULL;
 	sh->node = node_factory();
-	sh->node->head = sh->node;
 	sh->env = envp;
 	sh->pipe_count = 0;
 	return (sh);

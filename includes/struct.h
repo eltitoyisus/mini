@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/20 20:10:45 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/21 17:10:54 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,6 @@ typedef struct s_node
 	bool	is_flag;
 	bool	is_quote;
 	bool	is_built;
-	struct s_node	*head;
-	struct s_node	*next;
-	struct s_node	*prev;
 }	t_node;
 
 typedef struct s_sh

@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:49:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/20 20:10:33 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/21 19:07:33 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,30 +55,36 @@ int	case_double(t_parse *parse)
 	}
 	return (1);
 }
+//														|
+// Esto indica si esta abierto o cerrado las comillas 	v
 
-int	check_open(t_parse *parse)
-{ // Esto indica si esta abierto o cerrado las comillas
+int	check_open(t_parse *parse, int type)
+{
 	int	i;
+	int	flag;
 
 	i = 0;
-	while (parse->line[i])
+	if (type == SIMPLE)
 	{
-		if (parse->line[i] == '\'')
+		while (parse->line[i] == '\'')
 		{
+			flag = 0;
 			i++;
-			if(parse->line[i] == '\'')
-				 return (1);
+			if(parse->line[i++] == '\'')
+				 flag = 1;
 		}
-		else if (parse->line[i] == '\"')
-		{
-			i++;
-			if (parse->line[i] == '\"')
-				return (1);
-		}
-		else
-			i++;
 	}
-	return (0);
+	else if (type == DOUBLE)
+	{
+		while (parse->line[i] == '\"')
+		{
+			flag = 0;
+			i++;
+			if (parse->line[i++] == '\"')
+				flag = 1;
+		}
+	}
+	return (flag);
 }
 
 int	id_cases(t_parse *parse)
@@ -102,28 +108,30 @@ int	id_cases(t_parse *parse)
 
 void	ft_quotes(t_parse *parse)
 {
-	// int	ch_op;
+	int	ch_op;
 	int	case_q;
 	int	flag; // Esta flag lo que va a hacer es representar si se realizo bien el recorte de comillas, sean simples o dobles.
 
 	flag = 0;
-	// ch_op = check_open(parse);
 	while(ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
 	{
 		case_q = id_cases(parse);
-		printf("sabes case of quotes --> %d", case_q);
+		printf("sabes case of quotes --> %d\n", case_q);
 		if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
 			ft_error("sabes sale \n", 1);
 		printf("bucle infinito\n"); // Aqui estoy comparando longitudes de los punteros que devuelven quiere decir cual caracter esta mas cerca del inicio
 		if (case_q == SIMPLE)
+		{
+			ch_op = check_open(parse, SIMPLE);
 			flag = case_simple(parse);
+		}
 		else if (case_q == DOUBLE)
+		{
+			ch_op = check_open(parse, DOUBLE);
 			flag = case_double(parse);
-		if (flag == 1 || flag == 0)
+		}
+		if (ch_op == 0 && flag == 0)
 			break ;
-		// else if (flag == 1)
-
-		// 	break ;
 	}
 }
 
