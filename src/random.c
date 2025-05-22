@@ -1,20 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   random.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 16:27:01 by dacastil          #+#    #+#             */
-/*   Updated: 2024/09/17 19:25:27 by dacastil         ###   ########.fr       */
+/*   Created: 2025/05/03 20:17:24 by daniel-cast       #+#    #+#             */
+/*   Updated: 2025/05/03 21:27:53 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalpha(int c)
+#include <stdio.h>
+
+void	random_n()
 {
-	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
-	{
-		return (1);
-	}
-	return (0);
+	int	a;
+	int	random;
+
+	a = 0;
+	random = ((((long)&a % 37) % 10) % 7);
+	printf("%d\n", random);
+	return ;
+}
+
+int main ()
+{
+	random_n();
+	return 0;
 }

@@ -3,46 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/19 10:38:42 by marvin            #+#    #+#             */
-/*   Updated: 2024/10/22 12:20:24 by jramos-a         ###   ########.fr       */
+/*   Created: 2024/09/28 18:29:24 by dacastil          #+#    #+#             */
+/*   Updated: 2024/10/14 12:27:35 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
+#include <stdlib.h>
 #include "libft.h"
 
-//verifica si esta el caracter en set
-static int	ft_set(char c, const char *set)
+static int	check_set(char c, char const *set)
 {
-	while (*set)
+	int	i;
+
+	i = 0;
+	while (set[i])
 	{
-		if (c == *set)
+		if (c == set[i])
 			return (1);
-		set++;
+		i++;
 	}
 	return (0);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+static char	*mi_strncpy(char *dest, const char *src, size_t n)
 {
-	char	*ptr;
-	size_t	start;
-	size_t	end;
-	size_t	len;
+	size_t	i;
+
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strtrim(const char *s1, char const *set)
+{
+	size_t	inc;
+	size_t	fin;
+	size_t	lngnew;
+	char	*newstr;
 
 	if (!s1 || !set)
 		return (NULL);
-	start = 0;
-	end = ft_strlen(s1);
-	while (s1[start] && ft_set(s1[start], set))
-		start++;
-	while (end > start && ft_set(s1[end - 1], set))
-		end--;
-	len = end - start;
-	ptr = (char *)malloc(sizeof(char) * (len + 1));
-	if (!ptr)
+	inc = 0;
+	fin = ft_strlen(s1);
+	while (s1[inc] && check_set(s1[inc], set))
+	{
+		inc++;
+	}
+	while (fin > inc && check_set(s1[fin - 1], set))
+	{
+		fin--;
+	}
+	lngnew = fin - inc;
+	newstr = (char *)malloc(lngnew + 1);
+	if (!newstr)
 		return (NULL);
-	ft_strlcpy(ptr, s1 + start, len + 1);
-	return (ptr);
+	mi_strncpy(newstr, (s1 + inc), lngnew);
+	newstr[lngnew] = '\0';
+	return (newstr);
 }

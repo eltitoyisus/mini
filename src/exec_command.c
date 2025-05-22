@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/01 10:48:09 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:29:03 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void free_args(char **args)
 void exec_command(char *command, char **envp, t_sh *sh)
 {
 	char **args;
-	
+
 	args = ft_split(command, ' ');
 	if (!command || !*command)
 	{

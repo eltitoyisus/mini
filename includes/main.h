@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:40:58 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:19:42 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,47 @@
 # include "headers.h"
 # include "struct.h"
 
+//TX
+void	ft_tx();
+void	save_info(t_tx *tx, int i, int j);
+
 // UTILS TO EVERYTHING
 int		ft_error(char *msg, int ret);
 void	free_words(char **words);
+int		can_op(char *file);
 
 // FTs DE LISTAS
 void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.
-void	ft_lstclear_sh(t_sh *sh, t_node *temp); // Adaptada para la mini.
+void	ft_lstclear_sh(t_sh *sh); // Adaptada para la mini.
+void	ft_lstadd_back_parse(t_parse *parse);
+void	ft_lstadd_back_cmd(t_cmd *cmd);
+void	ft_lstclear_parse(t_parse *parse);
+
+//IDENTIFIERS
+int	id_red(t_parse *parse);
+int	id_file(t_parse *parse);
 
 // FREES OF LIST OR NODES
 void	destroy_node(t_node *node);
-void	free_built(t_built *built);
 void	free_cmd(t_cmd *cmd);
 void	free_red(t_reds *red);
-void	free_pipe(t_pipe *w_pipe);
+void	free_parse(t_parse *parse);
 
 // PARSE
 void	parse_comm(t_sh *sh, char **env);
+// void	info_to_struct(t_sh *sh, int type_token, char **input_s, int i);
+void	info_to_struct_2(t_parse *parse, t_sh *sh, int i);
+// void	type_cmd_built(t_sh *sh, int token, char **input_s, int i);
+void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i);
+void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i);
+// void	type_red_pipe(t_sh *sh, int token, char **input_s, int i);
+void	add_flag(t_sh *sh, char *flag);
+int		find_cmd(t_parse *parse);
+
+// QUOTES
+void	ft_quotes(t_parse *parse);
+
+
 
 // SIGNALS
 void	ft_signals(void);
@@ -40,13 +64,12 @@ void	ctrl_c(int sign);
 
 // SHELL FACTORY OR INITS
 
-t_sh	*shell_factory(void);
+t_sh	*shell_factory(char **envp);
 t_node	*node_factory(void);
 t_cmd	*cmd_factory(void);
 
-t_built	*init_built(void);
-t_pipe	*init_pipe(void);
 t_reds	*init_redir(void);
+t_parse	*init_parse(void);
 
 // PROMPT
 char	*ft_prompt(void);

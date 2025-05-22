@@ -3,40 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jesus <jesus@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/17 19:38:10 by marvin            #+#    #+#             */
-/*   Updated: 2024/10/21 18:41:32 by jesus            ###   ########.fr       */
+/*   Created: 2024/09/18 18:04:16 by dacastil          #+#    #+#             */
+/*   Updated: 2024/09/27 21:23:52 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdio.h>
+#include <stddef.h>
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	unsigned char	*d;
-	unsigned char	*s;
-	size_t			i;
+	size_t	i;
 
 	i = 0;
-	d = (unsigned char *)dest;
-	s = (unsigned char *)src;
 	if (dest == src || n == 0)
 		return (dest);
-	if (d < s)
+	if ((unsigned char *)src > (unsigned char *)dest)
 	{
 		while (i < n)
 		{
-			d[i] = s[i];
+			((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
 			i++;
 		}
 	}
 	else
 	{
-		while (n--)
+		i = n;
+		while (i > 0)
 		{
-			d[n] = s[n];
+			i--;
+			((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
 		}
 	}
 	return (dest);
 }
+/*int main()
+{
+const char src[] = "me voy";
+	char dest[] = "hola vida";
+	size_t n = 5;
+
+	printf("funcion original: %s\n", (char*)memmove(dest, src, n));
+	return (0);
+}*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/02 12:15:33 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:27:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,10 @@ int exec_cd(char **args, t_sh *sh)
 	}
 	if (chdir(args[1]) != 0)
 		return (0);
-	if (sh->prompt)
-		free(sh->prompt);
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (0);
-	new_prompt = ft_strdup("\033[44;97m@CRIPTO$HELL\033[0m \033[38;5;82m");
-	tmp = new_prompt;
-	new_prompt = ft_strjoin(new_prompt, "-");
-	free(tmp);
-	tmp = new_prompt;
-	new_prompt = ft_strjoin(new_prompt, cwd);
-	free(tmp);
-	free(cwd);
-	tmp = new_prompt;
-	new_prompt = ft_strjoin(new_prompt, " ~ \033[0;0m");
-	free(tmp);
-	sh->prompt = new_prompt;
+	sh->prompt = "\033[44;97m@MINISHELL\033[0m \033[38;5;82m";
+	sh->prompt = ft_strjoin(sh->prompt, "-");
+	sh->prompt = ft_strjoin(sh->prompt, getcwd(NULL, 0));
+	sh->prompt = ft_strjoin(sh->prompt, " ~ \033[0;0m");
 	return (1);
 }
 
