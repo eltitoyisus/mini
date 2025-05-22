@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 16:27:41 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/22 16:33:12 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,6 @@ int	exec_pwd(void)
 
 int exec_cd(char **args, t_sh *sh)
 {
-	char *tmp;
-	char *new_prompt;
-	char *cwd;
-
 	if (!args[1])
 	{
 		write(1, "cd: error\n", 11);

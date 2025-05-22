@@ -6,12 +6,13 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 16:19:42 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/22 16:32:45 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL
 # define MINISHELL
+# define _GNU_SOURCE
 
 # include "headers.h"
 # include "struct.h"
