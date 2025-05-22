@@ -6,13 +6,25 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 16:33:18 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/15 16:46:44 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-// inits
+t_parse	*init_parse(void)
+{
+	t_parse	*parse;
+
+	parse = malloc(sizeof(t_parse));
+	parse->is_cmd = false;
+	parse->is_flag = false;
+	parse->line = NULL;
+	parse->next = NULL;
+	parse->prev = NULL;
+	parse->head = parse;
+	return (parse);
+}
 
 t_reds	*init_redir(void)
 {
@@ -21,29 +33,10 @@ t_reds	*init_redir(void)
 	red = malloc(sizeof(t_reds));
 	red->fd = -1;
 	red->file = NULL;
-	red->type = NULL;
+	red->delim = NULL;
+	red->type = -1;
+	red->next = NULL;
 	return (red);
 }
 
-t_pipe	*init_pipe(void)
-{
-	t_pipe	*pipe_info;
 
-	pipe_info = malloc(sizeof(t_pipe));
-	pipe_info->pipefd[0] = -1;
-	pipe_info->pipefd[1] = -1;
-	pipe_info->pipe_count = 0;
-	pipe_info->pipe_pos = -1;
-	pipe_info->pipe_in = -1;
-	pipe_info->pipe_out = -1;
-	return (pipe_info);
-}
-
-t_built	*init_built(void)
-{
-	t_built	*built;
-
-	built = malloc(sizeof(t_built));
-	built->name = NULL;
-	return (built);
-}

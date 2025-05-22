@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/07 19:46:24 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:30:49 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,17 @@ int	exec_echo(char **args, char **envp)
 	}
 	while (args[i])
 	{
-		if (args[i] && ft_strncmp(args[i], "$?", 3) == 0)
+		if (echo_var(args, envp))
 		{
-			char *exit_str = ft_itoa(last_signal_code(-1));
-			write(1, exit_str, ft_strlen(exit_str));
-			free(exit_str);
-		}
-		else if (args[i] && args[i][0] == '$')
-		{
-			if (echo_var(&args[i], envp))
-				;
-			else
-				write(1, args[i], ft_strlen(args[i]));
+			write(1, "\n", 1);
+			return 1;
 		}
 		else
+		{
 			write(1, args[i], ft_strlen(args[i]));
-		
 		if (args[i + 1])
 			write(1, " ", 1);
+		}
 		i++;
 	}
 	if (newline)
@@ -63,10 +56,6 @@ int	exec_pwd(void)
 
 int exec_cd(char **args, t_sh *sh)
 {
-	char *tmp;
-	char *new_prompt;
-	char *cwd;
-
 	if (!args[1])
 	{
 		write(1, "cd: error\n", 11);
@@ -74,29 +63,16 @@ int exec_cd(char **args, t_sh *sh)
 	}
 	if (chdir(args[1]) != 0)
 		return (0);
-	if (sh->prompt)
-		free(sh->prompt);
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (0);
-	new_prompt = ft_strdup("\033[44;97m@CRIPTO$HELL\033[0m \033[38;5;82m");
-	tmp = new_prompt;
-	new_prompt = ft_strjoin(new_prompt, "-");
-	free(tmp);
-	tmp = new_prompt;
-	new_prompt = ft_strjoin(new_prompt, cwd);
-	free(tmp);
-	free(cwd);
-	tmp = new_prompt;
-	new_prompt = ft_strjoin(new_prompt, " ~ \033[0;0m");
-	free(tmp);
-	sh->prompt = new_prompt;
+	sh->prompt = "\033[44;97m@MINISHELL\033[0m \033[38;5;82m";
+	sh->prompt = ft_strjoin(sh->prompt, "-");
+	sh->prompt = ft_strjoin(sh->prompt, getcwd(NULL, 0));
+	sh->prompt = ft_strjoin(sh->prompt, " ~ \033[0;0m");
 	return (1);
 }
 
 int	exec_exit(void)
 {
 	write(1, "exit\n", 5);
-	exit(0);
+	exit(0); // change for SIGQUIT
 	return (1);
 }

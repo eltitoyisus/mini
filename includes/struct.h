@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/07 19:38:59 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:30:27 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 
 # include "../includes/main.h"
 
+enum e_case_quotes
+{
+	SIMPLE,
+	DOUBLE,
+	ERROR
+};
+
 enum e_type_token // TIPOS DE TOKENS
 {
 	BUILT,
@@ -22,62 +29,59 @@ enum e_type_token // TIPOS DE TOKENS
 	PIPE,
 	RED,
 	ARG,
+	FLAG,
+	FILES
 };
 
 enum e_type_red // TIPOS DE REDIRECCIONES --> CON SUS O_FLAGS CORRESPONDIENTES DEPENDIENDO DE LO QUE NECESITEMOS.
 {
-	OUTFILE_APPEND,
-	OUTFILE_TRUNCATE,
+	OUTFILE_APP,
+	OUTFILE_TR,
 	INFILE,
-	HEREDOC,
-};
+	DELIM,
+	HEREDOC, // "<<"
+	INRED, // "<"
+	OURED, // ">"
+	D_OURED // ">>"
 
-enum e_admissions // PERMISOS PARA FILES O FLAGS!
-{
-	APPEND,
-	TRUNCATE,
 };
-
-typedef struct s_built
-{
-	char	*name;
-}	t_built;
 
 typedef struct s_reds
 {
-	char	*file;
-	char	*type;
+	char	*file; // NOMBRE DE ARCHIVO O DELIMITADOR
+	char	*delim;
+	int		type; // TIPO DE RED O ARCHIVO
 	int		fd;
-	struct	s_reds *next;
+	struct s_reds	*next;
 }	t_reds;
 
-typedef struct s_pipe
-{
-	pid_t	*pids;
-	int		pipefd[2];
-	int		pipe_count;
-	int		pipe_pos;
-	int		pipe_in;
-	int		pipe_out;
-}	t_pipe;
 
 typedef struct s_cmd
 {
 	char	**split_cmd;
-	char	*line_cmd;
 	char	*path;
 	char	*cmd;
-	char	*args;
+	int		index_token;
+	t_reds	*red;
+	pid_t	*pids; // array de procesos
+	int		pipefd[2]; // puntero de pipes
+	int		pipe_in;
+	int		pipe_out;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+	struct s_cmd	*head;
 }	t_cmd;
+
 
 typedef struct s_node
 {
 	t_cmd	*cmd;
-	t_built	*built;
-	t_reds	*red;
-	t_pipe	*w_pipe;
 	char	*arg;
-	struct s_node	*next;
+	int		n_cmd; // Número de comandos.
+	bool	is_cmd;
+	bool	is_flag;
+	bool	is_quote;
+	bool	is_built;
 }	t_node;
 
 typedef struct s_sh
@@ -86,6 +90,37 @@ typedef struct s_sh
 	char	*input;
 	char	*prompt;
 	char	*pwd;
+	char	**env;
+	int		pipe_count; // Numero de pipes mejor tenerlo aqui
 }	t_sh;
+
+typedef struct s_parse
+{
+	char	*line;
+	bool	is_flag;
+	bool	is_cmd;
+	int		type_token;
+	struct s_parse	*next;
+	struct s_parse	*prev;
+	struct s_parse	*head;
+}	t_parse;
+
+
+//	TETRIS DEJAMELO A MI JEJE
+
+typedef struct s_tx
+{
+	int		x;
+	int		y;
+	char	**matx;
+}	t_tx;
+
+typedef struct s_piece
+{
+	int	x;
+	int	y;
+	char	***piece;
+}	t_piece;
+
 
 #endif

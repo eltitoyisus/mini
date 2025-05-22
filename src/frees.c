@@ -3,33 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:15:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/01 16:29:24 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/22 17:32:11 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-void	free_built(t_built *built)
-{
-	if (built->name)
-		free(built->name);
-}
-
 void	free_cmd(t_cmd *cmd)
 {
-	if (cmd->args)
-		free(cmd->args);
 	if (cmd->cmd)
 		free(cmd->cmd);
-	if (cmd->line_cmd)
-		free(cmd->line_cmd);
 	if (cmd->path)
 		free(cmd->path);
 	if (cmd->split_cmd)
 		free_words(cmd->split_cmd);
+	if (cmd->red)
+		free_red(cmd->red);
 }
 
 void	free_red(t_reds *red)
@@ -38,35 +30,29 @@ void	free_red(t_reds *red)
 		close(red->fd);
 	if (red->file)
 		free(red->file);
-	if (red->type)
-		free(red->type);
-}
-
-void	free_pipe(t_pipe *w_pipe)
-{
-	// w_pipe->pids; NO RECUERDO COMO GESTIONAR ESTO JAJAJA
-	w_pipe->pipe_count = 0;
-	w_pipe->pipe_in = 0;
-	w_pipe->pipe_out = 0;
-	w_pipe->pipe_pos = 0;
-	if (w_pipe->pipefd[1] > 0)
-		close (w_pipe->pipefd[1]);
-	if (w_pipe->pipefd[0] > 0)
-		close (w_pipe->pipefd[0]);
+	red->type = -1;
 }
 
 void	destroy_node(t_node *node)
 {
 	if (node->arg)
 		free(node->arg);
-	if (node->built)
-		free_built(node->built);
 	if (node->cmd)
 		free_cmd(node->cmd);
-	if (node->red)
-		free_red(node->red);
-	if (node->w_pipe)
-		free_pipe(node->w_pipe);
+	node->n_cmd = 0;
 	free(node);
 }
 
+void	free_parse(t_parse *parse)
+{
+	parse->is_cmd = false;
+	parse->is_flag = false;
+	parse->type_token = 0;
+	free(parse);
+}
+
+// void	destroy_sh(t_sh *sh)
+// {
+// 	free_words(sh->env);
+// 	sh->
+// }

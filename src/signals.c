@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:04:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/07 19:58:15 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:34:25 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	ctrl_c(int sign)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	// esto es para el codigo de salida de ctrl+c
 	g_exit_status = 130;
 
 }
