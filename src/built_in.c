@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 17:30:49 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 08:55:44 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 int	exec_echo(char **args, char **envp)
 {
-	int	i;
-	int	newline;
+	int		i;
+	int		newline;
+	int		fd;
+	char	buffer[4096];
+	ssize_t	bytes_read;
 
 	i = 1;
 	newline = 1;
@@ -26,17 +29,37 @@ int	exec_echo(char **args, char **envp)
 	}
 	while (args[i])
 	{
-		if (echo_var(args, envp))
+		if (ft_strncmp(args[i], "<", 2) == 0 && args[i + 1])
 		{
-			write(1, "\n", 1);
-			return 1;
+			// Read from file
+			fd = open(args[i + 1], O_RDONLY);
+			if (fd < 0)
+			{
+				write(2, "echo: ", 6);
+				write(2, args[i + 1], ft_strlen(args[i + 1]));
+				write(2, ": No such file or directory\n", 28);
+				return (0);
+			}
+			while ((bytes_read = read(fd, buffer, sizeof(buffer) - 1)) > 0)
+			{
+				buffer[bytes_read] = '\0';
+				write(1, buffer, bytes_read);
+			}
+			close(fd);
+			i += 2;
+			continue ;
+		}
+		else if (args[i][0] == '$')
+		{
+			if (echo_var(args, i, envp) == 0)
+				write(1, args[i], ft_strlen(args[i]));
 		}
 		else
 		{
 			write(1, args[i], ft_strlen(args[i]));
-		if (args[i + 1])
-			write(1, " ", 1);
 		}
+		if (args[i + 1] && ft_strncmp(args[i + 1], "<", 2) != 0)
+			write(1, " ", 1);
 		i++;
 	}
 	if (newline)
@@ -54,7 +77,7 @@ int	exec_pwd(void)
 	return (1);
 }
 
-int exec_cd(char **args, t_sh *sh)
+int	exec_cd(char **args, t_sh *sh)
 {
 	if (!args[1])
 	{

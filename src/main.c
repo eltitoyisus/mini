@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 17:33:04 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:19:41 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv, char **envp)
 			add_history(sh->input);
 			parse_comm(sh, envp);
 			printf("que belleza mi rey\n");
-			exec_command(sh->input, envp, sh);
+			exec_parsed_command(sh, envp);
 		}
 		free(sh->input);
 	}

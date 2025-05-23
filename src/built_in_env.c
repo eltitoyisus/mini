@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:04:02 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/04 10:34:30 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 08:51:55 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	exec_env(char **envp)
 
 int	env_unset(char **argv, char **envp)
 {
-	int i;
-	int j;
-	char *var;
+	int		i;
+	int		j;
+	char	*var;
 
 	i = 0;
 	if (!argv[1])
@@ -55,15 +55,14 @@ int	env_unset(char **argv, char **envp)
 	return (1);
 }
 
-int env_export(char **argv, char **envp)
+int	env_export(char **argv, char **envp)
 {
-	int i;
-	char *new_var;
+	int		i;
+	char	*new_var;
 
 	i = 0;
 	if (!envp)
 		return (0);
-
 	if (!argv[1])
 	{
 		while (envp[i])
@@ -83,7 +82,8 @@ int env_export(char **argv, char **envp)
 		return (-1);
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], argv[1], ft_strchr(argv[1], '=') - argv[1]) == 0)
+		if (ft_strncmp(envp[i], argv[1], ft_strchr(argv[1], '=')
+				- argv[1]) == 0)
 		{
 			free(envp[i]);
 			envp[i] = new_var;
@@ -96,10 +96,10 @@ int env_export(char **argv, char **envp)
 	return (1);
 }
 
-void export_no_args(char **envp)
+void	export_no_args(char **envp)
 {
-	char *equals;
-	int i;
+	char	*equals;
+	int		i;
 
 	i = 0;
 	write(1, "declare -x ", 11);
@@ -117,34 +117,26 @@ void export_no_args(char **envp)
 	i++;
 }
 
-int	echo_var(char **argv, char **envp)
+int	echo_var(char **argv, int index, char **envp)
 {
-	int i;
-	int j;
-	char *value;
+	int		j;
+	char	*value;
 
-	i = 0;
+	if (argv[index][0] != '$')
+		return (0);
 	j = 0;
-	while (argv[i])
+	while (envp[j])
 	{
-		if (argv[i][0] == '$')
+		if (ft_strncmp(&argv[index][1], envp[j],
+				ft_strlen(&argv[index][1])) == 0
+			&& envp[j][ft_strlen(&argv[index][1])] == '=')
 		{
-			j = 0;
-			while (envp[j])
-			{
-				if (ft_strncmp(&argv[i][1], envp[j], ft_strlen(&argv[i][1])) == 0)
-				{
-					value = ft_strchr(envp[j], '=');
-					if (value)
-						write(1, value + 1, ft_strlen(value + 1));
-					return (1);
-					write(1, "\n", 1);
-				}
-				j++;
-			}
+			value = ft_strchr(envp[j], '=');
+			if (value)
+				write(1, value + 1, ft_strlen(value + 1));
 			return (1);
 		}
-		i++;
+		j++;
 	}
-	return (0);
+	return (1);
 }

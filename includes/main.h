@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 17:56:09 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:22:34 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int		exec_env(char **envp);
 int		exec_env(char **envp);
 int		env_unset(char **argv, char **envp);
 int		env_export(char **argv, char **envp);
-int		echo_var(char **argv, char **envp);
+int	echo_var(char **argv, int index, char **envp);
 
 // REDIRECTION
 int		has_redirection(char **args);
@@ -127,5 +127,8 @@ void	process_redirs(char **args, char **redir);
 // void safe_close(int fd);
 // int safe_open(const char *path, t_open_flags flags);
 // void safe_dup2(int oldfd, int newfd);
+
+void	exec_parsed_command(t_sh *sh, char **envp);
+
 
 #endif
