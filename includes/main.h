@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/23 16:22:34 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/24 08:47:25 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	echo_var(char **argv, int index, char **envp);
 
 // REDIRECTION
 int		has_redirection(char **args);
-int		handle_redirs(char *command, char **envp);
+int	handle_redirs(t_sh *sh, char **envp);
 void	free_redirs(t_reds *head);
 int		heredoc(char *delimiter);
 
@@ -112,7 +112,7 @@ void	free_commands(char ***commands, int k);
 void	pipe_command(char **args, char **envp);
 void	execute_pipe_chain(t_sh *sh, char ***cmds, char **envp);
 int		do_pipe(char **argv, char **envp, t_sh *sh);
-int		handle_pipes(char *command, char **envp);
+int		handle_pipes(t_sh *sh, char **envp);
 void	export_no_args(char **envp);
 
 // static void _tokenize(char **ptr, char *delim, char **tokens, int *i);

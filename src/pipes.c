@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 17:54:46 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/24 08:45:09 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	is_pipe(char **args)
 	int	i;
 
 	i = 0;
+	if (!args)
+		return (0);
 	while (args[i])
 	{
 		if (ft_strncmp(args[i], "|", 2) == 0)
@@ -33,6 +35,8 @@ int	count_pipes(char **args)
 
 	i = 0;
 	count = 0;
+	if (!args)
+		return (0);
 	while (args[i])
 	{
 		if (ft_strncmp(args[i], "|", 2) == 0)
@@ -48,6 +52,8 @@ void	free_commands(char ***commands, int k)
 	int	j;
 
 	i = 0;
+	if (!commands)
+		return ;
 	while (i < k)
 	{
 		j = 0;
@@ -82,7 +88,7 @@ char	***split_command(char **args, int num_cmds)
 	{
 		if (ft_strncmp(args[j], "|", 2) == 0 || args[j + 1] == NULL)
 		{
-			if (args[j + 1] == NULL)
+			if (args[j + 1] == NULL && ft_strncmp(args[j], "|", 2) != 0)
 				len = j - start + 1;
 			else
 				len = j - start;
@@ -140,25 +146,50 @@ void	pipe_command(char **args, char **envp)
 	exit(EXIT_FAILURE);
 }
 
+void	close_pipe_fds(int fd_prev, int fd[2], int pipe_stage)
+{
+	if (fd_prev != -1)
+		close(fd_prev);
+	if (pipe_stage)
+	{
+		close(fd[0]);
+		close(fd[1]);
+	}
+}
+
 void	execute_pipe_chain(t_sh *sh, char ***cmds, char **envp)
 {
-	int	i;
-	int	fd_prev;
-	int	fd[2];
-	int	status;
+	int		i;
+	int		fd_prev;
+	int		fd[2];
+	int		status;
+	pid_t	*pids;
 
 	i = 0;
 	fd_prev = -1;
-	sh->node->cmd->pids = malloc(sizeof(pid_t) * sh->pipe_count);
-	if (!sh->node->cmd->pids)
+	if (!sh->node || !sh->node->cmd)
 		return ;
+	pids = malloc(sizeof(pid_t) * sh->pipe_count);
+	if (!pids)
+		return ;
+	sh->node->cmd->pids = pids;
 	while (i < sh->pipe_count)
 	{
 		if (i < sh->pipe_count - 1)
 			if (pipe(fd) == -1)
-				exit(EXIT_FAILURE);
-		sh->node->cmd->pids[i] = fork();
-		if (sh->node->cmd->pids[i] == 0)
+			{
+				free(pids);
+				sh->node->cmd->pids = NULL;
+				return ;
+			}
+		pids[i] = fork();
+		if (pids[i] == -1)
+		{
+			free(pids);
+			sh->node->cmd->pids = NULL;
+			return ;
+		}
+		if (pids[i] == 0)
 		{
 			if (i > 0)
 			{
@@ -185,7 +216,7 @@ void	execute_pipe_chain(t_sh *sh, char ***cmds, char **envp)
 	i = 0;
 	while (i < sh->pipe_count)
 	{
-		waitpid(sh->node->cmd->pids[i], &status, 0);
+		waitpid(pids[i], &status, 0);
 		if (i == sh->pipe_count - 1)
 		{
 			if (WIFEXITED(status))
@@ -195,7 +226,7 @@ void	execute_pipe_chain(t_sh *sh, char ***cmds, char **envp)
 		}
 		i++;
 	}
-	free(sh->node->cmd->pids);
+	free(pids);
 	sh->node->cmd->pids = NULL;
 }
 
@@ -203,7 +234,16 @@ int	do_pipe(char **argv, char **envp, t_sh *sh)
 {
 	char	***all_cmds;
 	int		i;
+	int		saved_pipe_count;
+	int		saved_n_cmd;
+	int		saved_pipefd[2];
 
+	if (!sh || !sh->node || !sh->node->cmd)
+		return (-1);
+	saved_pipe_count = sh->pipe_count;
+	saved_n_cmd = sh->node->n_cmd;
+	saved_pipefd[0] = sh->node->cmd->pipefd[0];
+	saved_pipefd[1] = sh->node->cmd->pipefd[1];
 	i = 0;
 	sh->pipe_count = count_pipes(argv) + 1;
 	sh->node->cmd->pipefd[0] = -1;
@@ -213,43 +253,40 @@ int	do_pipe(char **argv, char **envp, t_sh *sh)
 	sh->node->n_cmd = sh->pipe_count;
 	all_cmds = split_command(argv, sh->pipe_count);
 	if (!all_cmds)
-		return (-1);
-	execute_pipe_chain(sh, all_cmds, envp);
-	while (i < sh->pipe_count)
 	{
-		free_args(all_cmds[i]);
-		i++;
+		sh->pipe_count = saved_pipe_count;
+		sh->node->n_cmd = saved_n_cmd;
+		sh->node->cmd->pipefd[0] = saved_pipefd[0];
+		sh->node->cmd->pipefd[1] = saved_pipefd[1];
+		return (-1);
 	}
-	free(all_cmds);
+	execute_pipe_chain(sh, all_cmds, envp);
+	if (all_cmds)
+	{
+		for (i = 0; i < sh->pipe_count && all_cmds[i]; i++)
+			free_args(all_cmds[i]);
+		free(all_cmds);
+	}
+	sh->pipe_count = saved_pipe_count;
+	sh->node->n_cmd = saved_n_cmd;
+	sh->node->cmd->pipefd[0] = saved_pipefd[0];
+	sh->node->cmd->pipefd[1] = saved_pipefd[1];
 	return (0);
 }
 
-int	handle_pipes(char *command, char **envp)
+int	handle_pipes(t_sh *sh, char **envp)
 {
 	char	**args;
 	int		result;
-	t_sh	*sh;
 
 	result = 0;
-	sh = shell_factory(envp);
-	if (!sh)
+	if (!sh || !sh->input)
 		return (1);
-	args = ft_split(command, ' ');
+	args = ft_split(sh->input, ' ');
 	if (!args)
-	{
-		free(sh->prompt);
-		free(sh->node->cmd);
-		free(sh->node);
-		free(sh);
 		return (1);
-	}
 	if (is_pipe(args))
 		result = do_pipe(args, envp, sh);
 	free_args(args);
-	free(sh->prompt);
-	free(sh->node->cmd->red);
-	free(sh->node->cmd);
-	free(sh->node);
-	free(sh);
 	return (result);
 }

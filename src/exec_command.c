@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/23 16:31:56 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/24 08:48:03 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,64 +159,6 @@ void	execute_cmd(t_cmd *cmd, char **envp, t_sh *sh)
 	}
 }
 
-void	exec_parsed_command(t_sh *sh, char **envp)
-{
-	char	**args;
-
-	if (!sh || !sh->node)
-	{
-		write(2, "No command to execute\n", 22);
-		return ;
-	}
-	if (sh->node->is_built && sh->node->arg)
-	{
-		args = ft_split(sh->node->arg, ' ');
-		if (!args)
-			return ;
-		exec_builtin(args, envp, sh);
-		free_words(args);
-		return ;
-	}
-	if (sh->node->n_cmd > 1)
-	{
-		args = ft_split(sh->input, ' ');
-		if (!args)
-			return ;
-		handle_pipes(sh->input, envp);
-		free_words(args);
-		return ;
-	}
-	if (sh->node->cmd && sh->node->cmd->red && (sh->node->cmd->red->file
-			|| sh->node->cmd->red->delim))
-	{
-		args = ft_split(sh->input, ' ');
-		if (!args)
-			return ;
-		handle_redirs(sh->input, envp);
-		free_words(args);
-		return ;
-	}
-	if (sh->node->is_cmd && sh->node->cmd && sh->node->cmd->cmd)
-	{
-		execute_cmd(sh->node->cmd, envp, sh);
-	}
-	else
-	{
-		args = ft_split(sh->input, ' ');
-		if (!args)
-			return ;
-		if (is_builtin(args[0]))
-		{
-			exec_builtin(args, envp, sh);
-		}
-		else
-		{
-			fork_and_exec(sh->input, envp);
-		}
-		free_words(args);
-	}
-}
-
 // void exec_command(char *command, char **envp, t_sh *sh)
 // {
 // 	char **args;
@@ -287,4 +229,68 @@ char	**inc_shlvl(char **envp)
 		i++;
 	}
 	return (envp);
+}
+
+void	exec_parsed_command(t_sh *sh, char **envp)
+{
+	char	**args;
+
+	if (!sh || !sh->node)
+	{
+		write(2, "No command to execute\n", 22);
+		return ;
+	}
+	if (sh->node->is_built && sh->node->arg)
+	{
+		args = ft_split(sh->node->arg, ' ');
+		if (!args)
+			return ;
+		exec_builtin(args, envp, sh);
+		free_words(args);
+		return ;
+	}
+	args = ft_split(sh->input, ' ');
+	if (!args)
+		return ;
+	if (is_pipe(args))
+	{
+		handle_pipes(sh, envp);
+		free_words(args);
+		return ;
+	}
+	free_words(args);
+	if (sh->node->n_cmd > 1)
+	{
+		handle_pipes(sh, envp);
+		return ;
+	}
+	if (sh->node->cmd && sh->node->cmd->red && (sh->node->cmd->red->file
+			|| sh->node->cmd->red->delim))
+	{
+		args = ft_split(sh->input, ' ');
+		if (!args)
+			return ;
+		handle_redirs(sh, envp);
+		free_words(args);
+		return ;
+	}
+	if (sh->node->is_cmd && sh->node->cmd && sh->node->cmd->cmd)
+	{
+		execute_cmd(sh->node->cmd, envp, sh);
+	}
+	else
+	{
+		args = ft_split(sh->input, ' ');
+		if (!args)
+			return ;
+		if (is_builtin(args[0]))
+		{
+			exec_builtin(args, envp, sh);
+		}
+		else
+		{
+			fork_and_exec(sh->input, envp);
+		}
+		free_words(args);
+	}
 }
