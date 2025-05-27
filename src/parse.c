@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/20 18:50:27 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 11:34:09 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,10 @@ static int	other_cases(char *input, char **input_split, int i)
 		return (ARG);
 }
 
-static int cases_builds(char *input)
+static int	cases_builds(char *input)
 {
 	if (!input)
 		return (ARG);
-	if (ft_strncmp(input, "-", 1))
-		return (FLAG);
 	if (!ft_strncmp(input, "pwd", 3))
 		return (BUILT);
 	else if (!ft_strncmp(input, "cd", 2))
@@ -44,11 +42,8 @@ static int cases_builds(char *input)
 		return (BUILT);
 	else if (!ft_strncmp(input, "env", 3))
 		return (BUILT);
-	// else if (!ft_strncmp(input, "exit", 4))
-	// {
-	// 	free(input);
-	// 	ft_error("exit", 127);
-	// }
+	else if (!ft_strncmp(input, "-", 1))
+		return (FLAG);
 	else
 		return (CMD);
 }
@@ -87,20 +82,18 @@ static int	n_token(char *input, char **env, char **input_split, int i)
 	value_token = cases_builds(input);
 	if (value_token == FLAG)
 		return (FLAG);
-	if (value_token == BUILT)
+	else if (value_token == BUILT)
 		return (BUILT);
 	value_token = cases_com(input, env);
 	if (value_token == CMD)
 		return (CMD);
-	else if (value_token == ARG)
-		return (ARG);
 	value_token = other_cases(input, input_split, i);
 	if (value_token == RED)
 		return (RED);
 	else if (value_token == PIPE)
 		return (PIPE);
 	else if (value_token == FILES)
-			return (FILES);
+		return (FILES);
 	return (ARG);
 }
 
@@ -205,7 +198,7 @@ void	parse_comm(t_sh *sh, char **env)
 	printf("reservada memoria\n");
 	parse->head = parse;
 	if (!sh || !sh->input)
-		return;
+		return ;
 	ft_parse(parse, sh, env);
 	printf("sale del parseo\n");
 	ft_lstclear_parse(parse);

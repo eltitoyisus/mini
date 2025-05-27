@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 09:59:08 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 11:23:04 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	if (parse->type_token == BUILT)
 	{
 		sh->node->arg = ft_strdup(parse->line);
-		sh->node->is_built = true;
+		sh->node->line_is->built = true;
 	}
 	else if (parse->type_token == CMD)
 	{
@@ -62,7 +62,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 			ft_lstadd_back_cmd(sh->node->cmd);
 		sh->node->cmd->cmd = ft_strdup(parse->line);
 		sh->node->cmd->path = find_path(sh->env);
-		sh->node->is_cmd = true;
+		sh->node->line_is->cmd = true;
 		sh->node->cmd->split_cmd = ft_split(sh->node->cmd->cmd, ' ');
 		sh->node->cmd->index_token = i;
 		j++;
