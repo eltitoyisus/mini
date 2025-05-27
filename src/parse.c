@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 11:34:09 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:57:41 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	other_cases(char *input, char **input_split, int i)
 {
 	if (!ft_strncmp(input, "<", 1) || !ft_strncmp(input, ">", 1)
-		|| !ft_strncmp(input, "<<", 1) || !ft_strncmp(input, ">>", 1))
+		|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2))
 		return (RED);
 	else if ((!ft_strncmp(input_split[i - 1], "<", 1) && can_op(input)) || !ft_strncmp(input_split[i - 1], ">", 1)
 		|| !ft_strncmp(input_split[i - 1], ">>", 2) || !ft_strncmp(input_split[i - 1], "<<", 2))
@@ -53,12 +53,14 @@ static int	cases_com(char *input, char **env)
 	char	**split_com;
 	char	*executable_path;
 
+	printf("sapo\n");
 	split_com = ft_split(input, ' ');
 	if (!split_com)
 		return (ft_error("ERROR: split failed\n", 1), ARG);
 	executable_path = get_path(env, split_com[0]);
 	if (!executable_path)
 	{
+		printf("$$$\n");
 		free_words(split_com);
 		return (ARG);
 	}
@@ -70,13 +72,14 @@ static int	cases_com(char *input, char **env)
 	}
 	free(executable_path);
 	free_words(split_com);
-	return (ARG);
+	return (RED);
 }
 
 static int	n_token(char *input, char **env, char **input_split, int i)
 {
-	int	value_token;
+	int		value_token;
 
+	// input = cut_quotes(input);
 	if (input == NULL)
 		return (-1);
 	value_token = cases_builds(input);
@@ -85,8 +88,11 @@ static int	n_token(char *input, char **env, char **input_split, int i)
 	else if (value_token == BUILT)
 		return (BUILT);
 	value_token = cases_com(input, env);
+	printf("tokennn --> %d\n", value_token);
 	if (value_token == CMD)
 		return (CMD);
+	else if (value_token == ARG)
+		return (ARG);
 	value_token = other_cases(input, input_split, i);
 	if (value_token == RED)
 		return (RED);
@@ -94,7 +100,8 @@ static int	n_token(char *input, char **env, char **input_split, int i)
 		return (PIPE);
 	else if (value_token == FILES)
 		return (FILES);
-	return (ARG);
+	else
+		return (ARG);
 }
 
 // void info_to_struct(t_sh *sh, int type_token, char **input_s, int i)
@@ -115,7 +122,7 @@ void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 	while (parse != NULL)
 	{
 		if (!parse || !parse->line)
-		return ;
+			return ;
 		type_cmd_built_2(sh, parse, i);
 		type_red_pipe_2(sh, parse, i);
 		if (parse->type_token == ARG)
@@ -159,33 +166,39 @@ void	ft_controls(t_parse *parse)
 
 // }
 
+
 void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 {
 	char	**split_input;
 	int		i;
+	int		count;
+	t_parse	*temp;
 
+	temp = parse;
 	split_input = ft_split(sh->input, ' ');
 	i = 0;
-	while (parse != NULL)
+	count = ft_countsubstr(sh->input, ' ');
+	while (parse != NULL && i < count)
 	{
 		printf("entra al bucle\n");
 		parse->line = split_input[i];
+		printf ("ssss111 %s %s \n", parse->line);
 		parse->type_token = n_token(split_input[i], env, split_input, i);
 		if (parse->type_token == -1)
 			break ;
 		printf("token --> %d\n", parse->type_token);
 		ft_controls(parse); // AQUI SE HARAN LAS IMPLEMENTACION QUE TENGO QUE INVESTIGAR PARA ASEGURARNOS BIEN QUE NO HALLAN ERRORES.
 		i++;
-		if (i != 0)
+		if (i != 0 && i < count)
 		{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.
 			printf("agrega otro nodo\n");
 			ft_lstadd_back_parse(parse); // En utils puedes ver esta funcion, es de listas pero esta adaptada.
 			parse = parse->next;
 		}
-		else
-			parse = parse->next;
 	}
-	parse = parse->head;
+	// printf ("ssss %s \n", parse->prev->line);
+	parse = temp;
+	printf ("ssss %s \n", parse->line);
 	info_to_struct_2(parse, sh, i);
 	free_words(split_input);
 }
@@ -196,7 +209,6 @@ void	parse_comm(t_sh *sh, char **env)
 
 	parse = init_parse();
 	printf("reservada memoria\n");
-	parse->head = parse;
 	if (!sh || !sh->input)
 		return ;
 	ft_parse(parse, sh, env);

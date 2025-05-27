@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lsts_sh.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/21 18:53:17 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 12:30:24 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_lstadd_back_cmd(t_cmd *cmd)
 
 void	ft_lstadd_back_parse(t_parse *parse)
 {
-	t_parse *new;
+	t_parse	*new;
 	t_parse	*last;
 
 	new = init_parse();

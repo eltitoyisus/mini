@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 11:20:36 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:57:29 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ typedef struct s_parse
 	int				type_token;
 	struct s_parse	*next;
 	struct s_parse	*prev;
-	struct s_parse	*head;
 }	t_parse;
 
 enum e_case_quotes

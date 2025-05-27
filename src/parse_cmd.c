@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 11:23:04 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:04:22 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	int	j; // count_cmd
 
 	j = 0;
+	printf("type_token --> %d", parse->type_token);
 	if (parse->type_token == BUILT)
 	{
 		sh->node->arg = ft_strdup(parse->line);
@@ -58,6 +59,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	}
 	else if (parse->type_token == CMD)
 	{
+		printf("sabessss\n");
 		if (j > 0)
 			ft_lstadd_back_cmd(sh->node->cmd);
 		sh->node->cmd->cmd = ft_strdup(parse->line);

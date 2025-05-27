@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 18:02:52 by dacastil          #+#    #+#             */
-/*   Updated: 2024/10/14 12:28:18 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:34:27 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	free_parcial(char **splres, int i)
 	free(splres);
 }
 
-static int	ft_countsubstr(const char*s, char c)
+int	ft_countsubstr(const char*s, char c)
 {
 	int		i;
 	int		countstr;

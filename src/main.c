@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 11:22:20 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:00:39 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int main(int argc, char **argv, char **envp)
 			// 	ft_tx();
 			add_history(sh->input);
 			parse_comm(sh, envp);
+			printf("linea completa --> %d %d \n", sh->node->line_is->cmd, sh->node->line_is->with_reds);
 			// exec();
 			printf("que belleza mi rey\n");
 			exec_command(sh->input, envp, sh);
