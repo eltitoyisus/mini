@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 19:32:21 by dacastil          #+#    #+#             */
-/*   Updated: 2025/05/27 12:34:41 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:14:14 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
-int		ft_countsubstr(const char*s, char c);
+int		ft_countsubstr(const char *s, char c);
 
 typedef struct s_list
 {

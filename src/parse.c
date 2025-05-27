@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 12:57:41 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:02:15 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	bool_active(t_parse *parse)
 {
 	t_parse	*count;
 
-	count = parse->head;
+	count = parse;
 	while (count != NULL)
 	{
 		if (count->type_token == CMD)
@@ -153,7 +153,6 @@ void	bool_active(t_parse *parse)
 void	ft_controls(t_parse *parse)
 {
 	bool_active(parse);
-	ft_quotes(parse);
 	printf("lineaaa ---->> %s\n", parse->line);
 }
 
@@ -182,8 +181,9 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 	{
 		printf("entra al bucle\n");
 		parse->line = split_input[i];
-		printf ("ssss111 %s %s \n", parse->line);
-		parse->type_token = n_token(split_input[i], env, split_input, i);
+		ft_quotes(parse);
+		printf ("ssss111 %s \n", parse->line);
+		parse->type_token = n_token(parse->line, env, split_input, i);
 		if (parse->type_token == -1)
 			break ;
 		printf("token --> %d\n", parse->type_token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 10:07:30 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 19:40:21 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int		find_cmd(t_parse *parse);
 
 // QUOTES
 void	ft_quotes(t_parse *parse);
-
-
+char	*cut_quotes(char	*input);
 
 // SIGNALS
 void	ft_signals(void);
@@ -76,40 +75,41 @@ t_type	*init_bools(void);
 char	*ft_prompt(void);
 
 // EXEC COMMAND
-char *find_path(char **envp);
-char *try_executable_path(char **paths, char *command);
-char *get_path(char **envp, char *command);
-void fork_and_exec(char *command, char **envp);
-void free_args(char **args);
-void exec_command(char *command, char **envp, t_sh *sh);
+char	*find_path(char **envp);
+char	*try_executable_path(char **paths, char *command);
+char	*get_path(char **envp, char *command);
+void	fork_and_exec(char *command, char **envp);
+void	free_args(char **args);
+void	exec_command(char *command, char **envp, t_sh *sh);
 
 // BUILT INS
-int	exec_echo(char **args, char **envp);
-int	exec_pwd(void);
-int exec_cd(char **args, t_sh *sh);
-int	exec_exit(void);
+
+int		exec_echo(char **args, char **envp);
+int		exec_pwd(void);
+int		exec_cd(char **args, t_sh *sh);
+int		exec_exit(void);
 
 // EXEC BUILT INS
-int is_builtin(char *command);
-int	exec_builtin(char **args, char **envp, t_sh *sh);
-int	exec_env(char **envp);
+int		is_builtin(char *command);
+int		exec_builtin(char **args, char **envp, t_sh *sh);
+int		exec_env(char **envp);
 
 // ENV
-int	exec_env(char **envp);
-int env_unset(char **argv, char **envp);
-int env_export(char **argv, char **envp);
-int	echo_var(char **argv, char **envp);
+int		exec_env(char **envp);
+int		env_unset(char **argv, char **envp);
+int		env_export(char **argv, char **envp);
+int		echo_var(char **argv, char **envp);
 
 // REDIRECTION
-void    redir_in(char *file_in);
-void redir_out(char *cmd_name, char **cmd_lst, char **envp, char *stdout_file, char *stderr_file);
+void	redir_in(char *file_in);
+void	redir_out(char *cmd_name, char **cmd_lst, char **envp, char *stdout_file, char *stderr_file);
 
 // PIPES
 void	exec_pipe(char *cmd_name, char **cmd_lst, char **envp, char *err);
-void    exec_line(char *line, char **envp);
+void	exec_line(char *line, char **envp);
 // static void _tokenize(char **ptr, char *delim, char **tokens, int *i);
-int tokenize(char *linea, char *delim, char **tokens, int max_tokens);
-void process_redirs(char **args, char **redir);
+int		tokenize(char *linea, char *delim, char **tokens, int max_tokens);
+void	process_redirs(char **args, char **redir);
 
 // SAFE
 // void *safe_malloc(size_t size, bool calloc_flag);

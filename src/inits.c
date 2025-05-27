@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 12:44:25 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:07:45 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_parse	*init_parse(void)
 	parse->line = NULL;
 	parse->next = NULL;
 	parse->prev = NULL;
-	parse->head = parse;
 	return (parse);
 }
 

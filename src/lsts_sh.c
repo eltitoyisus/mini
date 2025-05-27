@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 12:30:24 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:11:49 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,17 @@ void	ft_lstadd_back_parse(t_parse *parse)
 
 void	ft_lstclear_parse(t_parse *parse)
 {
+	t_parse	*temp;
+
+	temp = parse;
 	printf("entra a clean\n");
-	if (!parse->head || !parse)
+	if (!parse)
 		return ;
 	while (parse->next != NULL)
 	{
 		printf("entra al bucle de clear \n");
-		parse->head = parse->next;
+		temp = parse->next;
 		free_parse(parse);
-		parse = parse->head;
+		parse = temp;
 	}
 }

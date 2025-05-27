@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 12:04:22 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:08:54 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	find_cmd(t_parse *parse)
 {
 	t_parse	*node_count;
-	node_count = parse->head;
+
+	node_count = parse;
 	while (node_count != NULL)
 	{
 		if (node_count->is_cmd == true)
@@ -106,9 +107,11 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i)
 	if (parse->type_token == RED)
 	{
 		sh->node->cmd->red->type = id_red(parse);
+		sh->node->line_is->with_reds = true;
 	}
 	else if (parse->type_token == FILES)
 	{
+		sh->node->line_is->with_reds = true;
 		sh->node->cmd->red->type = id_file(parse);
 		if (sh->node->cmd->red->type == DELIM)
 			sh->node->cmd->red->delim = ft_strdup(parse->line);
@@ -117,6 +120,7 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i)
 	}
 	else if (parse->type_token == PIPE)
 	{
+		sh->node->line_is->with_pipe = true;
 		sh->node->n_cmd += 1;
 		if (sh->node->n_cmd == 2)
 			sh->node->cmd->pipe_in = i;
