@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/16 15:07:03 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 09:59:08 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	}
 	else if (parse->type_token == FLAG && find_cmd(parse)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
 	{
-		sh->node->is_flag = true;
+		parse->is_flag = true;
 		add_flag(sh, parse->line); // ENTONCES USO UNA (HEAD DE REFERENCIA PARA BUSCAR SI ES UNA FLAG DE UN CMD Y LE AGREGO LA FLAG A EL SPLIT DEL COMANDO)
 	}
 }

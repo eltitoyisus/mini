@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/15 16:46:44 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 10:07:09 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,18 @@ t_reds	*init_redir(void)
 	red->type = -1;
 	red->next = NULL;
 	return (red);
+}
+
+t_type	*init_bools(void)
+{
+	t_type	*new;
+
+	new = malloc(sizeof(t_type));
+	new->built = false;
+	new->cmd = false;
+	new->with_pipe = false;
+	new->with_reds = false;
+	return (new);
 }
 
 

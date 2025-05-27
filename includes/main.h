@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/21 16:53:40 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 10:07:30 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ t_cmd	*cmd_factory(void);
 
 t_reds	*init_redir(void);
 t_parse	*init_parse(void);
+t_type	*init_bools(void);
 
 // PROMPT
 char	*ft_prompt(void);

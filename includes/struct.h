@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/21 17:10:54 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 10:08:03 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 #define STRUCT_H
 
 # include "../includes/main.h"
+
+typedef struct s_type
+{
+	bool	cmd;
+	bool	with_pipe;
+	bool	built;
+	bool	with_reds;
+}	t_type;
+
 
 enum e_case_quotes
 {
@@ -78,10 +87,8 @@ typedef struct s_node
 	t_cmd	*cmd;
 	char	*arg;
 	int		n_cmd; // Número de comandos.
-	bool	is_cmd;
-	bool	is_flag;
 	bool	is_quote;
-	bool	is_built;
+	t_type	*line_is; // el tipo de la linea completa
 }	t_node;
 
 typedef struct s_sh
