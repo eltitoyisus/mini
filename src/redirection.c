@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/22 17:55:21 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:07:56 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ t_reds	*parse_redirection(char **args)
 			else
 				current->next = new;
 			current = new;
-			args[i] = NULL;
-			args[i + 1] = NULL;
 			i += 2;
 		}
 		else
@@ -128,7 +126,7 @@ int	heredoc(char *delimiter)
 		signal(SIGINT, SIG_DFL);
 		while (1)
 		{
-			line = readline("heredoc> ");
+			line = readline("theredoc> ");
 			if (!line)
 				exit(1);
 			if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
@@ -182,13 +180,16 @@ int	open_all_redirs(t_reds *head)
 	{
 		current->fd = open_redir(current);
 		if (current->fd < 0)
+		{
+			perror("open");
 			return (-1);
+		}
 		current = current->next;
 	}
 	return (0);
 }
 
-int	exec_redirs(char **args, char **envp, t_reds *redirs)
+int	exec_redirs(char **cmd_args, char **envp, t_reds *redirs)
 {
 	pid_t	pid;
 	char	*path;
@@ -225,21 +226,21 @@ int	exec_redirs(char **args, char **envp, t_reds *redirs)
 				close(current->fd);
 			current = current->next;
 		}
-		if (args && args[0])
+		if (cmd_args && cmd_args[0])
 		{
-			path = get_path(envp, args[0]);
+			path = get_path(envp, cmd_args[0]);
 			if (path)
 			{
-				execve(path, args, envp);
+				execve(path, cmd_args, envp);
 				free(path);
 			}
-			else if (is_builtin(args[0]))
+			else if (is_builtin(cmd_args[0]))
 			{
-				exec_builtin(args, envp, NULL);
+				exec_builtin(cmd_args, envp, NULL);
 				exit(EXIT_SUCCESS);
 			}
 		}
-		if (stdin_fd != -1 && (!args || !args[0]))
+		else if (stdin_fd != -1)
 		{
 			path = get_path(envp, "cat");
 			if (path)
@@ -267,11 +268,58 @@ int	exec_redirs(char **args, char **envp, t_reds *redirs)
 	return (0);
 }
 
+char	**prepare_cmd_args(char **args)
+{
+	int		count;
+	int		i;
+	int		j;
+	char	**cmd_args;
+
+	count = 0;
+	i = 0;
+	j = 0;
+	while (args[i])
+	{
+		if ((ft_strncmp(args[i], ">", 2) == 0 || ft_strncmp(args[i], ">>",
+					3) == 0 || ft_strncmp(args[i], "<", 2) == 0
+				|| ft_strncmp(args[i], "<<", 3) == 0) && args[i + 1])
+		{
+			i += 2;
+		}
+		else
+		{
+			count++;
+			i++;
+		}
+	}
+	cmd_args = malloc(sizeof(char *) * (count + 1));
+	if (!cmd_args)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (args[i])
+	{
+		if ((ft_strncmp(args[i], ">", 2) == 0 || ft_strncmp(args[i], ">>",
+					3) == 0 || ft_strncmp(args[i], "<", 2) == 0
+				|| ft_strncmp(args[i], "<<", 3) == 0) && args[i + 1])
+		{
+			i += 2;
+		}
+		else
+		{
+			cmd_args[j++] = ft_strdup(args[i++]);
+		}
+	}
+	cmd_args[j] = NULL;
+	return (cmd_args);
+}
+
 int	do_redir(char *command, char **envp)
 {
 	char	**args;
 	t_reds	*redirs;
 	int		result;
+	char	**cmd_args;
 
 	args = ft_split(command, ' ');
 	if (!args)
@@ -285,7 +333,15 @@ int	do_redir(char *command, char **envp)
 		free_redirs(redirs);
 		return (1);
 	}
-	result = exec_redirs(args, envp, redirs);
+	cmd_args = prepare_cmd_args(args);
+	if (!cmd_args)
+	{
+		free_args(args);
+		free_redirs(redirs);
+		return (1);
+	}
+	result = exec_redirs(cmd_args, envp, redirs);
+	free_args(cmd_args);
 	free_args(args);
 	free_redirs(redirs);
 	return (result);
@@ -300,9 +356,14 @@ int	handle_redirs(char *command, char **envp)
 	if (!args)
 		return (1);
 	if (has_redirection(args))
+	{
+		free_args(args);
 		result = do_redir(command, envp);
+	}
 	else
+	{
+		free_args(args);
 		result = 0;
-	free_args(args);
+	}
 	return (result);
 }

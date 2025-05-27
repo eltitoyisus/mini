@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/24 08:47:25 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:52:06 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	echo_var(char **argv, int index, char **envp);
 
 // REDIRECTION
 int		has_redirection(char **args);
-int	handle_redirs(t_sh *sh, char **envp);
+int	handle_redirs(char *command, char **envp);
 void	free_redirs(t_reds *head);
 int		heredoc(char *delimiter);
 

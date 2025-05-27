@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/24 08:48:03 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/27 18:06:51 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,63 +234,31 @@ char	**inc_shlvl(char **envp)
 void	exec_parsed_command(t_sh *sh, char **envp)
 {
 	char	**args;
+	int		has_redir;
+	int		has_pipe;
 
-	if (!sh || !sh->node)
-	{
-		write(2, "No command to execute\n", 22);
+	if (!sh || !sh->node || !sh->node->cmd)
 		return ;
-	}
-	if (sh->node->is_built && sh->node->arg)
-	{
-		args = ft_split(sh->node->arg, ' ');
-		if (!args)
-			return ;
-		exec_builtin(args, envp, sh);
-		free_words(args);
-		return ;
-	}
 	args = ft_split(sh->input, ' ');
 	if (!args)
 		return ;
-	if (is_pipe(args))
+	has_redir = has_redirection(args);
+	has_pipe = is_pipe(args);
+	if (has_pipe)
 	{
-		handle_pipes(sh, envp);
-		free_words(args);
-		return ;
-	}
-	free_words(args);
-	if (sh->node->n_cmd > 1)
-	{
+		free_args(args);
 		handle_pipes(sh, envp);
 		return ;
 	}
-	if (sh->node->cmd && sh->node->cmd->red && (sh->node->cmd->red->file
-			|| sh->node->cmd->red->delim))
+	if (has_redir)
 	{
-		args = ft_split(sh->input, ' ');
-		if (!args)
-			return ;
-		handle_redirs(sh, envp);
-		free_words(args);
+		free_args(args);
+		handle_redirs(sh->input, envp);
 		return ;
 	}
-	if (sh->node->is_cmd && sh->node->cmd && sh->node->cmd->cmd)
-	{
-		execute_cmd(sh->node->cmd, envp, sh);
-	}
+	if (is_builtin(args[0]))
+		exec_builtin(args, envp, sh);
 	else
-	{
-		args = ft_split(sh->input, ' ');
-		if (!args)
-			return ;
-		if (is_builtin(args[0]))
-		{
-			exec_builtin(args, envp, sh);
-		}
-		else
-		{
-			fork_and_exec(sh->input, envp);
-		}
-		free_words(args);
-	}
+		fork_and_exec(sh->input, envp);
+	free_args(args);
 }
