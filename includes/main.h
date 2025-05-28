@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 17:52:06 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:48:06 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	process_redirs(char **args, char **redir);
 // int safe_open(const char *path, t_open_flags flags);
 // void safe_dup2(int oldfd, int newfd);
 
-void	exec_parsed_command(t_sh *sh, char **envp);
-
+int	exec_parsed_command(t_sh *sh, char **envp);
+t_type	*init_bools(void);
 
 #endif

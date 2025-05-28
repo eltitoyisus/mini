@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:49:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/21 19:07:33 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 19:46:00 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,15 @@ int	check_open(t_parse *parse, int type)
 	int	flag;
 
 	i = 0;
+	flag = -1;
 	if (type == SIMPLE)
 	{
 		while (parse->line[i] == '\'')
 		{
 			flag = 0;
 			i++;
-			if(parse->line[i++] == '\'')
-				 flag = 1;
+			if (parse->line[i++] == '\'')
+				flag = 1;
 		}
 	}
 	else if (type == DOUBLE)
@@ -113,7 +114,7 @@ void	ft_quotes(t_parse *parse)
 	int	flag; // Esta flag lo que va a hacer es representar si se realizo bien el recorte de comillas, sean simples o dobles.
 
 	flag = 0;
-	while(ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
+	while (ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
 	{
 		case_q = id_cases(parse);
 		printf("sabes case of quotes --> %d\n", case_q);

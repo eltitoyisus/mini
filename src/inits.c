@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/15 16:46:44 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/27 19:07:45 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_parse	*init_parse(void)
 	parse->line = NULL;
 	parse->next = NULL;
 	parse->prev = NULL;
-	parse->head = parse;
 	return (parse);
 }
 
@@ -39,4 +38,14 @@ t_reds	*init_redir(void)
 	return (red);
 }
 
+t_type	*init_bools(void)
+{
+	t_type	*new;
 
+	new = malloc(sizeof(t_type));
+	new->built = false;
+	new->cmd = false;
+	new->with_pipe = false;
+	new->with_reds = false;
+	return (new);
+}

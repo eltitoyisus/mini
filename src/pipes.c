@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/24 08:45:09 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:34:42 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,17 +276,90 @@ int	do_pipe(char **argv, char **envp, t_sh *sh)
 
 int	handle_pipes(t_sh *sh, char **envp)
 {
-	char	**args;
-	int		result;
+	pid_t	*pids;
+	int		fd[2];
+	int		fd_prev;
+	int		i;
+	int		status;
+	t_cmd	*current_cmd;
+	char	*path;
 
-	result = 0;
-	if (!sh || !sh->input)
+	if (!sh || !sh->node || !sh->node->cmd)
 		return (1);
-	args = ft_split(sh->input, ' ');
-	if (!args)
+	fd_prev = -1;
+	i = 0;
+	current_cmd = sh->node->cmd;
+	pids = malloc(sizeof(pid_t) * sh->node->n_cmd);
+	if (!pids)
 		return (1);
-	if (is_pipe(args))
-		result = do_pipe(args, envp, sh);
-	free_args(args);
-	return (result);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	while (i < sh->node->n_cmd && current_cmd)
+	{
+		if (i < sh->node->n_cmd - 1)
+			if (pipe(fd) == -1)
+			{
+				free(pids);
+				return (1);
+			}
+		pids[i] = fork();
+		if (pids[i] == -1)
+		{
+			free(pids);
+			return (1);
+		}
+		if (pids[i] == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+			if (i > 0)
+			{
+				dup2(fd_prev, STDIN_FILENO);
+				close(fd_prev);
+			}
+			if (i < sh->node->n_cmd - 1)
+			{
+				dup2(fd[1], STDOUT_FILENO);
+				close(fd[0]);
+				close(fd[1]);
+			}
+			if (current_cmd->split_cmd)
+			{
+				path = get_path(envp, current_cmd->split_cmd[0]);
+				if (path)
+				{
+					execve(path, current_cmd->split_cmd, envp);
+					free(path);
+				}
+				write(2, "Command not found: ", 19);
+				write(2, current_cmd->split_cmd[0],
+					ft_strlen(current_cmd->split_cmd[0]));
+				write(2, "\n", 1);
+			}
+			exit(EXIT_FAILURE);
+		}
+		if (i > 0)
+			close(fd_prev);
+		if (i < sh->node->n_cmd - 1)
+		{
+			fd_prev = fd[0];
+			close(fd[1]);
+		}
+		current_cmd = current_cmd->next;
+		i++;
+	}
+	for (i = 0; i < sh->node->n_cmd; i++)
+	{
+		waitpid(pids[i], &status, 0);
+		if (i == sh->node->n_cmd - 1)
+		{
+			if (WIFEXITED(status))
+				last_signal_code(WEXITSTATUS(status));
+			else if (WIFSIGNALED(status))
+				last_signal_code(128 + WTERMSIG(status));
+		}
+	}
+	ft_signals();
+	free(pids);
+	return (0);
 }

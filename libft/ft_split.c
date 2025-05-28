@@ -3,102 +3,118 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/19 10:55:24 by marvin            #+#    #+#             */
-/*   Updated: 2024/10/23 09:20:33 by jramos-a         ###   ########.fr       */
+/*   Created: 2024/09/30 18:02:52 by dacastil          #+#    #+#             */
+/*   Updated: 2025/05/28 10:43:21 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
+#include <stdlib.h>
 #include "libft.h"
 
-static int	ft_counter(const char *s, char c)
+static void	free_parcial(char **splres, int i)
 {
-	int		word;
-
-	word = 0;
-	if (!s)
-		return (0);
-	while (*s)
+	while (i > 0)
 	{
-		while (*s == c)
-			s++;
-		if (*s)
-		{
-			word++;
-			while (*s && *s != c)
-				s++;
-		}
+		i--;
+		free(splres[i]);
 	}
-	return (word);
+	free(splres);
 }
 
-static void	ft_free(char **a)
+int	ft_countsubstr(const char*s, char c)
 {
-	int	i;
+	int		i;
+	int		countstr;
+	int		flag;
 
+	countstr = 0;
+	flag = 0;
 	i = 0;
-	if (!a)
-		return ;
-	while (a[i])
+	while (s[i])
 	{
-		free(a[i]);
+		if (s[i] != c && !flag)
+		{
+			countstr++;
+			flag = 1;
+		}
+		else if (s[i] == c && flag)
+		{
+			flag = 0;
+		}
 		i++;
 	}
-	free(a);
+	return (countstr);
 }
 
-static char	*ft_read_word(char *s, char c, int *index)
+static char	*next_substrs(const char **s, char delim)
 {
-	int		start;
-	int		end;
-	char	*word;
-	int		len;
+	char		*newstr;
+	const char	*start;
+	size_t		lng;
 
-	while (s[*index] == c)
-		(*index)++;
-	start = *index;
-	while (s[*index] && s[*index] != c)
-		(*index)++;
-	end = *index;
-	len = end - start;
-	if (start < end)
-	{
-		word = (char *)malloc((len + 1) * sizeof(char));
-		if (!word)
-			return (NULL);
-		ft_strlcpy(word, &s[start], len + 1);
-		return (word);
-	}
-	return (NULL);
-}
-
-static char	**ft_split_word(char *s, char c)
-{
-	char	**arr;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	arr = malloc((ft_counter(s, c) + 1) * sizeof(char *));
-	if (!arr)
+	while (**s == delim)
+		(*s)++;
+	if (**s == '\0')
 		return (NULL);
-	while (s[j])
+	start = *s;
+	lng = 0;
+	while (**s && **s != delim)
 	{
-		arr[i] = ft_read_word(s, c, &j);
-		if (arr[i])
-			i++;
-		else if (s[j])
-			return (ft_free(arr), NULL);
+		lng++;
+		(*s)++;
 	}
-	arr[i] = NULL;
-	return (arr);
+	newstr = malloc(lng + 1);
+	if (!newstr)
+		return (NULL);
+	ft_strlcpy(newstr, start, lng + 1);
+	return (newstr);
 }
 
 char	**ft_split(char const *s, char c)
 {
+	size_t	i_substr;
+	size_t	i;
+	char	**fin;
+
 	if (!s)
 		return (NULL);
-	return (ft_split_word((char *)s, c));
+	i_substr = ft_countsubstr(s, c);
+	fin = malloc((i_substr + 1) * sizeof(char *));
+	if (!fin)
+		return (NULL);
+	i = 0;
+	while (i < i_substr)
+	{
+		fin[i] = next_substrs(&s, c);
+		if (!fin[i])
+		{
+			free_parcial(fin, i);
+			return (NULL);
+		}
+		i++;
+	}
+	fin[i] = NULL;
+	return (fin);
 }
+/*
+#include <stdio.h>
+
+int main()
+{
+	char	s[] = "^^^1^^2a,^^^^3^^^^--h^^^^";
+	char	d;
+	char	**result;
+
+	d = '^';
+	result = ft_split(s, d);
+	if (result)
+	{
+		for (int i = 0; result[i]; i++)
+			printf("%s\n", result[i]);  // Imprimir cada subcadena
+	}
+	return (0);
+}
+*/

@@ -6,7 +6,7 @@
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/22 17:34:03 by jramos-a         ###   ########.fr        #
+#    Updated: 2025/05/28 10:40:32 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)quotes.c			\
 		$(SRC_DIR)random.c			\
 		$(SRC_DIR)tx.c				\
+		$(SRC_DIR)exec.c			\
+		$(SRC_DIR)utils_min.c		\
 		$(SRC_DIR)utils.c
 
 OBJ = $(SRC:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 18:06:51 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:02:25 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,20 @@ void	execute_cmd(t_cmd *cmd, char **envp, t_sh *sh)
 {
 	pid_t	pid;
 	int		status;
+	char	*executable_path;
 
 	(void)sh;
-	if (!cmd || !cmd->cmd || !cmd->path || !cmd->split_cmd)
+	if (!cmd || !cmd->cmd || !cmd->split_cmd || !cmd->split_cmd[0])
 	{
 		write(2, "Command not found or improperly parsed\n", 39);
+		return ;
+	}
+	executable_path = get_path(envp, cmd->split_cmd[0]);
+	if (!executable_path)
+	{
+		write(2, "Command not found: ", 19);
+		write(2, cmd->split_cmd[0], ft_strlen(cmd->split_cmd[0]));
+		write(2, "\n", 1);
 		return ;
 	}
 	pid = fork();
@@ -143,8 +152,9 @@ void	execute_cmd(t_cmd *cmd, char **envp, t_sh *sh)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		execve(cmd->path, cmd->split_cmd, envp);
+		execve(executable_path, cmd->split_cmd, envp);
 		perror("execve");
+		free(executable_path);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -152,6 +162,7 @@ void	execute_cmd(t_cmd *cmd, char **envp, t_sh *sh)
 		signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
 		ft_signals();
+		free(executable_path);
 		if (WIFSIGNALED(status))
 			last_signal_code(128 + WTERMSIG(status));
 		else if (WIFEXITED(status))
@@ -231,34 +242,69 @@ char	**inc_shlvl(char **envp)
 	return (envp);
 }
 
-void	exec_parsed_command(t_sh *sh, char **envp)
+void	exec_external_command(t_sh *sh, char **envp)
 {
-	char	**args;
-	int		has_redir;
-	int		has_pipe;
+	pid_t	pid;
+	char	*path;
+	int		status;
 
-	if (!sh || !sh->node || !sh->node->cmd)
-		return ;
-	args = ft_split(sh->input, ' ');
-	if (!args)
-		return ;
-	has_redir = has_redirection(args);
-	has_pipe = is_pipe(args);
-	if (has_pipe)
+	if (!sh->node->cmd->split_cmd || !sh->node->cmd->split_cmd[0])
 	{
-		free_args(args);
-		handle_pipes(sh, envp);
+		write(2, "Command not found\n", 18);
 		return ;
 	}
-	if (has_redir)
+	path = get_path(envp, sh->node->cmd->split_cmd[0]);
+	if (!path)
 	{
-		free_args(args);
-		handle_redirs(sh->input, envp);
+		write(2, sh->node->cmd->split_cmd[0],
+			ft_strlen(sh->node->cmd->split_cmd[0]));
+		write(2, ": command not found\n", 20);
 		return ;
 	}
-	if (is_builtin(args[0]))
-		exec_builtin(args, envp, sh);
+	pid = fork();
+	if (pid == -1)
+	{
+		write(2, "fork: failed to create process\n", 31);
+		free(path);
+		return ;
+	}
+	else if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		if (execve(path, sh->node->cmd->split_cmd, envp) == -1)
+		{
+			write(2, sh->node->cmd->split_cmd[0],
+				ft_strlen(sh->node->cmd->split_cmd[0]));
+			write(2, ": execution failed\n", 19);
+			free(path);
+			exit(EXIT_FAILURE);
+		}
+	}
 	else
-		fork_and_exec(sh->input, envp);
-	free_args(args);
+	{
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		ft_signals();
+		free(path);
+		if (WIFSIGNALED(status))
+			last_signal_code(128 + WTERMSIG(status));
+		else if (WIFEXITED(status))
+			last_signal_code(WEXITSTATUS(status));
+	}
+}
+
+int	exec_parsed_command(t_sh *sh, char **envp)
+{
+	if (!sh->node || !sh->node->cmd)
+		return (0);
+	if (sh->node->line_is->with_pipe)
+		return (handle_pipes(sh, envp));
+	// if (sh->node->line_is->with_reds)
+	//     handle_redirections(sh->node->cmd->split_cmd);
+	if (sh->node->line_is->built)
+		return (exec_builtin(sh->node->cmd->split_cmd, envp, sh));
+	if (sh->node->line_is->cmd)
+		exec_external_command(sh, envp);
+	return (1);
 }
