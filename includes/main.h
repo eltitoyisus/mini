@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 19:40:21 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/29 09:56:03 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	save_info(t_tx *tx, int i, int j);
 int		ft_error(char *msg, int ret);
 void	free_words(char **words);
 int		can_op(char *file);
+char	ft_chardup(char c);
 
 // FTs DE LISTAS
 void	ft_lstadd_back_sh(t_sh *sh); // Adaptada para la mini.

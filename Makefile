@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+         #
+#    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/27 19:41:23 by dacastil         ###   ########.fr        #
+#    Updated: 2025/05/29 09:57:02 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)tx.c				\
 		$(SRC_DIR)identifiers.c		\
 		$(SRC_DIR)quotes.c			\
-		$(SRC_DIR)utils_min.c
+		$(SRC_DIR)utils_min.c		\
+		$(SRC_DIR)ft_chardup.c		
 
 OBJ = $(SRC:.c=.o)
 

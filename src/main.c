@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 12:00:39 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/29 09:41:26 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	t_sh	*sh;
 
+	if (argc != 1)
+		exit(0);
 	ft_signals();
 	sh = shell_factory(envp);
 	sh->prompt = ft_prompt();

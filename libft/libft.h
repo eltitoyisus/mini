@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 19:32:21 by dacastil          #+#    #+#             */
-/*   Updated: 2025/05/27 19:14:14 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/29 13:03:42 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_countsubstr(const char *s, char c);
+char	*ft_strldup(const char *s, int lenght);
 
 typedef struct s_list
 {
