@@ -6,19 +6,19 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/29 18:10:11 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/29 18:19:48 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-static int	other_cases(char *input, char **input_split, int i)
+static int	other_cases(char *input, t_parse *parse)
 {
 	if (!ft_strncmp(input, "<", 1) || !ft_strncmp(input, ">", 1)
 		|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2))
 		return (RED);
-	else if ((!ft_strncmp(input_split[i - 1], "<", 1) && can_op(input)) || !ft_strncmp(input_split[i - 1], ">", 1)
-		|| !ft_strncmp(input_split[i - 1], ">>", 2) || !ft_strncmp(input_split[i - 1], "<<", 2))
+	else if ((!ft_strncmp(parse->prev->line, "<", 1) && can_op(input)) || !ft_strncmp(parse->prev->line, ">", 1)
+		|| !ft_strncmp(parse->prev->line, ">>", 2) || !ft_strncmp(parse->prev->line, "<<", 2))
 		return (FILES);
 	else if (!ft_strncmp(input, "|", 1))
 		return (PIPE);
@@ -62,7 +62,7 @@ static int	cases_com(char *input, char **env)
 	{
 		printf("$$$\n");
 		free_words(split_com);
-		return (ARG);
+		return (RED);
 	}
 	if (access(executable_path, X_OK) == 0)
 	{
@@ -75,25 +75,25 @@ static int	cases_com(char *input, char **env)
 	return (RED);
 }
 
-static int	n_token(char *input, char **env, char **input_split, int i)
+static int	n_token(char **env, t_parse *parse)
 {
 	int		value_token;
 
 	// input = cut_quotes(input);
-	if (input == NULL)
+	if (parse->line == NULL)
 		return (-1);
-	value_token = cases_builds(input);
+	value_token = cases_builds(parse->line);
 	if (value_token == FLAG)
 		return (FLAG);
 	else if (value_token == BUILT)
 		return (BUILT);
-	value_token = cases_com(input, env);
+	value_token = cases_com(parse->line, env);
 	printf("tokennn --> %d\n", value_token);
 	if (value_token == CMD)
 		return (CMD);
 	else if (value_token == ARG)
 		return (ARG);
-	value_token = other_cases(input, input_split, i);
+	value_token = other_cases(parse->line, parse);
 	if (value_token == RED)
 		return (RED);
 	else if (value_token == PIPE)
@@ -165,7 +165,7 @@ void	ft_controls(t_parse *parse)
 
 // }
 
-void	case_without_space(char *sp_input, t_parse *parse)
+void	case_without_space(char *sp_input, char **env, t_parse *parse)
 {
 	int	i;
 	int	w;
@@ -215,6 +215,7 @@ void	case_without_space(char *sp_input, t_parse *parse)
 			parse->line = ft_strldup(sp_input + i, w);
 			i += w;
 		}
+		parse->type_token = n_token(env, parse);
 		printf("sale condicion parseline -> %s \n", parse->line);
 	}
 }
@@ -234,12 +235,12 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 	{
 		printf("entra al bucle\n");
 		if (ft_strchr(split_input[i], '<') && ft_strchr(split_input[i], '>'))
-			case_without_space(split_input[i], parse);
+			case_without_space(split_input[i], env, parse);
 		else
 			parse->line = split_input[i];
 		ft_quotes(parse);
 		printf ("ssss111 %s \n", parse->line);
-		parse->type_token = n_token(parse->line, env, split_input, i);
+		parse->type_token = n_token(env, parse);
 		if (parse->type_token == -1)
 			break ;
 		printf("token --> %d\n", parse->type_token);
