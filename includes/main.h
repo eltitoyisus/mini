@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/28 16:48:06 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:30:08 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,18 @@ void	process_redirs(char **args, char **redir);
 
 int	exec_parsed_command(t_sh *sh, char **envp);
 t_type	*init_bools(void);
+
+
+
+void build_command_args(t_sh *sh, t_parse *parse);
+void execute_pipe_chain_new(char ***commands, int cmd_count, char **envp);
+int process_piped_command(t_sh *sh, char **envp);
+// Add these function declarations
+int has_redirection_in_cmd(t_cmd *cmd);
+t_reds *parse_redirection_from_cmd(t_cmd *cmd);
+char **clean_cmd_args(t_cmd *cmd);
+int	exec_builtin(char **args, char **envp, t_sh *sh);
+int exec_builtin_with_redirs(char **args, char **envp, t_sh *sh, t_reds *redirs);
+int	open_all_redirs(t_reds *head);
 
 #endif

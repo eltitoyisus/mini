@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:40 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/28 16:34:42 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 21:11:32 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,77 +157,210 @@ void	close_pipe_fds(int fd_prev, int fd[2], int pipe_stage)
 	}
 }
 
-void	execute_pipe_chain(t_sh *sh, char ***cmds, char **envp)
+void	execute_pipe_chain_new(char ***commands, int cmd_count, char **envp)
 {
-	int		i;
-	int		fd_prev;
-	int		fd[2];
-	int		status;
+	int		pipefd[2];
+	int		prev_pipe;
 	pid_t	*pids;
+	char	*path;
+	int		status;
+	t_reds	*redirs;
+	char	**clean_args;
+		t_cmd temp_cmd;
+	t_reds	*current;
+	char	**exec_args;
 
-	i = 0;
-	fd_prev = -1;
-	if (!sh->node || !sh->node->cmd)
-		return ;
-	pids = malloc(sizeof(pid_t) * sh->pipe_count);
+	redirs = NULL;
+	clean_args = NULL;
+	prev_pipe = -1;
+	pids = malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
 		return ;
-	sh->node->cmd->pids = pids;
-	while (i < sh->pipe_count)
+	for (int i = 0; i < cmd_count; i++)
 	{
-		if (i < sh->pipe_count - 1)
-			if (pipe(fd) == -1)
+		temp_cmd.split_cmd = commands[i];
+		if (has_redirection_in_cmd(&temp_cmd))
+		{
+			redirs = parse_redirection_from_cmd(&temp_cmd);
+			if (redirs)
 			{
+				if (open_all_redirs(redirs) >= 0)
+				{
+					clean_args = clean_cmd_args(&temp_cmd);
+				}
+			}
+		}
+		if (i < cmd_count - 1)
+		{
+			if (pipe(pipefd) == -1)
+			{
+				perror("pipe");
+				if (redirs)
+					free_redirs(redirs);
+				if (clean_args)
+					free_args(clean_args);
 				free(pids);
-				sh->node->cmd->pids = NULL;
 				return ;
 			}
+		}
 		pids[i] = fork();
 		if (pids[i] == -1)
 		{
+			perror("fork");
+			if (redirs)
+				free_redirs(redirs);
+			if (clean_args)
+				free_args(clean_args);
 			free(pids);
-			sh->node->cmd->pids = NULL;
 			return ;
 		}
 		if (pids[i] == 0)
 		{
-			if (i > 0)
+			if (prev_pipe != -1)
 			{
-				dup2(fd_prev, STDIN_FILENO);
-				close(fd_prev);
+				dup2(prev_pipe, STDIN_FILENO);
+				close(prev_pipe);
 			}
-			if (i < sh->pipe_count - 1)
+			if (i < cmd_count - 1)
 			{
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[0]);
-				close(fd[1]);
+				close(pipefd[0]);
+				dup2(pipefd[1], STDOUT_FILENO);
+				close(pipefd[1]);
 			}
-			pipe_command(cmds[i], envp);
+			if (redirs)
+			{
+				current = redirs;
+				while (current)
+				{
+					if (current->type == INRED || current->type == HEREDOC)
+						dup2(current->fd, STDIN_FILENO);
+					else if (current->type == OURED || current->type == D_OURED)
+						dup2(current->fd, STDOUT_FILENO);
+					close(current->fd);
+					current = current->next;
+				}
+			}
+			exec_args = clean_args ? clean_args : commands[i];
+			if (is_builtin(exec_args[0]))
+			{
+				exec_builtin(exec_args, envp, NULL);
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				path = get_path(envp, exec_args[0]);
+				if (path)
+				{
+					execve(path, exec_args, envp);
+					free(path);
+				}
+				fprintf(stderr, "Command not found: %s\n", exec_args[0]);
+				exit(EXIT_FAILURE);
+			}
 		}
-		if (i > 0)
-			close(fd_prev);
-		if (i < sh->pipe_count - 1)
+		if (prev_pipe != -1)
+			close(prev_pipe);
+		if (i < cmd_count - 1)
 		{
-			fd_prev = fd[0];
-			close(fd[1]);
+			prev_pipe = pipefd[0];
+			close(pipefd[1]);
 		}
-		i++;
+		if (redirs)
+		{
+			free_redirs(redirs);
+			redirs = NULL;
+		}
+		if (clean_args)
+		{
+			free_args(clean_args);
+			clean_args = NULL;
+		}
 	}
-	i = 0;
-	while (i < sh->pipe_count)
+	for (int i = 0; i < cmd_count; i++)
 	{
 		waitpid(pids[i], &status, 0);
-		if (i == sh->pipe_count - 1)
+		if (i == cmd_count - 1)
 		{
 			if (WIFEXITED(status))
 				last_signal_code(WEXITSTATUS(status));
 			else if (WIFSIGNALED(status))
 				last_signal_code(128 + WTERMSIG(status));
 		}
-		i++;
 	}
 	free(pids);
-	sh->node->cmd->pids = NULL;
+}
+
+int	process_piped_command(t_sh *sh, char **envp)
+{
+	int		i;
+	char	**cmd_args;
+	char	***commands;
+	int		pipe_count;
+	int		cmd_count;
+	int		start;
+	int		cmd_idx;
+	int		cmd_len;
+
+	i = 0;
+	cmd_args = sh->node->cmd->split_cmd;
+	commands = NULL;
+	pipe_count = 0;
+	cmd_count = 0;
+	(void)cmd_count;
+	while (cmd_args[i])
+	{
+		if (ft_strncmp(cmd_args[i], "|", 2) == 0)
+			pipe_count++;
+		i++;
+	}
+	commands = malloc(sizeof(char **) * (pipe_count + 2));
+	if (!commands)
+		return (1);
+	for (i = 0; i <= pipe_count + 1; i++)
+		commands[i] = NULL;
+	start = 0;
+	cmd_idx = 0;
+	i = 0;
+	while (cmd_args[i])
+	{
+		if (ft_strncmp(cmd_args[i], "|", 2) == 0 || cmd_args[i + 1] == NULL)
+		{
+			cmd_len = i - start;
+			if (cmd_args[i + 1] == NULL && ft_strncmp(cmd_args[i], "|", 2) != 0)
+				cmd_len++;
+			commands[cmd_idx] = malloc(sizeof(char *) * (cmd_len + 1));
+			if (!commands[cmd_idx])
+			{
+				for (int j = 0; j < cmd_idx; j++)
+					free_args(commands[j]);
+				free(commands);
+				return (1);
+			}
+			for (int j = 0; j < cmd_len; j++)
+			{
+				commands[cmd_idx][j] = ft_strdup(cmd_args[start + j]);
+				if (!commands[cmd_idx][j])
+				{
+					for (int k = 0; k < j; k++)
+						free(commands[cmd_idx][k]);
+					free(commands[cmd_idx]);
+					for (int k = 0; k < cmd_idx; k++)
+						free_args(commands[k]);
+					free(commands);
+					return (1);
+				}
+			}
+			commands[cmd_idx][cmd_len] = NULL;
+			cmd_idx++;
+			start = i + 1;
+		}
+		i++;
+	}
+	execute_pipe_chain_new(commands, cmd_idx, envp);
+	for (i = 0; i < cmd_idx; i++)
+		free_args(commands[i]);
+	free(commands);
+	return (0);
 }
 
 int	do_pipe(char **argv, char **envp, t_sh *sh)
@@ -260,7 +393,7 @@ int	do_pipe(char **argv, char **envp, t_sh *sh)
 		sh->node->cmd->pipefd[1] = saved_pipefd[1];
 		return (-1);
 	}
-	execute_pipe_chain(sh, all_cmds, envp);
+	execute_pipe_chain_new(all_cmds, sh->pipe_count, envp);
 	if (all_cmds)
 	{
 		for (i = 0; i < sh->pipe_count && all_cmds[i]; i++)

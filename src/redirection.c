@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 18:07:56 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 21:12:10 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,4 +366,123 @@ int	handle_redirs(char *command, char **envp)
 		result = 0;
 	}
 	return (result);
+}
+
+//
+//
+//
+//
+//
+
+int	has_redirection_in_cmd(t_cmd *cmd)
+{
+	int	i;
+
+	if (!cmd || !cmd->split_cmd)
+		return (0);
+	i = 0;
+	while (cmd->split_cmd[i])
+	{
+		if (ft_strncmp(cmd->split_cmd[i], ">", 2) == 0
+			|| ft_strncmp(cmd->split_cmd[i], ">>", 3) == 0
+			|| ft_strncmp(cmd->split_cmd[i], "<", 2) == 0
+			|| ft_strncmp(cmd->split_cmd[i], "<<", 3) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+t_reds	*parse_redirection_from_cmd(t_cmd *cmd)
+{
+	t_reds	*head;
+	t_reds	*current;
+	t_reds	*new;
+	int		i;
+
+	if (!cmd || !cmd->split_cmd)
+		return (NULL);
+	head = NULL;
+	current = NULL;
+	i = 0;
+	while (cmd->split_cmd[i])
+	{
+		if ((ft_strncmp(cmd->split_cmd[i], ">", 2) == 0
+				|| ft_strncmp(cmd->split_cmd[i], ">>", 3) == 0
+				|| ft_strncmp(cmd->split_cmd[i], "<", 2) == 0
+				|| ft_strncmp(cmd->split_cmd[i], "<<", 3) == 0)
+			&& cmd->split_cmd[i + 1])
+		{
+			new = malloc(sizeof(t_reds));
+			if (!new)
+			{
+				free_redirs(head);
+				return (NULL);
+			}
+			new->type = get_redir_type(cmd->split_cmd[i]);
+			new->file = ft_strdup(cmd->split_cmd[i + 1]);
+			new->delim = NULL;
+			new->next = NULL;
+			new->fd = -1;
+			if (!head)
+				head = new;
+			else
+				current->next = new;
+			current = new;
+			i += 2;
+		}
+		else
+			i++;
+	}
+	return (head);
+}
+
+char	**clean_cmd_args(t_cmd *cmd)
+{
+	char	**new_args;
+	int		count;
+
+	int i, j;
+	if (!cmd || !cmd->split_cmd)
+		return (NULL);
+	count = 0;
+	i = 0;
+	while (cmd->split_cmd[i])
+	{
+		if ((ft_strncmp(cmd->split_cmd[i], ">", 2) == 0
+				|| ft_strncmp(cmd->split_cmd[i], ">>", 3) == 0
+				|| ft_strncmp(cmd->split_cmd[i], "<", 2) == 0
+				|| ft_strncmp(cmd->split_cmd[i], "<<", 3) == 0)
+			&& cmd->split_cmd[i + 1])
+		{
+			i += 2;
+		}
+		else
+		{
+			count++;
+			i++;
+		}
+	}
+	new_args = malloc(sizeof(char *) * (count + 1));
+	if (!new_args)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (cmd->split_cmd[i])
+	{
+		if ((ft_strncmp(cmd->split_cmd[i], ">", 2) == 0
+				|| ft_strncmp(cmd->split_cmd[i], ">>", 3) == 0
+				|| ft_strncmp(cmd->split_cmd[i], "<", 2) == 0
+				|| ft_strncmp(cmd->split_cmd[i], "<<", 3) == 0)
+			&& cmd->split_cmd[i + 1])
+		{
+			i += 2;
+		}
+		else
+		{
+			new_args[j++] = ft_strdup(cmd->split_cmd[i++]);
+		}
+	}
+	new_args[j] = NULL;
+	return (new_args);
 }

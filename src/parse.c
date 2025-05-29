@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/28 10:39:14 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 21:07:06 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,14 @@ static int	n_token(char *input, char **env, char **input_split, int i)
 // 	// Siempre que metamos la info del node que estemos creamos otro
 // 	ft_lstadd_back_sh(sh);
 // }
-void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
+void info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 {
+	t_parse *original_parse = parse;
+
 	while (parse != NULL)
 	{
 		if (!parse || !parse->line)
-			return ;
+			return;
 		type_cmd_built_2(sh, parse, i);
 		type_red_pipe_2(sh, parse, i);
 		if (parse->type_token == ARG)
@@ -131,7 +133,9 @@ void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 		}
 		parse = parse->next;
 	}
-		// Siempre que metamos la info del node que estemos creamos otro
+	//necesito esta funcion para poder gestionar bien los comandos
+	build_command_args(sh, original_parse);
+	// Siempre que metamos la info del node que estemos creamos otro
 }
 
 
