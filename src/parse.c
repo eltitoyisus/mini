@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 20:02:15 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/29 08:50:03 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,50 @@ void	ft_controls(t_parse *parse)
 
 // }
 
+void	case_without_space(char *sp_input, t_parse *parse)
+{
+	int	i;
+
+	i = 0;
+	printf("Aqui entra\n");
+	while (sp_input[i])
+	{
+		if (i != 0)
+		{
+			ft_lstadd_back_parse(parse);
+			parse = parse->next;
+		}
+		if ((sp_input[i] == '<' && sp_input[i + 1] == '<')
+			|| (sp_input[i] == '>' && sp_input[i + 1] == '>'))
+		{
+			while (sp_input[i] != '<' || sp_input[i] != '>')
+			{
+				parse->line[i] = sp_input[i];
+				i++;
+			}
+		}
+		else if ((sp_input[i++] == '<' && sp_input[i + 1] != '<')
+			|| (sp_input[i++] == '>' && sp_input[i + 1] != '>'))
+		{
+			parse->line[i] = sp_input[i];
+			i++;
+		}
+		else if (sp_input[i++] == '|')
+		{
+			parse->line[i] = sp_input[i];
+			i++;
+		}
+		else
+		{
+			while (sp_input[i++] != '|' && sp_input[i++] != '<'
+				&& sp_input[i++] != '>')
+			{
+				parse->line[i] = sp_input[i];
+				i++;
+			}
+		}
+	}
+}
 
 void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 {
@@ -180,7 +224,10 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 	while (parse != NULL && i < count)
 	{
 		printf("entra al bucle\n");
-		parse->line = split_input[i];
+		if (ft_strchr(split_input[i], '<') && ft_strchr(split_input[i], '>'))
+			case_without_space(split_input[i], parse);
+		else
+			parse->line = split_input[i];
 		ft_quotes(parse);
 		printf ("ssss111 %s \n", parse->line);
 		parse->type_token = n_token(parse->line, env, split_input, i);
