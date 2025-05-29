@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/29 13:13:01 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/29 18:10:11 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,16 +205,17 @@ void	case_without_space(char *sp_input, t_parse *parse)
 		}
 		else
 		{
-			w = 0;
-			while (sp_input[i] != '|' && sp_input[i] != '<'
-				&& sp_input[i] != '>' && sp_input[i])
-			{
-				i++;
+			printf("sales\n");
+			w = i;
+			while (sp_input[w] != '|' && sp_input[w] != '<'
+				&& sp_input[w] != '>' && sp_input[w])
 				w++;
-			}
+			w -= i;
+			printf("flipante %d  -- %s imbecil \n", w, (sp_input + i));
 			parse->line = ft_strldup(sp_input + i, w);
+			i += w;
 		}
-		printf("sale condicion \n");
+		printf("sale condicion parseline -> %s \n", parse->line);
 	}
 }
 
