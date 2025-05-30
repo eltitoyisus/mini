@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:11:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/29 21:12:10 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/30 23:50:13 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,50 +107,76 @@ int	open_redir(t_reds *redir)
 	return (fd);
 }
 
-int	heredoc(char *delimiter)
+int heredoc(char *delimiter, char **envp, int expand_vars)
 {
-	char	*line;
-	int		fd;
-	pid_t	pid;
-	int		status;
+	char *line;
+	char *expanded_line;
+	int fd;
+	char filename[32];
+	static int heredoc_count = 0;
+	int pid;
+	int status;
 
-	fd = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
+	snprintf(filename, sizeof(filename), "/tmp/heredoc_%d_%d", getpid(), heredoc_count++);
+	pid = fork();
+	if (pid == -1)
 	{
-		perror("heredoc: open");
+		perror("fork");
 		return (-1);
 	}
-	pid = fork();
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+		{
+			perror("open");
+			exit(EXIT_FAILURE);
+		}
 		while (1)
 		{
-			line = readline("theredoc> ");
-			if (!line)
-				exit(1);
-			if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+			line = readline("> ");
+			if (!line || ft_strcmp(line, delimiter) == 0)
 			{
 				free(line);
-				exit(0);
+				break;
 			}
-			write(fd, line, ft_strlen(line));
-			write(fd, "\n", 1);
+			if (expand_vars)
+			{
+				expanded_line = expand_variables(line, envp);
+				write(fd, expanded_line, ft_strlen(expanded_line));
+				write(fd, "\n", 1);
+				free(expanded_line);
+			}
+			else
+			{
+				write(fd, line, ft_strlen(line));
+				write(fd, "\n", 1);
+			}
 			free(line);
 		}
+		close(fd);
+		exit(EXIT_SUCCESS);
 	}
-	close(fd);
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid, &status, 0);
-	ft_signals();
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	else
 	{
-		write(1, "\n", 1);
-		last_signal_code(130);
-		unlink("heredoc.tmp");
-		return (-1);
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		ft_signals();
+		if (WIFSIGNALED(status))
+		{
+			unlink(filename);
+			return (-1);
+		}
+		fd = open(filename, O_RDONLY);
+		if (fd < 0)
+		{
+			perror("open");
+			unlink(filename);
+			return (-1);
+		}
+		return (fd);
 	}
-	return (open("heredoc.tmp", O_RDONLY));
 }
 
 void	free_redirs(t_reds *head)

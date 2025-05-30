@@ -6,19 +6,20 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/29 21:09:06 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/05/30 23:49:20 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-void	build_command_args(t_sh *sh, t_parse *parse)
+void build_command_args(t_sh *sh, t_parse *parse)
 {
-	t_parse	*current;
-	int		count;
-	t_cmd	*cmd_node;
-	int		cmd_idx;
-	int		cmd_count;
+	t_parse *current;
+	int count;
+	t_cmd *cmd_node;
+	int cmd_idx;
+	int cmd_count;
+	int found_cmd = 0;
 
 	count = 0;
 	cmd_node = sh->node->cmd;
@@ -28,31 +29,21 @@ void	build_command_args(t_sh *sh, t_parse *parse)
 	{
 		if (current->type_token == PIPE)
 			cmd_count++;
+		else if (current->type_token == CMD || current->type_token == BUILT)
+			found_cmd = 1;
 		current = current->next;
 	}
+	if (!found_cmd)
+		return;
 	sh->node->n_cmd = cmd_count;
 	printf("Found %d commands in pipe chain\n", cmd_count);
 	current = parse;
 	cmd_node = sh->node->cmd;
 	count = 0;
-	while (current)
+	while (current && current->type_token != PIPE)
 	{
-		if (current->type_token == PIPE)
-		{
-			if (count > 0)
-			{
-				cmd_node->split_cmd = malloc(sizeof(char *) * (count + 1));
-				if (!cmd_node->split_cmd)
-					return ;
-			}
-			ft_lstadd_back_cmd(cmd_node);
-			cmd_node = cmd_node->next;
-			count = 0;
-			current = current->next;
-			continue ;
-		}
-		if (current->type_token == CMD || current->type_token == FLAG
-			|| current->type_token == ARG)
+		if (current->type_token == CMD || current->type_token == BUILT || 
+			current->type_token == FLAG || current->type_token == ARG)
 			count++;
 		current = current->next;
 	}
@@ -60,35 +51,28 @@ void	build_command_args(t_sh *sh, t_parse *parse)
 	{
 		cmd_node->split_cmd = malloc(sizeof(char *) * (count + 1));
 		if (!cmd_node->split_cmd)
-			return ;
-	}
-	current = parse;
-	cmd_node = sh->node->cmd;
-	count = 0;
-	while (current)
-	{
-		if (current->type_token == PIPE)
+			return;
+		current = parse;
+		count = 0;
+		while (current && current->type_token != PIPE)
 		{
-			if (cmd_node && cmd_node->split_cmd)
-				cmd_node->split_cmd[count] = NULL;
-			cmd_node = cmd_node->next;
-			count = 0;
-			current = current->next;
-			continue ;
-		}
-		if (current->type_token == CMD || current->type_token == FLAG
-			|| current->type_token == ARG)
-		{
-			if (cmd_node && cmd_node->split_cmd)
+			if (current->type_token == CMD || current->type_token == BUILT || 
+				current->type_token == FLAG || current->type_token == ARG)
 			{
-				cmd_node->split_cmd[count] = ft_strdup(current->line);
-				count++;
+				cmd_node->split_cmd[count++] = ft_strdup(current->line);
 			}
+			current = current->next;
 		}
-		current = current->next;
-	}
-	if (cmd_node && cmd_node->split_cmd)
 		cmd_node->split_cmd[count] = NULL;
+	}
+	if (current && current->type_token == PIPE)
+	{
+		t_parse *next_cmd = current->next;
+		if (next_cmd)
+		{
+			build_command_args(sh, next_cmd);
+		}
+	}
 	cmd_node = sh->node->cmd;
 	cmd_idx = 0;
 	while (cmd_node)
@@ -104,10 +88,10 @@ void	build_command_args(t_sh *sh, t_parse *parse)
 	}
 }
 
-char	*find_path(char **envp)
+char *find_path(char **envp)
 {
-	char	*env_path;
-	int		i;
+	char *env_path;
+	int i;
 
 	env_path = NULL;
 	i = 0;
@@ -118,18 +102,18 @@ char	*find_path(char **envp)
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
 			env_path = envp[i] + 5;
-			break ;
+			break;
 		}
 		i++;
 	}
 	return (env_path);
 }
 
-char	*try_executable_path(char **paths, char *command)
+char *try_executable_path(char **paths, char *command)
 {
-	char	*path;
-	char	*tmp;
-	int		i;
+	char *path;
+	char *tmp;
+	int i;
 
 	i = 0;
 	if (!paths || !command || !command[0])
@@ -151,16 +135,15 @@ char	*try_executable_path(char **paths, char *command)
 	return (NULL);
 }
 
-char	*get_path(char **envp, char *command)
+char *get_path(char **envp, char *command)
 {
-	char	*env_path;
-	char	**paths;
-	char	*executable_path;
+	char *env_path;
+	char **paths;
+	char *executable_path;
 
 	if (!command || !command[0])
 		return (NULL);
-	if (command[0] == '/' || command[0] == '.' || ft_strchr(command,
-			'/') != NULL)
+	if (command[0] == '/' || command[0] == '.' || ft_strchr(command, '/') != NULL)
 	{
 		if (access(command, F_OK) == 0)
 		{
@@ -187,17 +170,17 @@ char	*get_path(char **envp, char *command)
 	return (executable_path);
 }
 
-void	exec_external_command(t_sh *sh, char **envp)
+void exec_external_command(t_sh *sh, char **envp)
 {
-	pid_t	pid;
-	char	*path;
-	int		status;
-	int		i;
-	t_reds	*redirs;
-	char	**clean_args;
-	int		stdin_fd;
-	int		stdout_fd;
-	t_reds	*current;
+	pid_t pid;
+	char *path;
+	int status;
+	int i;
+	t_reds *redirs;
+	char **clean_args;
+	int stdin_fd;
+	int stdout_fd;
+	t_reds *current;
 
 	stdin_fd = -1;
 	stdout_fd = -1;
@@ -212,27 +195,26 @@ void	exec_external_command(t_sh *sh, char **envp)
 		}
 		printf("\n");
 	}
-	if (!sh->node->cmd || !sh->node->cmd->split_cmd
-		|| !sh->node->cmd->split_cmd[0])
+	if (!sh->node->cmd || !sh->node->cmd->split_cmd || !sh->node->cmd->split_cmd[0])
 	{
 		write(2, "Command not found\n", 18);
-		return ;
+		return;
 	}
 	if (has_redirection_in_cmd(sh->node->cmd))
 	{
 		redirs = parse_redirection_from_cmd(sh->node->cmd);
 		if (!redirs)
-			return ;
+			return;
 		if (open_all_redirs(redirs) < 0)
 		{
 			free_redirs(redirs);
-			return ;
+			return;
 		}
 		clean_args = clean_cmd_args(sh->node->cmd);
 		if (!clean_args)
 		{
 			free_redirs(redirs);
-			return ;
+			return;
 		}
 	}
 	else
@@ -252,7 +234,7 @@ void	exec_external_command(t_sh *sh, char **envp)
 			free_redirs(redirs);
 		if (clean_args != sh->node->cmd->split_cmd)
 			free_args(clean_args);
-		return ;
+		return;
 	}
 	if (redirs)
 	{
@@ -275,7 +257,7 @@ void	exec_external_command(t_sh *sh, char **envp)
 			free_redirs(redirs);
 		if (clean_args != sh->node->cmd->split_cmd)
 			free_args(clean_args);
-		return ;
+		return;
 	}
 	else if (pid == 0)
 	{
@@ -334,16 +316,16 @@ void	exec_external_command(t_sh *sh, char **envp)
 	}
 }
 
-void	fork_and_exec(char *command, char **envp)
+void fork_and_exec(char *command, char **envp)
 {
-	pid_t	pid;
-	int		status;
-	char	**args;
-	char	*path;
+	pid_t pid;
+	int status;
+	char **args;
+	char *path;
 
 	args = ft_split(command, ' ');
 	if (!args)
-		return ;
+		return;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -373,9 +355,9 @@ void	fork_and_exec(char *command, char **envp)
 	free_args(args);
 }
 
-void	free_args(char **args)
+void free_args(char **args)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (args[i])
@@ -470,12 +452,12 @@ void	free_args(char **args)
 // 	free_args(args);
 // }
 
-char	**inc_shlvl(char **envp)
+char **inc_shlvl(char **envp)
 {
-	int		i;
-	int		shlvl;
-	char	*new_value;
-	char	*new_var;
+	int i;
+	int shlvl;
+	char *new_value;
+	char *new_var;
 
 	i = 0;
 	while (envp[i])
@@ -491,29 +473,28 @@ char	**inc_shlvl(char **envp)
 				if (new_var)
 					envp[i] = new_var;
 			}
-			break ;
+			break;
 		}
 		i++;
 	}
 	return (envp);
 }
 
-void	exec_external_command_with_redirs(t_sh *sh, char **envp, t_reds *redirs)
+void exec_external_command_with_redirs(t_sh *sh, char **envp, t_reds *redirs)
 {
-	pid_t	pid;
-	char	*path;
-	int		status;
-	int		stdin_fd;
-	int		stdout_fd;
-	t_reds	*current;
+	pid_t pid;
+	char *path;
+	int status;
+	int stdin_fd;
+	int stdout_fd;
+	t_reds *current;
 
 	stdin_fd = -1;
 	stdout_fd = -1;
-	if (!sh->node->cmd || !sh->node->cmd->split_cmd
-		|| !sh->node->cmd->split_cmd[0])
+	if (!sh->node->cmd || !sh->node->cmd->split_cmd || !sh->node->cmd->split_cmd[0])
 	{
 		write(2, "Command not found\n", 18);
-		return ;
+		return;
 	}
 	path = get_path(envp, sh->node->cmd->split_cmd[0]);
 	if (!path)
@@ -521,10 +502,10 @@ void	exec_external_command_with_redirs(t_sh *sh, char **envp, t_reds *redirs)
 		if (ft_strchr(sh->node->cmd->split_cmd[0], '/') == NULL)
 		{
 			write(2, sh->node->cmd->split_cmd[0],
-				ft_strlen(sh->node->cmd->split_cmd[0]));
+				  ft_strlen(sh->node->cmd->split_cmd[0]));
 			write(2, ": command not found\n", 20);
 		}
-		return ;
+		return;
 	}
 	if (redirs)
 	{
@@ -543,7 +524,7 @@ void	exec_external_command_with_redirs(t_sh *sh, char **envp, t_reds *redirs)
 	{
 		write(2, "fork: failed to create process\n", 31);
 		free(path);
-		return ;
+		return;
 	}
 	else if (pid == 0)
 	{
@@ -566,7 +547,7 @@ void	exec_external_command_with_redirs(t_sh *sh, char **envp, t_reds *redirs)
 		if (execve(path, sh->node->cmd->split_cmd, envp) == -1)
 		{
 			write(2, sh->node->cmd->split_cmd[0],
-				ft_strlen(sh->node->cmd->split_cmd[0]));
+				  ft_strlen(sh->node->cmd->split_cmd[0]));
 			write(2, ": execution failed\n", 19);
 			free(path);
 			exit(EXIT_FAILURE);
@@ -595,28 +576,35 @@ void	exec_external_command_with_redirs(t_sh *sh, char **envp, t_reds *redirs)
 	}
 }
 
-int	exec_parsed_command(t_sh *sh, char **envp)
+int exec_parsed_command(t_sh *sh, char **envp)
 {
-	int		has_pipe;
-	int		has_redirs;
-	int		i;
-	t_reds	*redirs;
-	char	**clean_args;
-	char	**cmd_to_exec;
-		int result;
-	char	**temp;
+	int has_pipe;
+	int has_redirs;
+	int i;
+	t_reds *redirs;
+	char **clean_args;
+	char **cmd_to_exec;
+	int result;
+	char **temp;
+	int stdin_backup = -1;
+	int has_heredoc = 0;
+	int needs_cleanup = 0;
 
 	redirs = NULL;
 	clean_args = NULL;
 	printf("Executing parsed command\n");
-	if (!sh->node || !sh->node->cmd)
-		return (1);
-	if (!sh->node->cmd->split_cmd || !sh->node->cmd->split_cmd[0])
-	{
-		printf("No command to execute\n");
+	if (!sh->node || !sh->node->cmd) {
 		return (1);
 	}
-	printf("Command to execute: [%s]\n", sh->node->cmd->split_cmd[0]);
+	if (isatty(STDIN_FILENO))
+	{
+		stdin_backup = dup(STDIN_FILENO);
+		if (stdin_backup < 0)
+		{
+			perror("dup");
+			return (1);
+		}
+	}
 	has_pipe = 0;
 	has_redirs = 0;
 	i = 0;
@@ -625,45 +613,97 @@ int	exec_parsed_command(t_sh *sh, char **envp)
 		while (sh->node->cmd->split_cmd[i])
 		{
 			if (ft_strncmp(sh->node->cmd->split_cmd[i], "|", 2) == 0)
-			{
 				has_pipe = 1;
-				break ;
-			}
-			else if (ft_strncmp(sh->node->cmd->split_cmd[i], ">", 2) == 0
-				|| ft_strncmp(sh->node->cmd->split_cmd[i], ">>", 3) == 0
-				|| ft_strncmp(sh->node->cmd->split_cmd[i], "<", 2) == 0
+			else if (ft_strncmp(sh->node->cmd->split_cmd[i], ">", 2) == 0 
+				|| ft_strncmp(sh->node->cmd->split_cmd[i], ">>", 3) == 0 
+				|| ft_strncmp(sh->node->cmd->split_cmd[i], "<", 2) == 0 
 				|| ft_strncmp(sh->node->cmd->split_cmd[i], "<<", 3) == 0)
 			{
 				has_redirs = 1;
+				if (ft_strncmp(sh->node->cmd->split_cmd[i], "<<", 3) == 0)
+					has_heredoc = 1;
 			}
 			i++;
 		}
 	}
-	if (has_redirs)
+	if (has_redirs && (!sh->node->cmd->split_cmd || !sh->node->cmd->split_cmd[0]))
 	{
-		redirs = parse_redirection_from_cmd(sh->node->cmd);
-		if (!redirs)
-			return (1);
-		if (open_all_redirs(redirs) < 0)
+		printf("Creating default cat command for heredoc\n");
+		char **cat_args = malloc(sizeof(char *) * 2);
+		if (!cat_args)
 		{
-			free_redirs(redirs);
+			if (stdin_backup != -1)
+				close(stdin_backup);
 			return (1);
 		}
+		cat_args[0] = ft_strdup("cat");
+		cat_args[1] = NULL;
+		
+		sh->node->cmd->split_cmd = cat_args;
+		needs_cleanup = 1;
+	}
+	if (!sh->node->cmd->split_cmd || !sh->node->cmd->split_cmd[0])
+	{
+		printf("No command to execute\n");
+		if (stdin_backup != -1)
+			close(stdin_backup);
+		return (1);
+	}
+	
+	printf("Command to execute: [%s]\n", sh->node->cmd->split_cmd[0]);
+	if (has_redirs)
+	{
+		printf("Processing redirections\n");
+		redirs = parse_redirection_from_cmd(sh->node->cmd);
+		if (!redirs)
+		{
+			if (stdin_backup != -1)
+				close(stdin_backup);
+			if (needs_cleanup && sh->node->cmd->split_cmd)
+				free_args(sh->node->cmd->split_cmd);
+			return (1);
+		}
+		
+		if (has_heredoc)
+			printf("Heredoc detected\n");
+			
+		if (open_all_redirs(redirs) < 0)
+		{
+			printf("Failed to open redirections\n");
+			if (stdin_backup != -1)
+				close(stdin_backup);
+			free_redirs(redirs);
+			if (needs_cleanup && sh->node->cmd->split_cmd)
+				free_args(sh->node->cmd->split_cmd);
+			return (1);
+		}
+		
 		clean_args = clean_cmd_args(sh->node->cmd);
 		if (!clean_args)
 		{
+			printf("Failed to clean command arguments\n");
+			if (stdin_backup != -1)
+				close(stdin_backup);
 			free_redirs(redirs);
+			if (needs_cleanup && sh->node->cmd->split_cmd)
+				free_args(sh->node->cmd->split_cmd);
 			return (1);
 		}
 	}
+	
 	if (has_pipe)
 	{
+		if (stdin_backup != -1)
+			close(stdin_backup);
 		if (redirs)
 			free_redirs(redirs);
 		if (clean_args)
 			free_args(clean_args);
+		if (needs_cleanup && sh->node->cmd->split_cmd)
+			free_args(sh->node->cmd->split_cmd);
 		return (process_piped_command(sh, envp));
 	}
+	
 	printf("Executing command: ");
 	if (clean_args)
 	{
@@ -685,6 +725,7 @@ int	exec_parsed_command(t_sh *sh, char **envp)
 		}
 		printf("\n");
 	}
+	
 	cmd_to_exec = clean_args ? clean_args : sh->node->cmd->split_cmd;
 	if (cmd_to_exec && is_builtin(cmd_to_exec[0]))
 	{
@@ -693,10 +734,21 @@ int	exec_parsed_command(t_sh *sh, char **envp)
 			result = exec_builtin_with_redirs(cmd_to_exec, envp, sh, redirs);
 		else
 			result = exec_builtin(cmd_to_exec, envp, sh);
+		if (stdin_backup != -1)
+		{
+			dup2(stdin_backup, STDIN_FILENO);
+			close(stdin_backup);
+		}
+		if (has_heredoc)
+			unlink("heredoc.tmp");
+			
 		if (redirs)
 			free_redirs(redirs);
 		if (clean_args && clean_args != sh->node->cmd->split_cmd)
 			free_args(clean_args);
+		if (needs_cleanup && sh->node->cmd->split_cmd)
+			free_args(sh->node->cmd->split_cmd);
+			
 		return (result);
 	}
 	else
@@ -713,8 +765,19 @@ int	exec_parsed_command(t_sh *sh, char **envp)
 		{
 			exec_external_command(sh, envp);
 		}
+		if (stdin_backup != -1)
+		{
+			dup2(stdin_backup, STDIN_FILENO);
+			close(stdin_backup);
+		}
+		if (has_heredoc)
+			unlink("heredoc.tmp");
+		
 		if (redirs)
 			free_redirs(redirs);
+		if (needs_cleanup && sh->node->cmd->split_cmd)
+			free_args(sh->node->cmd->split_cmd);
 	}
+	
 	return (0);
 }
