@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/27 12:57:29 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/05/31 22:15:21 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_type // BOOLEANOS
 	bool	with_pipe;
 	bool	built;
 	bool	with_reds;
+	bool	built_args;
 }	t_type;
 //_---------------------------------------------------------
 
@@ -60,6 +61,7 @@ typedef struct s_node
 {
 	t_cmd	*cmd;
 	char	*arg;
+	char	**built_args;
 	int		n_cmd; // Número de comandos.
 	bool	is_quote;
 	t_type	*line_is; // el tipo de la linea completa
@@ -84,6 +86,7 @@ typedef struct s_parse
 	char			*line;
 	bool			is_flag;
 	bool			is_cmd;
+	bool			is_built_arg;
 	int				type_token;
 	struct s_parse	*next;
 	struct s_parse	*prev;

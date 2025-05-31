@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/29 18:19:48 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/31 22:15:09 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,10 @@ void	bool_active(t_parse *parse)
 	{
 		if (count->type_token == CMD)
 			count->is_cmd = true;
-		else if (parse->type_token == FLAG)
+		else if (count->type_token == FLAG)
 			count->is_flag = true;
+		else if (count->type_token == ARG && count->prev->type_token == BUILT)
+			count->is_built_arg = true;
 		count = count->next;
 	}
 }
@@ -211,7 +213,7 @@ void	case_without_space(char *sp_input, char **env, t_parse *parse)
 				&& sp_input[w] != '>' && sp_input[w])
 				w++;
 			w -= i;
-			printf("flipante %d  -- %s imbecil \n", w, (sp_input + i));
+			printf("flipante %d  -- %s \n", w, (sp_input + i));
 			parse->line = ft_strldup(sp_input + i, w);
 			i += w;
 		}

@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/29 18:16:01 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/05/31 22:42:07 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i);
 void	add_flag(t_sh *sh, char *flag);
 int		find_cmd(t_parse *parse);
 void	case_without_space(char *sp_input, char **env, t_parse *parse);
+int		is_built(t_parse *parse);
+char	**ft_built_args(t_parse *parse, char **built_args)
 
 // QUOTES
 void	ft_quotes(t_parse *parse);
