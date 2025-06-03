@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 22:21:04 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/31 22:41:40 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/03 15:47:25 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,18 @@ char	**ft_built_args(t_parse *parse, char **built_args)
 
 	to_back = parse;
 	while (to_back != NULL)
+	{
+		to_back = to_back->prev;
 		i++;
+	}
 	new = malloc(sizeof(char *) * i);
 	i = 0;
 	while (built_args[i])
 	{
-		new[i] = built_args[i];
+		new[i] = ft_strdup(built_args[i]);
 		i++;
 	}
-	new[i] = parse->line;
+	new[i] = ft_strdup(parse->line);
 	i++;
 	new[i] = NULL;
 	free_words(built_args);

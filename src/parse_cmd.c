@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/31 22:33:34 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/03 15:33:47 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 		sh->node->arg = ft_strdup(parse->line);
 		sh->node->line_is->built = true;
 	}
-	else if (is_built(parse) && parse->type_token == ARG
-		|| is_built(parse) && parse->next->type_token == ARG)
+	else if ((is_built(parse) && parse->type_token == ARG)
+		|| (is_built(parse) && parse->next->type_token == ARG))
 	{
 		sh->node->built_args = ft_built_args(parse, sh->node->built_args);
 		sh->node->line_is->built_args = true;

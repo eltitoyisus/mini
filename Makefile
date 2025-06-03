@@ -6,7 +6,7 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/05/29 09:57:02 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/06/03 15:48:16 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,9 @@ SRC = $(SRC_DIR)main.c				\
 		$(SRC_DIR)identifiers.c		\
 		$(SRC_DIR)quotes.c			\
 		$(SRC_DIR)utils_min.c		\
-		$(SRC_DIR)ft_chardup.c		
+		$(SRC_DIR)ft_chardup.c		\
+		$(SRC_DIR)without_spaces.c	\
+		$(SRC_DIR)ft_built_args.c
 
 OBJ = $(SRC:.c=.o)
 

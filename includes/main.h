@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/31 22:42:07 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/03 15:33:00 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	ft_lstclear_parse(t_parse *parse);
 //IDENTIFIERS
 int	id_red(t_parse *parse);
 int	id_file(t_parse *parse);
+int	space_case(char	*input);
 
 // FREES OF LIST OR NODES
 void	destroy_node(t_node *node);
@@ -55,7 +56,7 @@ void	add_flag(t_sh *sh, char *flag);
 int		find_cmd(t_parse *parse);
 void	case_without_space(char *sp_input, char **env, t_parse *parse);
 int		is_built(t_parse *parse);
-char	**ft_built_args(t_parse *parse, char **built_args)
+char	**ft_built_args(t_parse *parse, char **built_args);
 
 // QUOTES
 void	ft_quotes(t_parse *parse);

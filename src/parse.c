@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/31 22:15:09 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/03 16:01:30 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ static int	n_token(char **env, t_parse *parse)
 // }
 void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 {
+
 	while (parse != NULL)
 	{
 		if (!parse || !parse->line)
@@ -236,7 +237,7 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 	while (parse != NULL && i < count)
 	{
 		printf("entra al bucle\n");
-		if (ft_strchr(split_input[i], '<') && ft_strchr(split_input[i], '>'))
+		if (space_case(split_input[i]))
 			case_without_space(split_input[i], env, parse);
 		else
 			parse->line = split_input[i];
@@ -256,6 +257,12 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		}
 	}
 	// printf ("ssss %s \n", parse->prev->line);
+	parse = temp;
+	for (int j = 0; parse != NULL; j++)
+	{
+		printf("COMPLETO :		%s  TYPE: %d \n", parse->line, parse->type_token);
+		parse = parse->next;
+	}
 	parse = temp;
 	printf ("ssss %s \n", parse->line);
 	info_to_struct_2(parse, sh, i);
