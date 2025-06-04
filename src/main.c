@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/29 09:41:26 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 15:05:58 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int main(int argc, char **argv, char **envp)
 			// 	ft_tx();
 			add_history(sh->input);
 			parse_comm(sh, envp);
-			printf("linea completa --> %d %d \n", sh->node->line_is->cmd, sh->node->line_is->with_reds);
+			// printf("linea completa --> %d %d \n", sh->node->line_is->cmd, sh->node->line_is->with_reds);
 			// exec();
 			printf("que belleza mi rey\n");
 			exec_command(sh->input, envp, sh);

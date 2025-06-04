@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/31 22:15:21 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 13:59:02 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_reds
 	int					type; // TIPO DE RED O ARCHIVO
 	int					fd;
 	struct s_reds		*next;
+	struct s_reds		*prev;
 }	t_reds;
 
 typedef struct s_cmd

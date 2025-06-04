@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:08:57 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/03 15:35:54 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 14:24:01 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	space_case(char	*input)
 		if (ft_strchr(input, '<')[i + 1] != '<')
 			return (1);
 	}
-	if ((ft_strchr(input, '|')[i + 1] != '<' || ft_strchr(input, '|')[i + 1] != '>'
-		|| ft_strchr(input, '|')[i + 1] != '|') && ft_strchr(input, '|'))
+	if (ft_strchr(input, '|') && (ft_strchr(input, '|')[i + 1] != '<' || ft_strchr(input, '|')[i + 1] != '>'
+		|| ft_strchr(input, '|')[i + 1] != '|'))
 		return (1);
 	return (0);
 }

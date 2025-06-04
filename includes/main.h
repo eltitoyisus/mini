@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/03 15:33:00 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 14:41:37 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	ft_lstclear_sh(t_sh *sh); // Adaptada para la mini.
 void	ft_lstadd_back_parse(t_parse *parse);
 void	ft_lstadd_back_cmd(t_cmd *cmd);
 void	ft_lstclear_parse(t_parse *parse);
+void	ft_lstadd_back_red(t_reds *red);
+void	has_more_reds(t_parse *parse, t_reds *red);
 
 //IDENTIFIERS
 int	id_red(t_parse *parse);
@@ -49,7 +51,7 @@ void	parse_comm(t_sh *sh, char **env);
 // void	info_to_struct(t_sh *sh, int type_token, char **input_s, int i);
 void	info_to_struct_2(t_parse *parse, t_sh *sh, int i);
 // void	type_cmd_built(t_sh *sh, int token, char **input_s, int i);
-void	type_cmd_built_2(t_sh *sh, t_parse *parse, int i);
+int	type_cmd_built_2(t_sh *sh, t_parse *parse, int i);
 void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i);
 // void	type_red_pipe(t_sh *sh, int token, char **input_s, int i);
 void	add_flag(t_sh *sh, char *flag);

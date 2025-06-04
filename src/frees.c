@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:15:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/16 16:03:20 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 15:02:27 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ void	destroy_node(t_node *node)
 
 void	free_parse(t_parse *parse)
 {
+	parse->is_built_arg = false;
 	parse->is_cmd = false;
 	parse->is_flag = false;
-	parse->type_token = 0;
+	parse->type_token = -1;
 	free(parse);
 }
 

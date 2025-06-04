@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/03 16:01:30 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 15:58:16 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,19 +119,30 @@ static int	n_token(char **env, t_parse *parse)
 // }
 void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 {
+	t_reds	*temp;
+	// t_parse	*temp_parse;
 
+	temp = sh->node->cmd->red;
+	// temp_parse = parse;
 	while (parse != NULL)
 	{
-		if (!parse || !parse->line)
+		if (parse->type_token == FLAG && find_cmd(parse)) // ESTE ES EL CASO DE LAS FLAGS POR EJEMPLO CAT -E QUE TAMBIEN PUEDE RECIBIR "CAT MAKEFILE ./SRC/MAIN.C ./INCLUDES/MAIN.H -E"
+		{
+			printf("FLAGG ENTER\n");
+			parse->is_flag = true;
+			add_flag(sh, parse->line); // ENTONCES USO UNA (HEAD DE REFERENCIA PARA BUSCAR SI ES UNA FLAG DE UN CMD Y LE AGREGO LA FLAG A EL SPLIT DEL COMANDO)
 			return ;
-		type_cmd_built_2(sh, parse, i);
-		type_red_pipe_2(sh, parse, i);
+		}
+		if (!type_cmd_built_2(sh, parse, i))
+			type_red_pipe_2(sh, parse, i);
 		if (parse->type_token == ARG)
 		{
 			sh->node->arg = ft_strdup(parse->line);
 		}
 		parse = parse->next;
 	}
+	sh->node->cmd->red = temp;
+	// parse = temp_parse;
 		// Siempre que metamos la info del node que estemos creamos otro
 }
 
@@ -240,13 +251,13 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		if (space_case(split_input[i]))
 			case_without_space(split_input[i], env, parse);
 		else
-			parse->line = split_input[i];
+			printf("sabes conn\n"), parse->line = split_input[i];
 		ft_quotes(parse);
 		printf ("ssss111 %s \n", parse->line);
 		parse->type_token = n_token(env, parse);
 		if (parse->type_token == -1)
 			break ;
-		printf("token --> %d\n", parse->type_token);
+		printf("token ----> %d\n", parse->type_token);
 		ft_controls(parse); // AQUI SE HARAN LAS IMPLEMENTACION QUE TENGO QUE INVESTIGAR PARA ASEGURARNOS BIEN QUE NO HALLAN ERRORES.
 		i++;
 		if (i != 0 && i < count)
@@ -258,20 +269,23 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 	}
 	// printf ("ssss %s \n", parse->prev->line);
 	parse = temp;
-	for (int j = 0; parse != NULL; j++)
-	{
-		printf("COMPLETO :		%s  TYPE: %d \n", parse->line, parse->type_token);
-		parse = parse->next;
-	}
-	parse = temp;
+	// for (int j = 0; parse != NULL; j++)
+	// {
+	// 	printf("COMPLETO :		%s  TYPE: %d \n", parse->line, parse->type_token);
+	// 	parse = parse->next;
+	// }
+	// parse = temp;
 	printf ("ssss %s \n", parse->line);
 	info_to_struct_2(parse, sh, i);
+	parse = temp;
+	printf ("ss223ss %s \n", parse->line);
 	free_words(split_input);
 }
 
 void	parse_comm(t_sh *sh, char **env)
 {
 	t_parse	*parse;
+
 
 	parse = init_parse();
 	printf("reservada memoria\n");
@@ -280,4 +294,6 @@ void	parse_comm(t_sh *sh, char **env)
 	ft_parse(parse, sh, env);
 	printf("sale del parseo\n");
 	ft_lstclear_parse(parse);
+	printf("sale\n;");
+	return ;
 }

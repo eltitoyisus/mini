@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   lsts_sh.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:09:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 19:11:49 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:58:09 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
+
+void	ft_lstadd_back_red(t_reds *red)
+{
+	t_reds	*new;
+	t_reds	*last;
+
+	new = init_redir();
+	if (!red || !new)
+		return ;
+	if (red == NULL)
+	{
+		red = new;
+		return ;
+	}
+	last = red;
+	while (last->next != NULL)
+		last = last->next;
+	last->next = new;
+	new->prev = last;
+}
 
 void	ft_lstadd_back_cmd(t_cmd *cmd)
 {
@@ -87,11 +107,25 @@ void	ft_lstadd_back_parse(t_parse *parse)
 void	ft_lstclear_parse(t_parse *parse)
 {
 	t_parse	*temp;
+	int		i;
 
 	temp = parse;
+	i = 0;
 	printf("entra a clean\n");
 	if (!parse)
 		return ;
+	while (parse)
+	{
+		parse = parse->next;
+		i++;
+	}
+	parse = temp;
+	if (i == 1)
+	{
+		printf("aqui entra\n");
+		free_parse(parse);
+		return ;
+	}
 	while (parse->next != NULL)
 	{
 		printf("entra al bucle de clear \n");
