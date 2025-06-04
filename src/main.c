@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/04 15:05:58 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/05 00:01:36 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,17 @@ int main(int argc, char **argv, char **envp)
 	if (argc != 1)
 		exit(0);
 	ft_signals();
-	sh = shell_factory(envp);
-	sh->prompt = ft_prompt();
 	using_history();
 	while (1)
 	{
+		sh = shell_factory(envp);
+		sh->prompt = ft_prompt();
 		sh->input = readline(sh->prompt);
 		if (!sh->input)
 		{
 			write(1, "exit\n", 5);
-			break;
+			destroy_node(sh->node);
+			break ;
 		}
 		if (sh->input)
 		{
@@ -43,7 +44,8 @@ int main(int argc, char **argv, char **envp)
 			printf("que belleza mi rey\n");
 			exec_command(sh->input, envp, sh);
 		}
-		free(sh->input);
+		destroy_node(sh->node);
+		// free(sh->input);
 	}
 	clear_history();
 	return (0);

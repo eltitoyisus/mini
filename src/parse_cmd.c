@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:51:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/04 16:14:08 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 23:53:39 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,20 @@ int	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 	int	j; // count_cmd
 
 	j = 0;
-	printf("type_tokennnmm --> %d\n", parse->type_token);
-	if (parse->type_token == BUILT && parse->next->is_built_arg == false)
+	// printf("type_tokennnmm --> %d bool -> %d\n", parse->type_token, parse->next->is_built_arg);
+	if (parse->type_token == BUILT && !parse->next)
 	{
 		sh->node->arg = ft_strdup(parse->line);
 		sh->node->line_is->built = true;
 		return (1);
 	}
 	else if ((is_built(parse) && parse->type_token == ARG)
-		|| (is_built(parse) && parse->next->type_token == ARG))
+			|| (parse->type_token == BUILT && parse->next->type_token == ARG))
 	{
+		printf("ENTRA BUILT CON ARGS\n");
 		sh->node->built_args = ft_built_args(parse, sh->node->built_args);
 		sh->node->line_is->built_args = true;
-		return (1);
+		return (printf("1\n"), 1);
 	}
 	else if (parse->type_token == CMD)
 	{
@@ -86,6 +87,7 @@ int	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 		printf("all god\n");
 		return (1);
 	}
+	printf("0 \n");
 	return (0);
 }
 
@@ -114,21 +116,23 @@ int	type_cmd_built_2(t_sh *sh, t_parse *parse, int i)
 // TIPO DE ENTRADA DE INFORMACION PARA REDIRECCIONES, PIPE
 // -----------------------------------------------------------------------------------------
 
-void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i)
+int	type_red_pipe_2(t_sh *sh, t_parse *parse, int i)
 {
 	if (parse->type_token == RED)
 	{
 		sh->node->cmd->red->type = id_red(parse);
 		sh->node->line_is->with_reds = true;
+		return (1);
 	}
 	else if (parse->type_token == FILES)
 	{
 		sh->node->line_is->with_reds = true;
 		sh->node->cmd->red->type = id_file(parse);
 		if (sh->node->cmd->red->type == DELIM)
-		sh->node->cmd->red->delim = ft_strdup(parse->line);
+			sh->node->cmd->red->delim = ft_strdup(parse->line);
 		else
-		sh->node->cmd->red->file = ft_strdup(parse->line);
+			sh->node->cmd->red->file = ft_strdup(parse->line);
+		return (1);
 	}
 	else if (parse->type_token == PIPE)
 	{
@@ -140,7 +144,10 @@ void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i)
 		sh->node->cmd->pipe_out = i;
 		// pipe(sh->node->cmd->pipefd);
 		ft_lstadd_back_cmd(sh->node->cmd);
+		return (1);
 	}
+	else
+		return (0);
 	has_more_reds(parse, sh->node->cmd->red);
 }
 

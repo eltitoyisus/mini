@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/04 15:58:16 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 23:52:31 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static int	other_cases(char *input, t_parse *parse)
 		|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2))
 		return (RED);
 	else if ((!ft_strncmp(parse->prev->line, "<", 1) && can_op(input)) || !ft_strncmp(parse->prev->line, ">", 1)
-		|| !ft_strncmp(parse->prev->line, ">>", 2) || !ft_strncmp(parse->prev->line, "<<", 2))
+		|| !ft_strncmp(parse->prev->line, ">>", 2) || !ft_strncmp(parse->prev->line, "<<", 2)
+		|| (can_op(input) && parse->prev->is_cmd))
 		return (FILES);
 	else if (!ft_strncmp(input, "|", 1))
 		return (PIPE);
@@ -41,6 +42,8 @@ static int	cases_builds(char *input)
 	else if (!ft_strncmp(input, "unset", 5))
 		return (BUILT);
 	else if (!ft_strncmp(input, "env", 3))
+		return (BUILT);
+	else if (!ft_strncmp(input, "exit", 3))
 		return (BUILT);
 	else if (!ft_strncmp(input, "-", 1))
 		return (FLAG);
@@ -133,13 +136,13 @@ void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 			add_flag(sh, parse->line); // ENTONCES USO UNA (HEAD DE REFERENCIA PARA BUSCAR SI ES UNA FLAG DE UN CMD Y LE AGREGO LA FLAG A EL SPLIT DEL COMANDO)
 			return ;
 		}
-		if (!type_cmd_built_2(sh, parse, i))
-			type_red_pipe_2(sh, parse, i);
-		if (parse->type_token == ARG)
+		else if (!type_cmd_built_2(sh, parse, i))
 		{
-			sh->node->arg = ft_strdup(parse->line);
+			if (!type_red_pipe_2(sh, parse, i) && parse->type_token == ARG)
+				sh->node->arg = ft_strdup(parse->line);
 		}
 		parse = parse->next;
+		printf("AVaanzaros\n");
 	}
 	sh->node->cmd->red = temp;
 	// parse = temp_parse;
@@ -150,6 +153,7 @@ void	info_to_struct_2(t_parse *parse, t_sh *sh, int i)
 void	bool_active(t_parse *parse)
 {
 	t_parse	*count;
+	t_parse *current;
 
 	count = parse;
 	while (count != NULL)
@@ -158,8 +162,17 @@ void	bool_active(t_parse *parse)
 			count->is_cmd = true;
 		else if (count->type_token == FLAG)
 			count->is_flag = true;
-		else if (count->type_token == ARG && count->prev->type_token == BUILT)
-			count->is_built_arg = true;
+		else
+		{
+			current = count;
+			while (count->type_token == ARG && count != NULL)
+			{
+				if (count->prev->type_token == BUILT)
+					count->is_built_arg = true;
+				count = count->prev;
+			}
+			count = current;
+		}
 		count = count->next;
 	}
 }

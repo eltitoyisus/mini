@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:42:14 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/04 14:30:21 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/05 00:05:15 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,9 @@ t_type	*init_bools(void)
 	t_type	*new;
 
 	new = malloc(sizeof(t_type));
-	new->built = malloc(sizeof(bool));
 	new->built = false;
-	new->cmd = malloc(sizeof(bool));
 	new->cmd = false;
-	new->with_pipe = malloc(sizeof(bool));
 	new->with_pipe = false;
-	new->with_reds = malloc(sizeof(bool));
 	new->with_reds = false;
 	return (new);
 }

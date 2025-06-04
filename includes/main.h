@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/04 14:41:37 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/04 23:50:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	parse_comm(t_sh *sh, char **env);
 // void	info_to_struct(t_sh *sh, int type_token, char **input_s, int i);
 void	info_to_struct_2(t_parse *parse, t_sh *sh, int i);
 // void	type_cmd_built(t_sh *sh, int token, char **input_s, int i);
-int	type_cmd_built_2(t_sh *sh, t_parse *parse, int i);
-void	type_red_pipe_2(t_sh *sh, t_parse *parse, int i);
+int		type_cmd_built_2(t_sh *sh, t_parse *parse, int i);
+int		type_red_pipe_2(t_sh *sh, t_parse *parse, int i);
 // void	type_red_pipe(t_sh *sh, int token, char **input_s, int i);
 void	add_flag(t_sh *sh, char *flag);
 int		find_cmd(t_parse *parse);
