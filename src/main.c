@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/05 00:01:36 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/10 12:19:34 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv, char **envp)
 			printf("que belleza mi rey\n");
 			exec_command(sh->input, envp, sh);
 		}
-		destroy_node(sh->node);
+		// destroy_node(sh->node);
 		// free(sh->input);
 	}
 	clear_history();

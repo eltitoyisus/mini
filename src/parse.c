@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/04 23:52:31 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/10 12:18:56 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ static int	other_cases(char *input, t_parse *parse)
 	if (!ft_strncmp(input, "<", 1) || !ft_strncmp(input, ">", 1)
 		|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2))
 		return (RED);
-	else if ((!ft_strncmp(parse->prev->line, "<", 1) && can_op(input)) || !ft_strncmp(parse->prev->line, ">", 1)
+	else if (parse->prev && ((!ft_strncmp(parse->prev->line, "<", 1) && can_op(input)) || !ft_strncmp(parse->prev->line, ">", 1)
 		|| !ft_strncmp(parse->prev->line, ">>", 2) || !ft_strncmp(parse->prev->line, "<<", 2)
-		|| (can_op(input) && parse->prev->is_cmd))
+		|| (can_op(input) && parse->prev->is_cmd)))
 		return (FILES);
 	else if (!ft_strncmp(input, "|", 1))
 		return (PIPE);
 	else
+	{
+		printf("sabes\n");
 		return (ARG);
+	}
 }
 
 static int	cases_builds(char *input)
@@ -91,12 +94,12 @@ static int	n_token(char **env, t_parse *parse)
 	else if (value_token == BUILT)
 		return (BUILT);
 	value_token = cases_com(parse->line, env);
-	printf("tokennn --> %d\n", value_token);
 	if (value_token == CMD)
-		return (CMD);
+	return (CMD);
 	else if (value_token == ARG)
-		return (ARG);
+	return (ARG);
 	value_token = other_cases(parse->line, parse);
+	printf("tokennn --> %d\n", value_token);
 	if (value_token == RED)
 		return (RED);
 	else if (value_token == PIPE)
@@ -165,7 +168,7 @@ void	bool_active(t_parse *parse)
 		else
 		{
 			current = count;
-			while (count->type_token == ARG && count != NULL)
+			while (count->type_token == ARG && count->prev)
 			{
 				if (count->prev->type_token == BUILT)
 					count->is_built_arg = true;
@@ -270,8 +273,8 @@ void	ft_parse(t_parse *parse, t_sh *sh, char **env)
 		parse->type_token = n_token(env, parse);
 		if (parse->type_token == -1)
 			break ;
-		printf("token ----> %d\n", parse->type_token);
 		ft_controls(parse); // AQUI SE HARAN LAS IMPLEMENTACION QUE TENGO QUE INVESTIGAR PARA ASEGURARNOS BIEN QUE NO HALLAN ERRORES.
+		printf("token ----> %d\n", parse->type_token);
 		i++;
 		if (i != 0 && i < count)
 		{ // si no es el primer node y existe una palabra creamos un nuevo node para reconocer que tipo de token será ese y hacerle todo el procedimiento.

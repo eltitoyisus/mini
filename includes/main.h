@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/04 23:50:41 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/05 01:38:59 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,16 @@
 //TX
 void	ft_tx();
 void	save_info(t_tx *tx, int i, int j);
+void	init_one_piece(char piece[4][4], char pattern[4][4]);
+void	get_I(char pattern[4][4]);
+void	get_O(char pattern[4][4]);
+void	get_L(char pattern[4][4]);
+void	get_Z(char pattern[4][4]);
+void	get_S(char pattern[4][4]);
+void	get_T(char pattern[4][4]);
+void	get_J(char pattern[4][4]);
+void	save_types(char pieces[7][4][4]);
+t_piece	*init_piece(void);
 
 // UTILS TO EVERYTHING
 int		ft_error(char *msg, int ret);
