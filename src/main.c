@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:03:23 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/10 12:19:34 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/10 18:07:50 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int main(int argc, char **argv, char **envp)
 		exit(0);
 	ft_signals();
 	using_history();
+	sh = shell_factory(envp);
+	sh->prompt = ft_prompt();
 	while (1)
 	{
-		sh = shell_factory(envp);
-		sh->prompt = ft_prompt();
 		sh->input = readline(sh->prompt);
 		if (!sh->input)
 		{
@@ -33,7 +33,9 @@ int main(int argc, char **argv, char **envp)
 			destroy_node(sh->node);
 			break ;
 		}
-		if (sh->input)
+		if (ft_strlen(sh->input) < 1)
+			printf("command not found!\n");
+		else if (sh->input)
 		{
 			// if (ft_strncmp("tx", sh->input, 2) == 0)
 			// 	ft_tx();

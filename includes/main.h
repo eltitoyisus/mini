@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/05 01:38:59 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/10 15:53:50 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_type	*init_bools(void);
 
 // PROMPT
 char	*ft_prompt(void);
+char	*join_prompt(char *old_user, char *join);
 
 // EXEC COMMAND
 char	*find_path(char **envp);
