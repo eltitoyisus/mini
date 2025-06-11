@@ -63,6 +63,18 @@
 }
 
 {
+   add_history_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:add_history
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
    readline_add_history
    Memcheck:Leak
    match-leak-kinds: reachable

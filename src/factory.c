@@ -21,7 +21,7 @@ t_cmd	*cmd_factory(void)
 	cmd->split_cmd = NULL;
 	cmd->path = NULL;
 	cmd->red = init_redir();
-	cmd->pids =	NULL;
+	cmd->pids = NULL;
 	cmd->pipefd[1] = -1;
 	cmd->pipefd[0] = -1;
 	cmd->pipe_in = 0;

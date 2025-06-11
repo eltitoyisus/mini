@@ -22,6 +22,7 @@ t_parse	*init_parse(void)
 	parse->line = NULL;
 	parse->next = NULL;
 	parse->prev = NULL;
+	parse->quote_error = 0;
 	return (parse);
 }
 

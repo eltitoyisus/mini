@@ -29,10 +29,10 @@ int	case_simple(t_parse *parse)
 	j = 0;
 	while (ft_strchr(parse->line, '\'') && j < i)
 	{
-		// if (ft_strlen(ft_strchr(parse->line, '\'')) > ft_strlen(ft_strchr(parse->line, '\"')))
 		if (ft_strrchr(parse->line, '\'') != ft_strchr(parse->line, '\''))
 			parse->line = ft_strtrim(parse->line, "'");
-		if (ft_strchr(parse->line, '\'') && (ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
+		if (ft_strchr(parse->line, '\'') && (ft_strchr(parse->line,
+					'\'') == ft_strrchr(parse->line, '\'')))
 			ft_error("sabes sale \n", 1);
 		if (ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
 			return (0);
@@ -46,55 +46,49 @@ int	case_double(t_parse *parse)
 	if (!ft_strchr(parse->line, '\"'))
 		return (0);
 	printf("entra\n");
-	if (ft_strchr(parse->line, '\"') && ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
+	if (ft_strchr(parse->line, '\"') && ft_strrchr(parse->line,
+			'\"') != ft_strchr(parse->line, '\"'))
 	{
-		// if (ft_strlen(ft_strchr(parse->line, '\'')) < ft_strlen(ft_strchr(parse->line, '\"')))
 		parse->line = ft_strtrim(parse->line, "\"");
 		if (ft_strrchr(parse->line, '\'') != ft_strchr(parse->line, '\''))
 			return (0);
 	}
 	return (1);
 }
-//														|
-// Esto indica si esta abierto o cerrado las comillas 	v
 
 int	check_open(t_parse *parse, int type)
 {
-	int	i;
-	int	flag;
+	int		i;
+	int		count;
+	char	quote_char;
 
 	i = 0;
-	flag = -1;
+	count = 0;
 	if (type == SIMPLE)
+		quote_char = '\'';
+	else
+		quote_char = '\"';
+	while (parse->line[i])
 	{
-		while (parse->line[i] == '\'')
-		{
-			flag = 0;
-			i++;
-			if (parse->line[i++] == '\'')
-				flag = 1;
-		}
+		if (parse->line[i] == quote_char)
+			count++;
+		i++;
 	}
-	else if (type == DOUBLE)
-	{
-		while (parse->line[i] == '\"')
-		{
-			flag = 0;
-			i++;
-			if (parse->line[i++] == '\"')
-				flag = 1;
-		}
-	}
-	return (flag);
+	if (count % 2 == 0)
+		return (1);
+	else
+		return (0);
 }
 
 int	id_cases(t_parse *parse)
 {
 	if (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\"'))
 	{
-		if (ft_strlen(ft_strchr(parse->line, '\'')) > ft_strlen(ft_strchr(parse->line, '\"')))
+		if (ft_strlen(ft_strchr(parse->line,
+					'\'')) > ft_strlen(ft_strchr(parse->line, '\"')))
 			return (SIMPLE);
-		else if (ft_strlen(ft_strchr(parse->line, '\'')) < ft_strlen(ft_strchr(parse->line, '\"')))
+		else if (ft_strlen(ft_strchr(parse->line,
+					'\'')) < ft_strlen(ft_strchr(parse->line, '\"')))
 			return (DOUBLE);
 		else
 			return (ERROR);
@@ -107,31 +101,43 @@ int	id_cases(t_parse *parse)
 		return (ERROR);
 }
 
-void	ft_quotes(t_parse *parse)
-{
-	int	ch_op;
-	int	case_q;
-	int	flag; // Esta flag lo que va a hacer es representar si se realizo bien el recorte de comillas, sean simples o dobles.
+// void	ft_quotes(t_parse *parse)
+// {
+// 	int	ch_op;
+// 	int	case_q;
+// 	int	flag;
 
-	flag = 0;
-	while (ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
-	{
-		case_q = id_cases(parse);
-		printf("sabes case of quotes --> %d\n", case_q);
-		if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
-			ft_error("sabes sale \n", 1);
-		printf("bucle infinito\n"); // Aqui estoy comparando longitudes de los punteros que devuelven quiere decir cual caracter esta mas cerca del inicio
-		if (case_q == SIMPLE)
-		{
-			ch_op = check_open(parse, SIMPLE);
-			flag = case_simple(parse);
-		}
-		else if (case_q == DOUBLE)
-		{
-			ch_op = check_open(parse, DOUBLE);
-			flag = case_double(parse);
-		}
-		if (ch_op == 0 && flag == 0)
-			break ;
-	}
-}
+// 	flag = 0;
+// 	if ((check_open(parse, SIMPLE) == 0) || (check_open(parse, DOUBLE) == 0))
+// 	{
+// 		printf("Unmatched quotes found\n");
+// 		parse->quote_error = 1;
+// 		return ;
+// 	}
+// 	while (ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
+// 	{
+// 		case_q = id_cases(parse);
+// 		printf("sabes case of quotes --> %d\n", case_q);
+// 		if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line,
+// 					'\"') == ft_strrchr(parse->line, '\"'))
+// 			|| (ft_strchr(parse->line, '\'') && ft_strchr(parse->line,
+// 					'\'') == ft_strrchr(parse->line, '\'')))
+// 		{
+// 			printf("Unmatched quotes found\n");
+// 			parse->quote_error = 1;
+// 			return ;
+// 		}
+// 		if (case_q == SIMPLE)
+// 		{
+// 			ch_op = check_open(parse, SIMPLE);
+// 			flag = case_simple(parse);
+// 		}
+// 		else if (case_q == DOUBLE)
+// 		{
+// 			ch_op = check_open(parse, DOUBLE);
+// 			flag = case_double(parse);
+// 		}
+// 		if (ch_op == 0 && flag == 0)
+// 			break ;
+// 	}
+// }

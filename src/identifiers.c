@@ -25,7 +25,6 @@ int	id_red(t_parse *parse)
 	return (-1);
 }
 
-
 int	id_file(t_parse *parse)
 {
 	if (!ft_strncmp(parse->prev->line, "<", 1) && can_op(parse->line))
@@ -36,5 +35,5 @@ int	id_file(t_parse *parse)
 		return (OUTFILE_APP);
 	if (!ft_strncmp(parse->prev->line, "<<", 2))
 		return (DELIM);
-	return(-1);
+	return (-1);
 }

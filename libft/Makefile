@@ -1,6 +1,6 @@
 # VARIABLES
 NAME = libft.a
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Werror -Wextra
 AR = ar crs
 RM = rm -rf

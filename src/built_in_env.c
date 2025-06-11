@@ -6,25 +6,11 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:04:02 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/05/23 08:51:55 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:17:28 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
-
-int	exec_env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		write(1, envp[i], ft_strlen(envp[i]));
-		write(1, "\n", 1);
-		i++;
-	}
-	return (1);
-}
 
 int	env_unset(char **argv, char **envp)
 {
@@ -52,47 +38,6 @@ int	env_unset(char **argv, char **envp)
 		i++;
 	}
 	printf("unset: variable %s not found\n", var);
-	return (1);
-}
-
-int	env_export(char **argv, char **envp)
-{
-	int		i;
-	char	*new_var;
-
-	i = 0;
-	if (!envp)
-		return (0);
-	if (!argv[1])
-	{
-		while (envp[i])
-		{
-			export_no_args(&envp[i]);
-			i++;
-		}
-		return (1);
-	}
-	if (!ft_strchr(argv[1], '='))
-	{
-		printf("export: %s is not a valid variable\n", argv[1]);
-		return (-1);
-	}
-	new_var = ft_strdup(argv[1]);
-	if (!new_var)
-		return (-1);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], argv[1], ft_strchr(argv[1], '=')
-				- argv[1]) == 0)
-		{
-			free(envp[i]);
-			envp[i] = new_var;
-			return (1);
-		}
-		i++;
-	}
-	envp[i] = new_var;
-	envp[i + 1] = NULL;
 	return (1);
 }
 
@@ -128,7 +73,7 @@ int	echo_var(char **argv, int index, char **envp)
 	while (envp[j])
 	{
 		if (ft_strncmp(&argv[index][1], envp[j],
-				ft_strlen(&argv[index][1])) == 0
+			ft_strlen(&argv[index][1])) == 0
 			&& envp[j][ft_strlen(&argv[index][1])] == '=')
 		{
 			value = ft_strchr(envp[j], '=');

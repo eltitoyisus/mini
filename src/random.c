@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 
-// void	random_n()
+// void	random_n(void)
 // {
 // 	int	a;
 // 	int	random;
@@ -26,5 +26,5 @@
 // int main ()
 // {
 // 	random_n();
-// 	return 0;
+// 	return (0);
 // }
