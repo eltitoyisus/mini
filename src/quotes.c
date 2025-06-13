@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:49:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/05/27 19:46:00 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:32:54 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,31 +61,27 @@ int	case_double(t_parse *parse)
 int	check_open(t_parse *parse, int type)
 {
 	int	i;
-	int	flag;
 
 	i = 0;
-	flag = -1;
 	if (type == SIMPLE)
 	{
 		while (parse->line[i] == '\'')
 		{
-			flag = 0;
 			i++;
-			if (parse->line[i++] == '\'')
-				flag = 1;
+			if (parse->line[i] == '\'')
+				return (1);
 		}
 	}
 	else if (type == DOUBLE)
 	{
 		while (parse->line[i] == '\"')
 		{
-			flag = 0;
 			i++;
-			if (parse->line[i++] == '\"')
-				flag = 1;
+			if (parse->line[i] == '\"')
+				return (1);
 		}
 	}
-	return (flag);
+	return (0);
 }
 
 int	id_cases(t_parse *parse)
@@ -118,16 +114,18 @@ void	ft_quotes(t_parse *parse)
 	{
 		case_q = id_cases(parse);
 		printf("sabes case of quotes --> %d\n", case_q);
-		if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
-			ft_error("sabes sale \n", 1);
 		printf("bucle infinito\n"); // Aqui estoy comparando longitudes de los punteros que devuelven quiere decir cual caracter esta mas cerca del inicio
 		if (case_q == SIMPLE)
 		{
+			if ((ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
+				ft_error("sabes sale \n", 1);
 			ch_op = check_open(parse, SIMPLE);
 			flag = case_simple(parse);
 		}
 		else if (case_q == DOUBLE)
 		{
+			if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
+				ft_error("sabes sale \n", 1);
 			ch_op = check_open(parse, DOUBLE);
 			flag = case_double(parse);
 		}
