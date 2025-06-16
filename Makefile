@@ -6,7 +6,7 @@
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/06/11 18:59:45 by jramos-a         ###   ########.fr        #
+#    Updated: 2025/06/16 21:22:31 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)parse5.c					\
 		$(SRC_DIR)lsts_sh.c					\
 		$(SRC_DIR)frees.c					\
+		$(SRC_DIR)frees2.c					\
 		$(SRC_DIR)pipes.c					\
 		$(SRC_DIR)pipes2.c					\
 		$(SRC_DIR)pipes3.c					\
@@ -52,6 +53,7 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)clean_redirs.c			\
 		$(SRC_DIR)clean_redirs2.c			\
 		$(SRC_DIR)heredoc.c					\
+		$(SRC_DIR)heredoc_utils.c			\
 		$(SRC_DIR)parse_cmd.c				\
 		$(SRC_DIR)identifiers.c				\
 		$(SRC_DIR)quotes.c					\
@@ -106,6 +108,9 @@ fclean:
 re: fclean all
 
 v: re
-	@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME)
+
+vn:
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re

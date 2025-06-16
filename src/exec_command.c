@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 18:54:12 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 19:50:37 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 int	setup_command_execution(t_sh *sh, t_exec_params *params)
 {
-	printf("Executing parsed command\n");
 	if (!sh->node || !sh->node->cmd)
-		return (1);
-	if (backup_stdin(&params->stdin_backup))
 		return (1);
 	check_command_features(sh, &params->has_pipe, &params->has_redirs,
 		&params->has_heredoc);
@@ -45,7 +42,6 @@ int	process_command_features(t_sh *sh, char **envp, t_exec_params *params)
 			return (1);
 	if (params->has_pipe)
 		return (handle_piped_command(&args));
-	print_command_details(params->clean_args, sh);
 	return (0);
 }
 

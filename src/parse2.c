@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 19:46:06 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/10 19:46:06 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:15:30 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,12 @@ int	cases_com(char *input, char **env)
 	char	**split_com;
 	char	*executable_path;
 
-	printf("sapo\n");
 	split_com = ft_split(input, ' ');
 	if (!split_com)
 		return (ft_error("ERROR: split failed\n", 1), ARG);
 	executable_path = get_path(env, split_com[0]);
 	if (!executable_path)
 	{
-		printf("$$$\n");
 		free_words(split_com);
 		return (ARG);
 	}
@@ -88,7 +86,6 @@ int	n_token(char *input, char **env, char **input_split, int i)
 	else if (value_token == BUILT)
 		return (BUILT);
 	value_token = cases_com(input, env);
-	printf("tokennn --> %d\n", value_token);
 	if (value_token == CMD)
 		return (CMD);
 	else if (value_token == ARG)

@@ -6,11 +6,19 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:39:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 18:39:59 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:16:26 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
+
+void	write_to_heredoc(int fd, char *line)
+{
+	if (!line || fd < 0)
+		return ;
+	ft_putstr_fd(line, fd);
+	ft_putchar_fd('\n', fd);
+}
 
 int	open_redir(t_reds *redir)
 {
@@ -38,18 +46,24 @@ void	process_heredoc_input(int fd, char *delimiter)
 	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
+		rl_clear_history();
 		line = readline("theredoc> ");
 		if (!line)
-			exit(1);
+		{
+			free(delimiter);
+			break ;
+		}
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 		{
 			free(line);
-			exit(0);
+			free(delimiter);
+			break ;
 		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		write_to_heredoc(fd, line);
 		free(line);
 	}
+	close(fd);
+	unlink("heredoc.tmp");
 }
 
 int	handle_heredoc_parent(pid_t pid, int fd)
@@ -64,7 +78,7 @@ int	handle_heredoc_parent(pid_t pid, int fd)
 	{
 		write(1, "\n", 1);
 		last_signal_code(130);
-		unlink("heredoc.tmp");
+		close(fd);
 		return (-1);
 	}
 	return (open("heredoc.tmp", O_RDONLY));
@@ -74,6 +88,7 @@ int	heredoc(char *delimiter)
 {
 	int		fd;
 	pid_t	pid;
+	int		result;
 
 	fd = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
@@ -83,6 +98,17 @@ int	heredoc(char *delimiter)
 	}
 	pid = fork();
 	if (pid == 0)
+	{
 		process_heredoc_input(fd, delimiter);
-	return (handle_heredoc_parent(pid, fd));
+		exit(EXIT_SUCCESS);
+	}
+	else if (pid < 0)
+	{
+		perror("heredoc: fork");
+		close(fd);
+		free(delimiter);
+		return (-1);
+	}
+	result = handle_heredoc_parent(pid, fd);
+	return (result);
 }

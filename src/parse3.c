@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 19:46:52 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/10 19:46:52 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:16:41 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	handle_double_redirection(char *sp_input, int *i, t_parse *parse)
 void	handle_single_redirection(char *sp_input, int *i, t_parse *parse)
 {
 	parse->line = ft_substr(sp_input, *i, 1);
-	printf("yes\n");
 	(*i)++;
 }
 
@@ -45,7 +44,6 @@ void	handle_command_segment(char *cmd_segment, char **env, t_parse **parse)
 	{
 		(*parse)->line = ft_strdup(cmd_parts[0]);
 		(*parse)->type_token = n_token((*parse)->line, env, NULL, 0);
-		printf("sale condicion parseline -> %s \n", (*parse)->line);
 		j = 1;
 		while (cmd_parts[j])
 		{
@@ -53,7 +51,6 @@ void	handle_command_segment(char *cmd_segment, char **env, t_parse **parse)
 			*parse = (*parse)->next;
 			(*parse)->line = ft_strdup(cmd_parts[j]);
 			(*parse)->type_token = n_token((*parse)->line, env, NULL, 0);
-			printf("sale condicion parseline -> %s \n", (*parse)->line);
 			j++;
 		}
 		j = 0;
@@ -80,7 +77,6 @@ void	handle_other_cases(char *sp_input, int *i, t_parse **parse, char **env)
 	{
 		(*parse)->line = cmd_segment;
 		(*parse)->type_token = n_token((*parse)->line, env, NULL, 0);
-		printf("sale condicion parseline -> %s \n", (*parse)->line);
 	}
 	*i = w;
 }

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 11:53:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 11:53:59 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:17:16 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	count_pipe_commands(t_sh *sh, t_parse *parse)
 		current = current->next;
 	}
 	sh->node->n_cmd = cmd_count;
-	printf("Found %d commands in pipe chain\n", cmd_count);
 }
 
 void	allocate_cmd_memory(t_cmd *cmd_node, int count)

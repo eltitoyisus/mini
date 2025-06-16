@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 21:51:47 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/11 10:48:59 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:32:41 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ char	*ft_prompt(void)
 	}
 	tmp = ft_strjoin(user, " ~ \033[0;0m");
 	free(user);
-	return (tmp);
+	user = tmp;
+	return (user);
 }

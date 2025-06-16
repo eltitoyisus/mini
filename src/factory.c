@@ -16,18 +16,21 @@ t_cmd	*cmd_factory(void)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_cmd));
-	cmd->cmd = NULL;
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
 	cmd->split_cmd = NULL;
 	cmd->path = NULL;
-	cmd->red = init_redir();
+	cmd->cmd = NULL;
+	cmd->index_token = 0;
+	cmd->red = NULL;
 	cmd->pids = NULL;
-	cmd->pipefd[1] = -1;
-	cmd->pipefd[0] = -1;
+	cmd->pipefd[0] = 0;
+	cmd->pipefd[1] = 0;
 	cmd->pipe_in = 0;
-	cmd->pipe_out = 0;
-	cmd->index_token = -1;
+	cmd->pipe_out = 1;
 	cmd->next = NULL;
+	cmd->prev = NULL;
 	cmd->head = NULL;
 	return (cmd);
 }
@@ -37,6 +40,8 @@ t_node	*node_factory(void)
 	t_node	*node;
 
 	node = malloc(sizeof(t_node));
+	if (!node)
+		return (NULL);
 	node->cmd = cmd_factory();
 	node->is_quote = false;
 	node->n_cmd = 1;
@@ -50,9 +55,12 @@ t_sh	*shell_factory(char **envp)
 	t_sh	*sh;
 
 	sh = malloc(sizeof(t_sh));
+	if (!sh)
+		return (NULL);
 	sh->prompt = ft_prompt();
 	sh->input = NULL;
 	sh->node = node_factory();
+	sh->pwd = NULL;
 	sh->env = envp;
 	sh->pipe_count = 0;
 	return (sh);

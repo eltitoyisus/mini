@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:13:39 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 19:13:39 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:18:51 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,5 @@ int	check_command_exists(t_sh *sh, int stdin_backup, int needs_cleanup)
 			close(stdin_backup);
 		return (1);
 	}
-	printf("Command to execute: [%s]\n", sh->node->cmd->split_cmd[0]);
 	return (0);
 }

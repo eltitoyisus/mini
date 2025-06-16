@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 19:47:27 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/10 19:47:27 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:17:02 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	handle_space_case(t_parse *parse, t_sh *sh, char **env)
 	temp = parse;
 	case_without_space(sh->input, env, parse);
 	parse = temp;
-	printf("Space case handled\n");
 	info_to_struct_2(parse, sh, 0);
 }
 
@@ -37,7 +36,6 @@ void	prepare_token(t_parse *parse, char **split_input, int i, char **env)
 void	finalize_parsing(t_parse *parse, t_sh *sh, int count,
 		char **split_input)
 {
-	printf("ssss %s \n", parse->line);
 	info_to_struct_2(parse, sh, count);
 	free_words(split_input);
 }
@@ -55,14 +53,12 @@ void	process_with_spaces(t_parse *parse, t_sh *sh, char **env)
 	count = ft_countsubstr(sh->input, ' ');
 	while (parse != NULL && i < count)
 	{
-		printf("entra al bucle\n");
 		prepare_token(parse, split_input, i, env);
 		if (parse->type_token == -1)
 			break ;
 		i++;
 		if (i != 0 && i < count)
 		{
-			printf("agrega otro nodo\n");
 			ft_lstadd_back_parse(parse);
 			parse = parse->next;
 		}

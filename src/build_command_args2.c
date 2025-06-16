@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 11:56:07 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 11:56:07 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:33:31 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	process_cmd_token(t_parse *current, t_cmd *cmd, int *count)
 
 void	build_command_args(t_sh *sh, t_parse *parse)
 {
+	if (!sh || !sh->node || !sh->node->cmd || !parse)
+		return ;
 	count_pipe_commands(sh, parse);
 	allocate_first_commands(sh, parse);
 	allocate_last_command(sh, parse);

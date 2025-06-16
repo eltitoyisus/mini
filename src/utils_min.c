@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 19:20:48 by dacastil          #+#    #+#             */
-/*   Updated: 2025/06/11 11:12:04 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:32:37 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,27 @@ static char	*process_inner_quotes(char *input)
 
 char	*cut_quotes(char *input)
 {
-	int		len;
 	char	*result;
+	char	*temp;
+	int		are_equal;
 
 	if (!input)
 		return (NULL);
-	len = ft_strlen(input);
-	result = remove_surrounding_quotes(input, len);
-	if (result)
-		return (result);
-	result = process_inner_quotes(input);
-	if (result)
-		return (result);
-	return (ft_strdup(input));
+	result = remove_surrounding_quotes(input, ft_strlen(input));
+	if (!result)
+	{
+		result = process_inner_quotes(input);
+		if (!result)
+			return (ft_strdup(input));
+	}
+	while (ft_strchr(result, '\'') || ft_strchr(result, '\"'))
+	{
+		temp = result;
+		result = cut_quotes(result);
+		are_equal = (ft_strncmp(temp, result, ft_strlen(temp) + 1) == 0);
+		free(temp);
+		if (are_equal)
+			break ;
+	}
+	return (result);
 }

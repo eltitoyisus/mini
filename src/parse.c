@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:24:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/11 11:42:58 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:14:59 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,10 @@ void	case_without_space(char *sp_input, char **env, t_parse *parse)
 	(void)env;
 	i = 0;
 	w = 0;
-	printf("Aqui entra %s\n", sp_input);
 	while (sp_input[i])
 	{
-		printf("ss\n");
-		printf("(T->) %c\n", sp_input[i]);
 		if (i > 0)
 		{
-			printf("nexxxt\n");
 			ft_lstadd_back_parse(parse);
 			parse = parse->next;
 		}
@@ -90,10 +86,8 @@ void	parse_comm(t_sh *sh, char **env)
 	t_parse	*parse;
 
 	parse = init_parse();
-	printf("reservada memoria\n");
 	if (!sh || !sh->input)
 		return ;
 	ft_parse(parse, sh, env);
-	printf("sale del parseo\n");
 	ft_lstclear_parse(parse);
 }

@@ -33,9 +33,8 @@ int	case_simple(t_parse *parse)
 			parse->line = ft_strtrim(parse->line, "'");
 		if (ft_strchr(parse->line, '\'') && (ft_strchr(parse->line,
 					'\'') == ft_strrchr(parse->line, '\'')))
-			ft_error("sabes sale \n", 1);
-		if (ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
-			return (0);
+			if (ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
+				return (0);
 		j++;
 	}
 	return (1);
@@ -45,7 +44,6 @@ int	case_double(t_parse *parse)
 {
 	if (!ft_strchr(parse->line, '\"'))
 		return (0);
-	printf("entra\n");
 	if (ft_strchr(parse->line, '\"') && ft_strrchr(parse->line,
 			'\"') != ft_strchr(parse->line, '\"'))
 	{
@@ -100,44 +98,3 @@ int	id_cases(t_parse *parse)
 	else
 		return (ERROR);
 }
-
-// void	ft_quotes(t_parse *parse)
-// {
-// 	int	ch_op;
-// 	int	case_q;
-// 	int	flag;
-
-// 	flag = 0;
-// 	if ((check_open(parse, SIMPLE) == 0) || (check_open(parse, DOUBLE) == 0))
-// 	{
-// 		printf("Unmatched quotes found\n");
-// 		parse->quote_error = 1;
-// 		return ;
-// 	}
-// 	while (ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
-// 	{
-// 		case_q = id_cases(parse);
-// 		printf("sabes case of quotes --> %d\n", case_q);
-// 		if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line,
-// 					'\"') == ft_strrchr(parse->line, '\"'))
-// 			|| (ft_strchr(parse->line, '\'') && ft_strchr(parse->line,
-// 					'\'') == ft_strrchr(parse->line, '\'')))
-// 		{
-// 			printf("Unmatched quotes found\n");
-// 			parse->quote_error = 1;
-// 			return ;
-// 		}
-// 		if (case_q == SIMPLE)
-// 		{
-// 			ch_op = check_open(parse, SIMPLE);
-// 			flag = case_simple(parse);
-// 		}
-// 		else if (case_q == DOUBLE)
-// 		{
-// 			ch_op = check_open(parse, DOUBLE);
-// 			flag = case_double(parse);
-// 		}
-// 		if (ch_op == 0 && flag == 0)
-// 			break ;
-// 	}
-// }

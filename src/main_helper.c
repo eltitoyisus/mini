@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 16:05:16 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 16:05:16 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:25:14 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	process_input(t_sh *sh, char **envp)
 	{
 		add_history(sh->input);
 		parse_comm(sh, envp);
-		printf("linea completa --> %d %d \n", sh->node->line_is->cmd,
-			sh->node->line_is->with_reds);
 		exec_parsed_command(sh, envp);
 	}
 }
@@ -51,15 +49,18 @@ void	shell_loop(t_sh *sh, char **envp)
 		sh->input = readline(sh->prompt);
 		if (!sh->input)
 		{
-			free(sh->input);
 			write(1, "exit\n", 5);
 			break ;
 		}
+		if (sh->prompt)
+			free(sh->prompt);
+		sh->prompt = NULL;
 		if (sh->input)
 		{
 			process_input(sh, envp);
 			free(sh->input);
+			sh->input = NULL;
 		}
 	}
-	clear_history();
+	rl_clear_history();
 }

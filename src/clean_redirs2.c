@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:37:44 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 19:37:44 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:47:29 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_reds	*handle_redirection_op(t_reds *head, t_reds **current, char **cmd_array,
 	new = create_redirection_node(cmd_array, *i);
 	if (!new)
 	{
-		free_redirs(head);
+		free_red(head);
 		return (NULL);
 	}
 	add_redir_to_list(&head, current, new);

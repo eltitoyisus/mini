@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:08 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 17:43:24 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:53:22 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	exec_builtin(char **args, char **envp, t_sh *sh)
 	else if (ft_strncmp(args[0], "pwd", 4) == 0)
 		return (exec_pwd());
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
-		return (exec_exit());
+		return (exec_exit(sh));
 	else if (ft_strncmp(args[0], "cd", 3) == 0)
 		return (exec_cd(args, sh));
 	else if (ft_strncmp(args[0], "env", 4) == 0)

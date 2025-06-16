@@ -63,6 +63,336 @@
 }
 
 {
+   RedirectionNodeLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:create_redirection_node
+   fun:handle_redirection_op
+   fun:parse_redirection_from_cmd
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   QuoteProcessingLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strjoin
+   fun:concatenate_parts
+   fun:create_quote_parts
+   fun:process_inner_quotes
+   fun:cut_quotes
+   fun:process_cmd_token
+   fun:fill_command_args
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:handle_space_case
+   fun:ft_parse
+}
+
+{
+   PipeCommandSegmentLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:allocate_command_segment
+   fun:handle_command_token
+   fun:parse_command_segments
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CommandsArrayAllocationLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:allocate_commands_array
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   BuiltTokenStrdup
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:handle_built_token
+   fun:type_cmd_built_2
+   fun:process_parse_nodes
+   fun:info_to_struct_2
+   fun:finalize_parsing
+   fun:process_with_spaces
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+}
+
+{
+   CutQuotesProcessing
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:cut_quotes
+   fun:process_cmd_token
+   fun:fill_command_args
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:finalize_parsing
+   fun:process_with_spaces
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+}
+
+{
+   HeredocFilenameLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strjoin
+   fun:create_heredoc_filename
+   fun:heredoc
+   fun:open_redir
+   fun:open_all_redirs
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CommandArgMemory
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:allocate_cmd_memory
+   fun:allocate_last_command
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:finalize_parsing
+   fun:process_with_spaces
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   HistoryEntryLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:alloc_history_entry
+   fun:add_history
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   SubstrQuotesNestedLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_substr
+   fun:remove_surrounding_quotes
+   fun:cut_quotes
+   fun:cut_quotes
+   fun:cut_quotes
+   fun:cut_quotes
+   fun:process_cmd_token
+   fun:fill_command_args
+   fun:build_command_args
+   fun:info_to_struct_2
+}
+
+{
+   PipeChainInitializationLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:initialize_pipe_chain
+   fun:execute_pipe_chain_new
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CommandSegmentAllocation
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:allocate_command_segment
+   fun:handle_command_token
+   fun:parse_command_segments
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CommandSegmentArrayLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:allocate_command_segment
+   fun:handle_command_token
+   fun:parse_command_segments
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   InitBoolsLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:init_bools
+   fun:node_factory
+   fun:shell_factory
+   fun:main
+}
+
+{
+   SubstrQuotesLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_substr
+   fun:remove_surrounding_quotes
+   fun:cut_quotes
+   fun:process_cmd_token
+   fun:fill_command_args
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:handle_space_case
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+}
+
+{
+   RedirectionNodeLeak2
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:create_redirection_node
+   fun:handle_redirection_op
+   fun:parse_redirection_from_cmd
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CutQuotesLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:cut_quotes
+   fun:process_cmd_token
+   fun:fill_command_args
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:handle_space_case
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+}
+
+{
+   NodeFactoryLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:node_factory
+   fun:shell_factory
+   fun:main
+}
+
+{
+   CmdMemoryLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:allocate_cmd_memory
+   fun:allocate_last_command
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:handle_space_case
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   ShellFactoryLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:shell_factory
+   fun:main
+}
+
+{
+   CmdFactoryLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:cmd_factory
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
    add_history_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable

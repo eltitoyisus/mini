@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 11:41:30 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 11:41:30 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:15:42 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@ void	process_command_without_spaces(char *cmd_segment, t_parse **parse,
 {
 	(*parse)->line = cmd_segment;
 	(*parse)->type_token = n_token((*parse)->line, env, NULL, 0);
-	printf("sale condicion parseline -> %s \n", (*parse)->line);
 }
 
 void	process_command_segment(char *sp_input, int *i, int *w, t_parse **parse)
 {
 	char	*cmd_segment;
 
-	printf("sales\n");
 	*w = *i;
 	while (sp_input[*w] != '|' && sp_input[*w] != '<' && sp_input[*w] != '>'
 		&& sp_input[*w])
@@ -53,12 +51,10 @@ void	handle_input_character(char *sp_input, int *i, int *w, t_parse **parse)
 		&& sp_input[*i] != '>')
 	{
 		(*parse)->type_token = n_token((*parse)->line, NULL, NULL, 0);
-		printf("sale condicion parseline -> %s \n", (*parse)->line);
 	}
 }
 
 void	ft_controls(t_parse *parse)
 {
 	bool_active(parse);
-	printf("lineaaa ---->> %s\n", parse->line);
 }

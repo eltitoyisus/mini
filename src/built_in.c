@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:10 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 11:08:54 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:53:13 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	exec_pwd(void)
 	}
 }
 
-int	exec_exit(void)
+int	exec_exit(t_sh *sh)
 {
+	rl_clear_history();
+	free_shell(sh);
 	exit(0);
 }

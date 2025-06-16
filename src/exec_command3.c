@@ -6,11 +6,33 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:14:26 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 19:14:26 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:15:37 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
+
+void	free_exec_params(t_exec_params *params)
+{
+	if (params->stdin_backup != -1)
+	{
+		dup2(params->stdin_backup, STDIN_FILENO);
+		close(params->stdin_backup);
+		params->stdin_backup = -1;
+	}
+	if (params->has_heredoc)
+		unlink("heredoc.tmp");
+	if (params->redirs)
+	{
+		free_redirs(params->redirs);
+		params->redirs = NULL;
+	}
+	if (params->clean_args && params->needs_cleanup)
+	{
+		free_args(params->clean_args);
+		params->clean_args = NULL;
+	}
+}
 
 void	print_command_details(char **clean_args, t_sh *sh)
 {

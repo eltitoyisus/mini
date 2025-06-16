@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 20:46:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 20:46:59 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:18:58 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	handle_pipe_fork_error(pid_t *pids, t_reds *redirs, char **clean_args)
 	if (clean_args)
 		free_args(clean_args);
 	free(pids);
+	unlink("heredoc.tmp");
 }
 
 void	prepare_pipe_command(t_cmd *temp_cmd, char **commands_i,

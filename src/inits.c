@@ -17,11 +17,14 @@ t_parse	*init_parse(void)
 	t_parse	*parse;
 
 	parse = malloc(sizeof(t_parse));
+	if (!parse)
+		return (NULL);
 	parse->is_cmd = false;
 	parse->is_flag = false;
 	parse->line = NULL;
 	parse->next = NULL;
 	parse->prev = NULL;
+	parse->type_token = 0;
 	parse->quote_error = 0;
 	return (parse);
 }
@@ -31,6 +34,8 @@ t_reds	*init_redir(void)
 	t_reds	*red;
 
 	red = malloc(sizeof(t_reds));
+	if (!red)
+		return (NULL);
 	red->fd = -1;
 	red->file = NULL;
 	red->delim = NULL;
@@ -44,6 +49,8 @@ t_type	*init_bools(void)
 	t_type	*new;
 
 	new = malloc(sizeof(t_type));
+	if (!new)
+		return (NULL);
 	new->built = false;
 	new->cmd = false;
 	new->with_pipe = false;
