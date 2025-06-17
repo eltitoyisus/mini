@@ -6,12 +6,12 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 20:23:53 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:18:15 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MAIN_H
+# define MAIN_H
 
 # include "headers.h"
 # include "struct.h"
@@ -196,8 +196,7 @@ void			cleanup_redir_resources(char *path, t_reds *redirs,
 int				exec_echo(char **args, char **envp);
 int				exec_pwd(void);
 int				exec_cd(char **args, t_sh *sh);
-int				exec_exit(t_sh *sh);
-
+int				exec_exit(t_sh *sh, char **args);
 
 // EXEC BUILT INS
 int				is_builtin(char *command);
@@ -208,15 +207,14 @@ int				env_unset(char **argv, char **envp);
 int				env_export(char **argv, char **envp);
 int				echo_var(char **argv, int index, char **envp);
 void			export_no_args(char **envp);
-void free_env(char **env);
+void			free_env(char **env);
 
 // REDIRECTION
 int				has_redirection_in_cmd(t_cmd *cmd);
 char			**prepare_cmd_args(char **args);
 int				do_redir(char *command, char **envp);
 int				handle_redirs(char *command, char **envp);
-void free_exec_params(t_exec_params *params);
-
+void			free_exec_params(t_exec_params *params);
 
 // REDIRECTION 2
 void			exec_child_process(t_redir_args *redir_data);
@@ -344,6 +342,6 @@ char			**inc_shlvl(char **envp);
 void			process_input(t_sh *sh, char **envp);
 void			shell_loop(t_sh *sh, char **envp);
 void			free_shell(t_sh *sh);
-void free_exec_params(t_exec_params *params);
+void			free_exec_params(t_exec_params *params);
 
 #endif

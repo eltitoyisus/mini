@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:39:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 21:16:26 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:59:48 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	process_heredoc_input(int fd, char *delimiter)
 {
 	char	*line;
 
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
 		rl_clear_history();
@@ -76,9 +76,10 @@ int	handle_heredoc_parent(pid_t pid, int fd)
 	ft_signals();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
+		close(fd);
+		unlink("heredoc.tmp");
 		write(1, "\n", 1);
 		last_signal_code(130);
-		close(fd);
 		return (-1);
 	}
 	return (open("heredoc.tmp", O_RDONLY));

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:14:26 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 21:15:37 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:20:08 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	exec_builtin_command(t_exec_args *args, char **cmd_to_exec)
 {
 	int	result;
 
-	printf("Executing builtin: %s\n", cmd_to_exec[0]);
 	if (args->redirs)
 		result = exec_builtin_with_redirs(cmd_to_exec, args->envp, args->sh,
 				args->redirs);

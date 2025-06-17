@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:41:53 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 21:24:47 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:10:07 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,20 @@
 
 void	free_redirs(t_reds *head)
 {
-	free_red(head);
+	t_reds	*current;
+	t_reds	*next;
+
+	current = head;
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->file)
+			free(current->file);
+		if (current->delim)
+			free(current->delim);
+		free(current);
+		current = next;
+	}
 }
 
 int	open_all_redirs(t_reds *head)
@@ -74,7 +87,6 @@ void	attempt_command_execution(char **cmd_args, char **envp, int stdin_fd)
 		if (path)
 		{
 			execute_specific_command(path, cmd_args, envp);
-			free(path);
 		}
 		else if (is_builtin(cmd_args[0]))
 		{
