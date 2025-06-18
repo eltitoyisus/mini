@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 10:31:52 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 11:57:58 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 # include "struct.h"
 
 // TX
-void			init_Game(snake *snake, position *fruit, t_state *state);
-void			drawGame(const snake *snake, const position *fruit);
-void			updateSnake(snake *snake);
-int				checkCollision(snake *snake, position *fruit, t_state *state);
-int				get_botton();
-char			getch();
-char			ft_getchar();
+void			init_Game(t_snake *snake, t_position *fruit, t_state *state);
+void			drawGame(const t_snake *snake, const t_position *fruit);
+void			updateSnake(t_snake *snake);
+int				checkCollision(t_snake *snake, t_position *fruit, t_state *state);
+int				get_botton(void);
+char			getch(void);
+char			ft_getchar(void);
 void			my_srand(unsigned int new_seed, t_state *state);
 int				my_rand(t_state *state);
 unsigned int	generate_seed(int iteration);
 int				ft_game(char *input);
-int				game_main();
+int				game_main(void);
 
 // UTILS TO EVERYTHING
 int				ft_error(char *msg, int ret);

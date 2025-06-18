@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 10:26:10 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 11:59:02 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,22 +285,23 @@ typedef struct s_cleanup_args
 	char			***clean_args;
 }					t_cleanup_args;
 
-typedef struct
+typedef struct s_position
 {
-	int x;
-	int y;
-} position;
+	int				x;
+	int				y;
+}					t_position;
 
-typedef struct s_rng_state {
-	unsigned int seed;       // Semilla del generador
-	unsigned int fake_time;  // Tiempo ficticio
-} t_state;
-
-typedef struct
+typedef struct s_rng_state
 {
-	position body[100]; // Hasta 100 partes del cuerpo
-	int length;
-	int direction;
-} snake;
+	unsigned int	seed;
+	unsigned int	fake_time;
+}					t_state;
+
+typedef struct s_snake
+{
+	t_position		body[100];
+	int				length;
+	int				direction;
+}					t_snake;
 
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
+#    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/06/18 10:22:06 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/06/18 12:05:34 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,6 @@ SNK_DIR = tan/
 RED=\033[0;31m
 YELLOW=\033[0;33m
 NC=\033[0m
-
-SNK = $(SNK_DIR)tin.c						\
-		$(SNK_DIR)tin_2.c					\
-		$(SNK_DIR)utils_tin.c				\
 
 
 SRC = $(SRC_DIR)main.c						\
@@ -68,7 +64,6 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)quotes.c					\
 		$(SRC_DIR)quotes2.c					\
 		$(SRC_DIR)random.c					\
-		$(SRC_DIR)tx.c						\
 		$(SRC_DIR)without_spaces.c			\
 		$(SRC_DIR)utils_min.c				\
 		$(SRC_DIR)build_command_args.c		\

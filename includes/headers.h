@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:42 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 10:25:24 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 11:53:35 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <termios.h>
+# include <time.h>
 # include <unistd.h>
-#include <sys/ioctl.h>
-#include <termios.h>
-#include <time.h>
 
 #endif
