@@ -6,13 +6,13 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:02:17 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/18 02:21:16 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 09:58:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int	checkCollision(Snake *snake, Position *fruit, RNGState *state)
+int	checkCollision(snake *snake, position *fruit, t_state *state)
 {
 	int	i;
 

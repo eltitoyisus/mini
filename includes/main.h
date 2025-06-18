@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 02:47:10 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 09:58:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@
 # include "struct.h"
 
 // SNAKE
-void			init_Game(Snake *snake, Position *fruit, RNGState *state);
-void			drawGame(const Snake *snake, const Position *fruit);
-void			updateSnake(Snake *snake);
-int				checkCollision(Snake *snake, Position *fruit, RNGState *state);
+void			init_Game(snake *snake, position *fruit, t_state *state);
+void			drawGame(const snake *snake, const position *fruit);
+void			updateSnake(snake *snake);
+int				checkCollision(snake *snake, position *fruit, t_state *state);
 int				get_botton();
 char			getch();
 char			ft_getchar();
-void			my_srand(unsigned int new_seed, RNGState *state);
-int				my_rand(RNGState *state);
+void			my_srand(unsigned int new_seed, t_state *state);
+int				my_rand(t_state *state);
 unsigned int	generate_seed(int iteration);
 int				game_main();
 

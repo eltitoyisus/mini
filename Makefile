@@ -6,7 +6,7 @@
 #    By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/06/18 02:46:42 by daniel-cast      ###   ########.fr        #
+#    Updated: 2025/06/18 09:59:18 by daniel-cast      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -139,7 +139,7 @@ all: $(NAME)
 	@echo "                                                "
 	@echo "  * * * * * * * * * * * * * * * * * * * * * * * * "
 	@echo "   * * * * * * * * * * * * * * * * * * * * * * * *"
-	@sleep 1.5
+	@sleep 1
 
 	@clear
 	@echo "         .                            *                 "
@@ -174,7 +174,7 @@ all: $(NAME)
 	@echo "                                                   "
 	@echo " jrojrojrojrojrojrojrojrojrojrojrojrojrojrojro                 "
 	@echo " jrojrojrojrojrojrojrojrojrojrojrojrojrojrojro                 "
-	@sleep 2
+	@sleep 1
 
 
 	@clear
@@ -255,7 +255,7 @@ all: $(NAME)
 	@echo "                "
 	@echo "  # # # # # # # # # # # # # # # # # # # # # # # #                "
 	@echo "   # # # # # # # # # # # # # # # # # # # # # # # #                "
-	@sleep 2
+	@sleep 1
 
 	@clear
 	@echo " "
@@ -288,7 +288,7 @@ $(NAME): $(OBJ) libft/libft.a
 	@$(CC) $(FLAGS) $(OBJ) libft/libft.a -o $(NAME) $(LDFLAGS) > /dev/null 2>&1
 
 %.o: %.c
-	@$(CC) $(FLAGS) -c $< -o $@ 
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJ) > /dev/null 2>&1

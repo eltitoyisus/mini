@@ -6,13 +6,13 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 18:58:18 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/18 02:21:42 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 09:58:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-void init_Game(Snake *snake, Position *fruit, RNGState *state)
+void init_Game(snake *snake, position *fruit, t_state *state)
 {
 	unsigned int	seed;
 	unsigned int	ite;
@@ -28,13 +28,13 @@ void init_Game(Snake *snake, Position *fruit, RNGState *state)
 	fruit->y = my_rand(state) % HEIGHT;
 }
 
-int	draw_snake(const Snake *snake, int i, int x, int y)
+int	draw_snake(const snake *snake, int i, int x, int y)
 {
 	while (i < snake->length)
 	{
 		if (snake->body[i].x == x && snake->body[i].y == y)
 		{
-			printf("◉");
+			printf("\033[0;32m◉\033[0m");
 			return (1);
 		}
 		i++;
@@ -42,7 +42,7 @@ int	draw_snake(const Snake *snake, int i, int x, int y)
 	return (0);
 }
 
-void drawGame(const Snake *snake, const Position *fruit)
+void drawGame(const snake *snake, const position *fruit)
 {
 	int	y;
 	int	x;
@@ -59,7 +59,7 @@ void drawGame(const Snake *snake, const Position *fruit)
 				continue;
 			}
 			if (fruit->x == x && fruit->y == y)
-			printf("★"); // Dibuja la fruta.
+			printf("\033[0;31m★\033[0m"); // Dibuja la fruta.
 			else
 			printf("."); // Dibuja un espacio vacío.
 			x++; // Incremento de `x`.
@@ -69,7 +69,7 @@ void drawGame(const Snake *snake, const Position *fruit)
 	}
 }
 
-void updateSnake(Snake *snake)
+void updateSnake(snake *snake)
 {
 	int	i;
 
@@ -87,9 +87,9 @@ void updateSnake(Snake *snake)
 
 int game_main()
 {
-	Snake		snake;
-	Position	fruit;
-	RNGState	state;
+	snake		snake;
+	position	fruit;
+	t_state	state;
 	int			gameOver;
 
 	gameOver = 0;

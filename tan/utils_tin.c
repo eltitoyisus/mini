@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 17:18:51 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/18 02:19:29 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 09:58:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ char	ft_getchar()
 	return '\0'; // Devuelve '\0' si no se pudo leer nada
 }
 
-void my_srand(unsigned int new_seed, RNGState *state)
+void my_srand(unsigned int new_seed, t_state *state)
 {
 	state->seed = new_seed;
 }
 
-int my_rand(RNGState *state)
+int my_rand(t_state *state)
 {
 	unsigned int a;
 	unsigned int c;

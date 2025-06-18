@@ -6,7 +6,7 @@
 /*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 02:40:09 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 09:58:41 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,18 +289,18 @@ typedef struct
 {
 	int x;
 	int y;
-}	Position;
+}	position;
 
 typedef struct s_rng_state {
 	unsigned int seed;	// Semilla del generador
 	unsigned int fake_time;	// Tiempo ficticio
-}	RNGState;
+}	t_state;
 
 typedef struct
 {
-	Position body[100]; // Hasta 100 partes del cuerpo
+	position body[100]; // Hasta 100 partes del cuerpo
 	int length;
 	int direction;
-}	Snake;
+}	snake;
 
 #endif
