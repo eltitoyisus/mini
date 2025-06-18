@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 20:23:53 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/18 02:47:10 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,18 @@
 # include "headers.h"
 # include "struct.h"
 
-// TX
-void			ft_tx(void);
-void			save_info(t_tx *tx, int i, int j);
+// SNAKE
+void			init_Game(Snake *snake, Position *fruit, RNGState *state);
+void			drawGame(const Snake *snake, const Position *fruit);
+void			updateSnake(Snake *snake);
+int				checkCollision(Snake *snake, Position *fruit, RNGState *state);
+int				get_botton();
+char			getch();
+char			ft_getchar();
+void			my_srand(unsigned int new_seed, RNGState *state);
+int				my_rand(RNGState *state);
+unsigned int	generate_seed(int iteration);
+int				game_main();
 
 // UTILS TO EVERYTHING
 int				ft_error(char *msg, int ret);
