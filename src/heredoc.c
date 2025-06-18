@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:39:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 10:17:42 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/18 11:11:38 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	process_heredoc_input(int fd, char *delimiter)
 		free(line);
 	}
 	close(fd);
-	// unlink("heredoc.tmp");
 }
 
 int	handle_heredoc_parent(pid_t pid, int fd)
@@ -82,7 +81,7 @@ int	handle_heredoc_parent(pid_t pid, int fd)
 		last_signal_code(130);
 		return (-1);
 	}
-	return (open("heredoc.tmp", O_RDONLY));
+	return (open("heredoc.tmp", O_RDONLY), close(fd));
 }
 
 int	heredoc(char *delimiter)
