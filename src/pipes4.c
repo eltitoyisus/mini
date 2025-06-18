@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:04:16 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 18:04:16 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:04:41 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,10 @@
 
 void	init_pipe_command_vars(t_sh *sh, t_pipe_vars *vars)
 {
-	int	d;
-
 	vars->i = 0;
 	vars->cmd_args = sh->node->cmd->split_cmd;
 	vars->pipe_count = 0;
 	vars->cmd_count = 0;
-	printf("DEBUG: Input command array:\n");
-	d = 0;
-	while (sh->node->cmd->split_cmd[d])
-	{
-		printf("[%s] ", sh->node->cmd->split_cmd[d]);
-		d++;
-	}
-	printf("\n");
 	while (vars->cmd_args[vars->i])
 	{
 		if (ft_strncmp(vars->cmd_args[vars->i], "|", 2) == 0)
