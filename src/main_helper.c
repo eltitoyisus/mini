@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 16:05:16 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 21:25:14 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:38:23 by daniel-cast      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	shell_loop(t_sh *sh, char **envp)
 		sh->prompt = NULL;
 		if (sh->input)
 		{
+			if (ft_game(sh->input))
+				continue ;
 			process_input(sh, envp);
 			free(sh->input);
 			sh->input = NULL;
