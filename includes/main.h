@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/10 15:53:50 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/19 15:36:18 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ char	**ft_built_args(t_parse *parse, char **built_args);
 // QUOTES
 void	ft_quotes(t_parse *parse);
 char	*cut_quotes(char	*input);
+int		error_quotes(char *line, int op);
 
 // SIGNALS
 void	ft_signals(void);

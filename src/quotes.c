@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daniel-castillo <daniel-castillo@studen    +#+  +:+       +#+        */
+/*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:49:21 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/13 17:32:54 by daniel-cast      ###   ########.fr       */
+/*   Updated: 2025/06/19 15:39:21 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ int	case_simple(t_parse *parse)
 	j = 0;
 	while (ft_strchr(parse->line, '\'') && j < i)
 	{
-		// if (ft_strlen(ft_strchr(parse->line, '\'')) > ft_strlen(ft_strchr(parse->line, '\"')))
 		if (ft_strrchr(parse->line, '\'') != ft_strchr(parse->line, '\''))
 			parse->line = ft_strtrim(parse->line, "'");
-		if (ft_strchr(parse->line, '\'') && (ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
+		if (ft_strchr(parse->line, '\'')
+			&& (ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
 			ft_error("sabes sale \n", 1);
 		if (ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
 			return (0);
@@ -46,9 +46,9 @@ int	case_double(t_parse *parse)
 	if (!ft_strchr(parse->line, '\"'))
 		return (0);
 	printf("entra\n");
-	if (ft_strchr(parse->line, '\"') && ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
+	if (ft_strchr(parse->line, '\"')
+		&& ft_strrchr(parse->line, '\"') != ft_strchr(parse->line, '\"'))
 	{
-		// if (ft_strlen(ft_strchr(parse->line, '\'')) < ft_strlen(ft_strchr(parse->line, '\"')))
 		parse->line = ft_strtrim(parse->line, "\"");
 		if (ft_strrchr(parse->line, '\'') != ft_strchr(parse->line, '\''))
 			return (0);
@@ -88,9 +88,11 @@ int	id_cases(t_parse *parse)
 {
 	if (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\"'))
 	{
-		if (ft_strlen(ft_strchr(parse->line, '\'')) > ft_strlen(ft_strchr(parse->line, '\"')))
+		if (ft_strlen(ft_strchr(parse->line, '\''))
+			> ft_strlen(ft_strchr(parse->line, '\"')))
 			return (SIMPLE);
-		else if (ft_strlen(ft_strchr(parse->line, '\'')) < ft_strlen(ft_strchr(parse->line, '\"')))
+		else if (ft_strlen(ft_strchr(parse->line, '\''))
+			< ft_strlen(ft_strchr(parse->line, '\"')))
 			return (DOUBLE);
 		else
 			return (ERROR);
@@ -107,24 +109,22 @@ void	ft_quotes(t_parse *parse)
 {
 	int	ch_op;
 	int	case_q;
-	int	flag; // Esta flag lo que va a hacer es representar si se realizo bien el recorte de comillas, sean simples o dobles.
+	int	flag;
 
 	flag = 0;
 	while (ft_strchr(parse->line, '\'') || ft_strchr(parse->line, '\"'))
 	{
 		case_q = id_cases(parse);
-		printf("sabes case of quotes --> %d\n", case_q);
-		printf("bucle infinito\n"); // Aqui estoy comparando longitudes de los punteros que devuelven quiere decir cual caracter esta mas cerca del inicio
 		if (case_q == SIMPLE)
 		{
-			if ((ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
+			if (error_quotes(parse->line, case_q))
 				ft_error("sabes sale \n", 1);
 			ch_op = check_open(parse, SIMPLE);
 			flag = case_simple(parse);
 		}
 		else if (case_q == DOUBLE)
 		{
-			if ((ft_strchr(parse->line, '\"') && ft_strchr(parse->line, '\"') == ft_strrchr(parse->line, '\"')) || (ft_strchr(parse->line, '\'') && ft_strchr(parse->line, '\'') == ft_strrchr(parse->line, '\'')))
+			if (error_quotes(parse->line, case_q))
 				ft_error("sabes sale \n", 1);
 			ch_op = check_open(parse, DOUBLE);
 			flag = case_double(parse);
