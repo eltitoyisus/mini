@@ -6,86 +6,86 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:33:48 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/17 11:41:41 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:26:15 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int	has_unclosed_quotes(char *str)
+void	handle_echo_quote_markers(char **p, int *in_single_quotes)
 {
-	int	single_quotes;
-	int	double_quotes;
-	int	i;
-
-	single_quotes = 0;
-	double_quotes = 0;
-	i = 0;
-	while (str[i])
+	if (**p == '\001')
 	{
-		if (str[i] == '\'' && (double_quotes % 2 == 0))
-			single_quotes++;
-		else if (str[i] == '\"' && (single_quotes % 2 == 0))
-			double_quotes++;
-		i++;
+		*in_single_quotes = 1;
+		(*p)++;
 	}
-	return ((single_quotes % 2 != 0) || (double_quotes % 2 != 0));
+	else if (**p == '\002')
+	{
+		*in_single_quotes = 0;
+		(*p)++;
+	}
+	else if (**p == '\'')
+	{
+		*in_single_quotes = !(*in_single_quotes);
+		(*p)++;
+	}
 }
 
-int	parse_echo_flags(char **args, int *i)
+int	handle_echo_special_vars(char **p, int in_single_quotes, char **envp)
 {
-	int	n_flag;
-
-	n_flag = 0;
-	if (args[1] && ft_strncmp(args[1], "-n", 3) == 0)
+	if (**p == '$' && *(*p + 1) == '?' && !in_single_quotes)
 	{
-		n_flag = 1;
-		(*i)++;
+		handle_exit_status(p);
+		return (1);
 	}
-	return (n_flag);
+	else if (**p == '$' && !in_single_quotes)
+	{
+		handle_env_var(p, envp);
+		return (1);
+	}
+	return (0);
 }
 
-void	print_exit_status(void)
+void	process_echo_chars(char *p, char **envp)
 {
-	char	exit_status[12];
-	int		status;
+	int	in_single_quotes;
 
-	status = last_signal_code(-1);
-	ft_itoa_into(status, exit_status);
-	printf("%s", exit_status);
+	in_single_quotes = 0;
+	while (*p)
+	{
+		handle_echo_quote_markers(&p, &in_single_quotes);
+		if (handle_echo_special_vars(&p, in_single_quotes, envp))
+			continue ;
+		if (*p)
+			printf("%c", *p++);
+	}
 }
 
 void	print_echo_arg(char *arg, char **envp)
 {
-	if (ft_strncmp(arg, "$?", 2) == 0)
-		print_exit_status();
-	else if (arg[0] == '$')
-	{
-		if (!echo_var(&arg, 0, envp))
-			printf("%s", arg);
-	}
-	else
-		printf("%s", arg);
+	char	*processed_arg;
+
+	processed_arg = handle_echo_quotes(arg);
+	if (!processed_arg)
+		processed_arg = ft_strdup(arg);
+	process_echo_chars(processed_arg, envp);
+	free(processed_arg);
 }
 
-int	exec_echo(char **args, char **envp)
+int	exec_echo(t_sh *sh)
 {
-	int	i;
-	int	n_flag;
-	int	j;
+	int		i;
+	int		n_flag;
+	char	**args;
 
+	if (!sh || !sh->node || !sh->node->cmd || !sh->node->cmd->split_cmd)
+		return (1);
+	args = sh->node->cmd->split_cmd;
 	i = 1;
 	n_flag = parse_echo_flags(args, &i);
-	j = i;
-	while (args[j])
-	{
-		if (has_unclosed_quotes(args[j]))
-			return (ft_putstr_fd("echo: error: unclosed quotes\n", 2), 1);
-		j++;
-	}
 	while (args[i])
 	{
-		print_echo_arg(args[i], envp);
+		print_echo_arg(args[i], sh->env);
 		if (args[i + 1])
 			printf(" ");
 		i++;

@@ -5,12 +5,11 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/04/21 20:02:00 by jramos-a          #+#    #+#              #
-#    Updated: 2025/06/18 12:05:34 by jramos-a         ###   ########.fr        #
+#    Created: 2025/06/18 14:40:46 by jramos-a          #+#    #+#              #
+#    Updated: 2025/06/21 22:11:51 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc
 FLAGS = -Werror -Wall -Wextra -g3
 LDFLAGS = -lreadline -lhistory
 NAME = minishell
@@ -21,6 +20,9 @@ RED=\033[0;31m
 YELLOW=\033[0;33m
 NC=\033[0m
 
+SNK = $(SNK_DIR)tin.c						\
+		$(SNK_DIR)tin_2.c					\
+		$(SNK_DIR)utils_tin.c				\
 
 SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)main_helper.c				\
@@ -28,6 +30,7 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)exec_command2.c			\
 		$(SRC_DIR)exec_command3.c			\
 		$(SRC_DIR)built_in.c				\
+		$(SRC_DIR)env_utils.c				\
 		$(SRC_DIR)built_in_env.c			\
 		$(SRC_DIR)exec_built_in.c			\
 		$(SRC_DIR)prompt.c					\
@@ -73,6 +76,7 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)get_path.c				\
 		$(SRC_DIR)exec_external_command.c	\
 		$(SRC_DIR)exec_external_command2.c	\
+		$(SRC_DIR)redirs_utils.c			\
 		$(SRC_DIR)process_redir.c			\
 		$(SRC_DIR)exec_command_redirs.c		\
 		$(SRC_DIR)exec_command_redirs2.c	\
@@ -81,213 +85,223 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)exec_pipe_chain2.c		\
 		$(SRC_DIR)case_no_space.c			\
 		$(SRC_DIR)case_no_space2.c			\
+		$(SRC_DIR)exec_var_command.c		\
 		$(SRC_DIR)env_export.c				\
+		$(SRC_DIR)env_export2.c				\
 		$(SRC_DIR)env_cd.c					\
 		$(SRC_DIR)exec_env.c				\
 		$(SRC_DIR)env_echo.c				\
+		$(SRC_DIR)env_echo2.c				\
+		$(SRC_DIR)env_echo3.c				\
+		$(SRC_DIR)env_echo4.c				\
 		$(SRC_DIR)utils.c					\
 		$(SRC_DIR)utils2.c
 
 OBJ = $(SRC:.c=.o) $(SNK:.c=.o)
 
-all: $(NAME)
+all: 
+	@if [ ! -f $(NAME) ] || [ $$(find $(SRC_DIR) -name "*.c" -newer $(NAME) | wc -l) -gt 0 ] || [ ! -f libft/libft.a ] || [ $$(find libft -name "*.c" -newer libft/libft.a | wc -l) -gt 0 ]; then \
+		$(MAKE) --no-print-directory show_ascii_and_build; \
+	else \
+		echo "Nothing to be done for 'all'."; \
+	fi
 
-	@echo ""
-	@echo "        .       .    )        .           ."
-	@echo "   .       *             .         ."
-	@echo "                 .                      ."
-	@echo "   .       .       .'          ."
-	@echo "                  '.              *        ."
-	@echo "      .   '        .'     .              ."
-	@echo "              _.---._   .            .     *"
-	@echo "    *       .'       '."
-	@echo "        _.-~===========~-._"
-	@echo "       (___________________)       .   *"
-	@echo "  __         \_______/       ______        __"
-	@echo "    |                       |      |      |  |"
-	@echo "    |                       |      |      |  |"
-	@echo "    |                       |      |   ___|  |_"
-	@echo "  __|_______________________|__..--~~~~ jro    ~-- "
-	@echo "                    /|\                  "
-	@echo "                   /   \               "
-	@echo "                  /  |  \               "
-	@echo "                 /       \               "
-	@echo "   \|/          /    |    \               "
-	@echo "               /           \                    "
-	@echo "              /      |      \                   "
-	@echo "             /               \               "
-	@echo "            /        |        \               "
-	@echo "           /                                "
-	@echo "          /   ____   |               "
-	@echo "         /   /  __)         ___               "
-	@echo "        /    \(~oo   |     (___)  /               "
-	@echo "       /     _\_-/_       (_o o_)               "
-	@echo "      /     /  \/  \ |    (_\O/_)   \               "
-	@echo "     /     / /    \ \     //\_/\\    \               "
-	@echo "    /      \ |    /_/    //(_ _)\\    \               "
-	@echo "   /        \|___(_/     \\/   \//     \    \|/               "
-	@echo "             |    \      (/_____\)            "
-	@echo "             | |\  \      / /| |            "
-	@echo "             | |/  /      \ \| |            "
-	@echo "             |_/__/        \_|_|            "
-	@echo "            (__[__)        <_<_>            "
-	@echo "                                                "
-	@echo "  * * * * * * * * * * * * * * * * * * * * * * * * "
-	@echo "   * * * * * * * * * * * * * * * * * * * * * * * *"
-	@sleep 1
+show_ascii_and_build: $(NAME) show_ascii
 
-	@clear
-	@echo "         .                            *                 "
-	@echo "                   _.--~~~~--._                 "
-	@echo "     .          .-~ \__/  \__/ ~-.         .                 "
-	@echo "              .-~   (oo)  (oo)    ~-.                 "
-	@echo "             (_____//~~\\//~~\\______)                 "
-	@echo "        _.-~/                        \~-._                 "
-	@echo "       /O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O\                 "
-	@echo "       \___________________________________/                 "
-	@echo "                  \x x x x x x x/                 "
-	@echo "                   \x_x_x_x_x_x/                 "
-	@echo "                    :|. | | .|                 "
-	@echo "                    | |. |. |:| Zzuzz!                 "
-	@echo "                    | :  |:. ;|                 "
-	@echo "   Ohmygosh, a     . | : .|  :                   "
-	@echo "   flying saucer!   | . | : .||                 "
-	@echo "   - !Delores! -   : |. | . ::  Zzuzz!                 "
-	@echo "       \    ___     |.: |. :. |                 "
-	@echo "           /  _)    | :|___ |:|                 "
-	@echo "          |  (~o   (\.|(___)  /)                 "
-	@echo "          _\/_/_    \\(_O O_)//   Zzuzz!                 "
-	@echo "         /      \   .\(_\O/_)/:                 "
-	@echo "        / /    \ \  :|\/\_/\/ |                 "
-	@echo "        \ |    | /  | .(_ _): |                 "
-	@echo "         \|____|/   .| /   \ |:                 "
-	@echo "          |_  _|    | /_____\.| !!!EEEEKKKK!!!                 "
-	@echo "          | |  |    : .| | | .                 "
-	@echo "          | |  |    .  | | | ||                 "
-	@echo "          |_|__|    | :|_|_| .:                 "
-	@echo "  jro     [__[__)   .: <_|_> .|                 "
-	@echo "                                                   "
-	@echo " jrojrojrojrojrojrojrojrojrojrojrojrojrojrojro                 "
-	@echo " jrojrojrojrojrojrojrojrojrojrojrojrojrojrojro                 "
-	@sleep 1
-
-
-	@clear
-	@echo "     .       .    )        .           .                      "
-	@echo "  .       *             .         .                      "
-	@echo "              .                      .                      "
-	@echo "  .       .                   .                      "
-	@echo "                               *        .                      "
-	@echo "     .   '               .              .                      "
-	@echo "             _.---._   .            .     *                      "
-	@echo "   *       .'       '.                      "
-	@echo "       _.-~===========~-._                      "
-	@echo "      (___________________)       .   *                      "
-	@echo " __  .'     \_______/   .'  ______        __                      "
-	@echo "   |              .'  .'   |      |      |  |                      "
-	@echo "   |             '         |      |      |  |                      "
-	@echo "   |                       |      |   ___|  |_                      "
-	@echo " __|_______________________|__..--~~~~ jro    ~--.                      "
-	@echo "                   /|\                      "
-	@echo "                  /   \                      "
-	@echo "                 /  |  \                      "
-	@echo "                /       \                      "
-	@echo "  \|/          /    |    \                      "
-	@echo "              /           \                      "
-	@echo "             /      |      \                      "
-	@echo "            /               \                      "
-	@echo "           /                                "
-	@echo "          /       BRING MY WIFE BACK,                      "
-	@echo "         /    __  YOU COSMIC KIDNAPPERS!                      "
-	@echo "        /    /  \ /                      "
-	@echo "       /    (\__/)  |            \                      "
-	@echo "      /     _\__/_                \                      "
-	@echo "     /     /      \ |              \                      "
-	@echo "    /     / /   / /                 \                      "
-	@echo "          \ |   \_\                  \                      "
-	@echo "           \|____\_)                  \    \|/                      "
-	@echo "            |    \                      "
-	@echo "            | |\  \                      "
-	@echo "            | |/  /                      "
-	@echo "            |_/__/                      "
-	@echo "           (__[__)                      "
-	@echo "                                         "
-	@echo " 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8                      "
-	@echo "  8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8   "
-	@sleep 1
-
-
-	@clear
-	@echo "	        .       .    )        .           .                "
-	@echo "   .       *             .         .                "
-	@echo "                 .                      .                "
-	@echo "   .       .          o        .                "
-	@echo "                    ..            *        .                "
-	@echo "      .   .       ..      .              .                "
-	@echo "  __        .   ..           ______        __                "
-	@echo "    |           ..          |      |      |  |                "
-	@echo "    |            ..         |      |      |  |                "
-	@echo "    |                       |      |   ___|  |_                "
-	@echo "  __|_______________________|__..--~~~~ jro    ~--                "
-	@echo "                    /|\                "
-	@echo "                   /   \                "
-	@echo "                  /  |  \                "
-	@echo "                 /       \                "
-	@echo "   \|/          /    |    \                "
-	@echo "               /           \                "
-	@echo "              /      |      \                "
-	@echo "             /               \                "
-	@echo "            /        |        \                "
-	@echo "           /   _               \                "
-	@echo "          /   /_\    |          \                "
-	@echo "         /    \_/                \                "
-	@echo "        /    /   \   |            \                "
-	@echo "       /     \|_|/                 \                "
-	@echo "      /       |||    |              \                "
-	@echo "     /        |||                    \                "
-	@echo "    /        (_|_)   |                \                "
-	@echo "   /                                   \    \|/                "
-	@echo "                "
-	@echo "  # # # # # # # # # # # # # # # # # # # # # # # #                "
-	@echo "   # # # # # # # # # # # # # # # # # # # # # # # #                "
-	@sleep 1
-
-	@clear
-	@echo " "
-	@echo " "
-	@echo " "
-	@echo " ░░░░░░░░░░░░░░░░░░░$(YELLOW)▄▄$(NC)░░░░░░░░░░░░░░░░░░░          ██████ ██████  ██ ██████  ████████  ██████  ███████ ██   ██ ███████ ██      ██                 "
-	@echo " ░░░░░░░░░░░░░░░░░$(YELLOW)▄▄██▄▄$(NC)░░░░░░░░░░░░░░░░░         ██      ██   ██ ██ ██   ██    ██    ██    ██ ██      ██   ██ ██      ██      ██                 "
-	@echo " ░░░░░░░░░░░░░░░░░$(YELLOW)▀▀██▀▀$(NC)░░░░░░░░░░░░░░░░░         ██      ██████  ██ ██████     ██    ██    ██ ███████ ███████ █████   ██      ██                 "
-	@echo " ░░░░░░░░$(YELLOW)▄▄▄███████▄██▄███████▄▄▄$(NC)░░░░░░░░         ██      ██   ██ ██ ██         ██    ██    ██      ██ ██   ██ ██      ██      ██                 "
-	@echo " ░░░░$(YELLOW)▄█████▀▄$(NC)░░$(YELLOW)▀$(NC)░░$(YELLOW)██████$(NC)░░$(YELLOW)▀$(NC)░░$(YELLOW)▄▀█████▄$(NC)░░░░          ██████ ██   ██ ██ ██         ██     ██████  ███████ ██   ██ ███████ ███████ ███████                 "
-	@echo " ░░$(YELLOW)▄█▀▀░$(YELLOW)██$(NC)░░░░░░░░░░$(YELLOW)██▀$(NC)░░░░░░░░░$(YELLOW)██$(NC)░$(YELLOW)▀▀█▄$(NC)░░                          "
-	@echo " ░$(YELLOW)██░░$(YELLOW)▄██▀▀$(NC)░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░$(YELLOW)▀▀██▄$(NC)░$(YELLOW)▀██$(NC)░                          "
-	@echo " $(YELLOW)██░░░░$(YELLOW)██$(NC)░░░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░░░$(YELLOW)██$(NC)░░░░$(YELLOW)██$(NC)                          "
-	@echo " $(YELLOW)██░$(YELLOW)█$(NC)░░$(YELLOW)██▀▀$(NC)░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░$(YELLOW)▀▀██$(NC)░░$(YELLOW)█░$(NC)$(YELLOW)██$(NC)                          "
-	@echo " $(YELLOW)██░░░░$(YELLOW)▀██▄$(NC)░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░$(YELLOW)▄██▀$(NC)░░░░$(YELLOW)██$(NC)                          "
-	@echo " ░$(YELLOW)██░$(YELLOW)▀$(NC)░░$(YELLOW)▀██▀$(NC)░░░░░░$(YELLOW)▄████▄$(NC)░░░░░░$(YELLOW)▀▄█▀$(NC)░░$(YELLOW)▀$(NC)░$(YELLOW)██$(NC)░                          "
-	@echo " ░$(YELLOW)▀██░░$(YELLOW)▄$(NC)░$(YELLOW)▀██▀▄$(NC)░░░░$(YELLOW)██▄▄██$(NC)░░░░$(YELLOW)▄▀██▀$(NC)░$(YELLOW)▄$(NC)░$(YELLOW)▄██▀$(NC)░                          "
-	@echo " ░░░$(YELLOW)██▄▄▄▄██████████████████████▄▄▄▄█▀░$(NC)░░                          "
-	@echo " ░░░░$(YELLOW)█▀▀▀▀▀▀░░$(YELLOW)▄▄▄▄▄░░░░$(YELLOW)▄▄▄▄▄░░$(YELLOW)▀▀▀▀▀▀█$(NC)░░░░            DACASTIL && JRAMOS-A              "
-	@echo " ░░░░░$(YELLOW)███░░░░░$(YELLOW)▀███░░░░░░$(YELLOW)███▀░░░░░$(YELLOW)███$(NC)░░░░░                          "
-	@echo " ░░░░░$(YELLOW)▀██▄░░░░$(YELLOW)▀▀▀▀▀░░░░$(YELLOW)▀▀▀▀▀░░░░$(YELLOW)▄██▀$(NC)░░░░░                          "
-	@echo " ░░░░░$(YELLOW)▄▄▄▄██████████████████████▄▄▄▄$(NC)░░░░░                          "
-	@echo " ░░░░░░$(YELLOW)▀▀▀▀$(NC)░░░░░░░░░░░░░░░░░░░░$(YELLOW)▀▀▀▀$(NC)░░░░░░                          "
-
+show_ascii:
+		@echo ""
+		@echo "        .       .    )        .           ."
+		@echo "   .       *             .         ."
+		@echo "                 .                      ."
+		@echo "   .       .       .'          ."
+		@echo "                  '.              *        ."
+		@echo "      .   '        .'     .              ."
+		@echo "              _.---._   .            .     *"
+		@echo "    *       .'       '."
+		@echo "        _.-~===========~-._"
+		@echo "       (___________________)       .   *"
+		@echo "  __         \_______/       ______        __"
+		@echo "    |                       |      |      |  |"
+		@echo "    |                       |      |      |  |"
+		@echo "    |                       |      |   ___|  |_"
+		@echo "  __|_______________________|__..--~~~~ jro    ~-- "
+		@echo "                    /|\                  "
+		@echo "                   /   \               "
+		@echo "                  /  |  \               "
+		@echo "                 /       \               "
+		@echo "   \|/          /    |    \               "
+		@echo "               /           \                    "
+		@echo "              /      |      \                   "
+		@echo "             /               \               "
+		@echo "            /        |        \               "
+		@echo "           /                                "
+		@echo "          /   ____   |               "
+		@echo "         /   /  __)         ___               "
+		@echo "        /    \(~oo   |     (___)  /               "
+		@echo "       /     _\_-/_       (_o o_)               "
+		@echo "      /     /  \/  \ |    (_\O/_)   \               "
+		@echo "     /     / /    \ \     //\_/\\    \               "
+		@echo "    /      \ |    /_/    //(_ _)\\    \               "
+		@echo "   /        \|___(_/     \\/   \//     \    \|/               "
+		@echo "             |    \      (/_____\)            "
+		@echo "             | |\  \      / /| |            "
+		@echo "             | |/  /      \ \| |            "
+		@echo "             |_/__/        \_|_|            "
+		@echo "            (__[__)        <_<_>            "
+		@echo "                                                "
+		@echo "  * * * * * * * * * * * * * * * * * * * * * * * * "
+		@echo "   * * * * * * * * * * * * * * * * * * * * * * * *"
+		@sleep 1
+		
+		@clear
+		@echo "         .                            *                 "
+		@echo "                   _.--~~~~--._                 "
+		@echo "     .          .-~ \__/  \__/ ~-.         .                 "
+		@echo "              .-~   (oo)  (oo)    ~-.                 "
+		@echo "             (_____//~~\\//~~\\______)                 "
+		@echo "        _.-~/                        \~-._                 "
+		@echo "       /O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O=O\                 "
+		@echo "       \___________________________________/                 "
+		@echo "                  \x x x x x x x/                 "
+		@echo "                   \x_x_x_x_x_x/                 "
+		@echo "                    :|. | | .|                 "
+		@echo "                    | |. |. |:| Zzuzz!                 "
+		@echo "                    | :  |:. ;|                 "
+		@echo "   Ohmygosh, a     . | : .|  :                   "
+		@echo "   flying saucer!   | . | : .||                 "
+		@echo "   - !Delores! -   : |. | . ::  Zzuzz!                 "
+		@echo "       \    ___     |.: |. :. |                 "
+		@echo "           /  _)    | :|___ |:|                 "
+		@echo "          |  (~o   (\.|(___)  /)                 "
+		@echo "          _\/_/_    \\(_O O_)//   Zzuzz!                 "
+		@echo "         /      \   .\(_\O/_)/:                 "
+		@echo "        / /    \ \  :|\/\_/\/ |                 "
+		@echo "        \ |    | /  | .(_ _): |                 "
+		@echo "         \|____|/   .| /   \ |:                 "
+		@echo "          |_  _|    | /_____\.| !!!EEEEKKKK!!!                 "
+		@echo "          | |  |    : .| | | .                 "
+		@echo "          | |  |    .  | | | ||                 "
+		@echo "          |_|__|    | :|_|_| .:                 "
+		@echo "  jro     [__[__)   .: <_|_> .|                 "
+		@echo "                                                   "
+		@echo " jrojrojrojrojrojrojrojrojrojrojrojrojrojrojro                 "
+		@echo " jrojrojrojrojrojrojrojrojrojrojrojrojrojrojro                 "
+		@sleep 1
+		
+		@clear
+		@echo "     .       .    )        .           .                      "
+		@echo "  .       *             .         .                      "
+		@echo "              .                      .                      "
+		@echo "  .       .                   .                      "
+		@echo "                               *        .                      "
+		@echo "     .   '               .              .                      "
+		@echo "             _.---._   .            .     *                      "
+		@echo "   *       .'       '.                      "
+		@echo "       _.-~===========~-._                      "
+		@echo "      (___________________)       .   *                      "
+		@echo " __  .'     \_______/   .'  ______        __                      "
+		@echo "   |              .'  .'   |      |      |  |                      "
+		@echo "   |             '         |      |      |  |                      "
+		@echo "   |                       |      |   ___|  |_                      "
+		@echo " __|_______________________|__..--~~~~ jro    ~--.                      "
+		@echo "                   /|\                      "
+		@echo "                  /   \                      "
+		@echo "                 /  |  \                      "
+		@echo "                /       \                      "
+		@echo "  \|/          /    |    \                      "
+		@echo "              /           \                      "
+		@echo "             /      |      \                      "
+		@echo "            /               \                      "
+		@echo "           /                                "
+		@echo "          /       BRING MY WIFE BACK,                      "
+		@echo "         /    __  YOU COSMIC KIDNAPPERS!                      "
+		@echo "        /    /  \ /                      "
+		@echo "       /    (\__/)  |            \                      "
+		@echo "      /     _\__/_                \                      "
+		@echo "     /     /      \ |              \                      "
+		@echo "    /     / /   / /                 \                      "
+		@echo "          \ |   \_\                  \                      "
+		@echo "           \|____\_)                  \    \|/                      "
+		@echo "            |    \                      "
+		@echo "            | |\  \                      "
+		@echo "            | |/  /                      "
+		@echo "            |_/__/                      "
+		@echo "           (__[__)                      "
+		@echo "                                         "
+		@echo " 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8                      "
+		@echo "  8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8   "
+		@sleep 1
+		
+		@clear
+		@echo "	        .       .    )        .           .                "
+		@echo "   .       *             .         .                "
+		@echo "                 .                      .                "
+		@echo "   .       .          o        .                "
+		@echo "                    ..            *        .                "
+		@echo "      .   .       ..      .              .                "
+		@echo "  __        .   ..           ______        __                "
+		@echo "    |           ..          |      |      |  |                "
+		@echo "    |            ..         |      |      |  |                "
+		@echo "    |                       |      |   ___|  |_                "
+		@echo "  __|_______________________|__..--~~~~ jro    ~--                "
+		@echo "                    /|\                "
+		@echo "                   /   \                "
+		@echo "                  /  |  \                "
+		@echo "                 /       \                "
+		@echo "   \|/          /    |    \                "
+		@echo "               /           \                "
+		@echo "              /      |      \                "
+		@echo "             /               \                "
+		@echo "            /        |        \                "
+		@echo "           /   _               \                "
+		@echo "          /   /_\    |          \                "
+		@echo "         /    \_/                \                "
+		@echo "        /    /   \   |            \                "
+		@echo "       /     \|_|/                 \                "
+		@echo "      /       |||    |              \                "
+		@echo "     /        |||                    \                "
+		@echo "    /        (_|_)   |                \                "
+		@echo "   /                                   \    \|/                "
+		@echo "                "
+		@echo "  # # # # # # # # # # # # # # # # # # # # # # # #                "
+		@echo "   # # # # # # # # # # # # # # # # # # # # # # # #                "
+		@sleep 1
+		
+		@clear
+		@echo " "
+		@echo " "
+		@echo " "
+		@echo " ░░░░░░░░░░░░░░░░░░░$(YELLOW)▄▄$(NC)░░░░░░░░░░░░░░░░░░░          ██████ ██████  ██ ██████  ████████  ██████  ███████ ██   ██ ███████ ██      ██                 "
+		@echo " ░░░░░░░░░░░░░░░░░$(YELLOW)▄▄██▄▄$(NC)░░░░░░░░░░░░░░░░░         ██      ██   ██ ██ ██   ██    ██    ██    ██ ██      ██   ██ ██      ██      ██                 "
+		@echo " ░░░░░░░░░░░░░░░░░$(YELLOW)▀▀██▀▀$(NC)░░░░░░░░░░░░░░░░░         ██      ██████  ██ ██████     ██    ██    ██ ███████ ███████ █████   ██      ██                 "
+		@echo " ░░░░░░░░$(YELLOW)▄▄▄███████▄██▄███████▄▄▄$(NC)░░░░░░░░         ██      ██   ██ ██ ██         ██    ██    ██      ██ ██   ██ ██      ██      ██                 "
+		@echo " ░░░░$(YELLOW)▄█████▀▄$(NC)░░$(YELLOW)▀$(NC)░░$(YELLOW)██████$(NC)░░$(YELLOW)▀$(NC)░░$(YELLOW)▄▀█████▄$(NC)░░░░          ██████ ██   ██ ██ ██         ██     ██████  ███████ ██   ██ ███████ ███████ ███████                 "
+		@echo " ░░$(YELLOW)▄█▀▀░$(YELLOW)██$(NC)░░░░░░░░░░$(YELLOW)██▀$(NC)░░░░░░░░░$(YELLOW)██$(NC)░$(YELLOW)▀▀█▄$(NC)░░                          "
+		@echo " ░$(YELLOW)██░░$(YELLOW)▄██▀▀$(NC)░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░$(YELLOW)▀▀██▄$(NC)░$(YELLOW)▀██$(NC)░                          "
+		@echo " $(YELLOW)██░░░░$(YELLOW)██$(NC)░░░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░░░$(YELLOW)██$(NC)░░░░$(YELLOW)██$(NC)                          "
+		@echo " $(YELLOW)██░$(YELLOW)█$(NC)░░$(YELLOW)██▀▀$(NC)░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░$(YELLOW)▀▀██$(NC)░░$(YELLOW)█░$(NC)$(YELLOW)██$(NC)                          "
+		@echo " $(YELLOW)██░░░░$(YELLOW)▀██▄$(NC)░░░░░░░░░$(YELLOW)██$(NC)░░░░░░░░░$(YELLOW)▄██▀$(NC)░░░░$(YELLOW)██$(NC)                          "
+		@echo " ░$(YELLOW)██░$(YELLOW)▀$(NC)░░$(YELLOW)▀██▀$(NC)░░░░░░$(YELLOW)▄████▄$(NC)░░░░░░$(YELLOW)▀▄█▀$(NC)░░$(YELLOW)▀$(NC)░$(YELLOW)██$(NC)░                          "
+		@echo " ░$(YELLOW)▀██░░$(YELLOW)▄$(NC)░$(YELLOW)▀██▀▄$(NC)░░░░$(YELLOW)██▄▄██$(NC)░░░░$(YELLOW)▄▀██▀$(NC)░$(YELLOW)▄$(NC)░$(YELLOW)▄██▀$(NC)░                          "
+		@echo " ░░░$(YELLOW)██▄▄▄▄██████████████████████▄▄▄▄█▀░$(NC)░░                          "
+		@echo " ░░░░$(YELLOW)█▀▀▀▀▀▀░░$(YELLOW)▄▄▄▄▄░░░░$(YELLOW)▄▄▄▄▄░░$(YELLOW)▀▀▀▀▀▀█$(NC)░░░░            DACASTIL && JRAMOS-A              "
+		@echo " ░░░░░$(YELLOW)███░░░░░$(YELLOW)▀███░░░░░░$(YELLOW)███▀░░░░░$(YELLOW)███$(NC)░░░░░                          "
+		@echo " ░░░░░$(YELLOW)▀██▄░░░░$(YELLOW)▀▀▀▀▀░░░░$(YELLOW)▀▀▀▀▀░░░░$(YELLOW)▄██▀$(NC)░░░░░                          "
+		@echo " ░░░░░$(YELLOW)▄▄▄▄██████████████████████▄▄▄▄$(NC)░░░░░                          "
+		@echo " ░░░░░░$(YELLOW)▀▀▀▀$(NC)░░░░░░░░░░░░░░░░░░░░$(YELLOW)▀▀▀▀$(NC)░░░░░░                          "
 
 libft/libft.a:
-	@$(MAKE) -C libft > /dev/null 2>&1
+	@$(MAKE) -C libft
 
 $(NAME): $(OBJ) libft/libft.a
-	@$(CC) $(FLAGS) $(OBJ) libft/libft.a -o $(NAME) $(LDFLAGS) > /dev/null 2>&1
+	@$(CC) $(FLAGS) $(OBJ) libft/libft.a -o $(NAME) $(LDFLAGS)
 
 %.o: %.c
 	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	@$(RM) $(OBJ) > /dev/null 2>&1
-	@$(MAKE) clean -C libft > /dev/null 2>&1
+	@$(RM) $(OBJ)
+	@$(MAKE) clean -C libft
 
 fclean:
 
@@ -342,8 +356,8 @@ fclean:
 	@echo "$(RED) █▄▄█ █▄▄▄█ █  █ █▄▄▀ ▄█▄ █  ▀█ █▄▄█"
 	@echo "$(RED)$(NC)"
 
-	@$(RM) $(OBJ) $(NAME) > /dev/null 2>&1
-	@$(MAKE) fclean -C libft > /dev/null 2>&1
+	@$(RM) $(OBJ) $(NAME)
+	@$(MAKE) fclean -C libft
 
 re: fclean all
 

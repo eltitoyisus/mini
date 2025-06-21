@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:44:09 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/09 18:44:09 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/20 12:37:17 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,15 @@ void	exec_child_process(t_redir_args *redir_data)
 	t_reds	*current;
 
 	if (redir_data->stdin_fd != -1)
-		dup2(redir_data->stdin_fd, STDIN_FILENO);
+	{
+		if (dup2(redir_data->stdin_fd, STDIN_FILENO) == -1)
+			perror("dup2 error on stdin");
+	}
 	if (redir_data->stdout_fd != -1)
-		dup2(redir_data->stdout_fd, STDOUT_FILENO);
+	{
+		if (dup2(redir_data->stdout_fd, STDOUT_FILENO) == -1)
+			perror("dup2 error on stdout");
+	}
 	current = redir_data->redirs;
 	while (current)
 	{

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 11:59:02 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:44:01 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,16 @@ typedef struct s_pipe_context
 	t_reds			*redirs;
 	char			**clean_args;
 }					t_pipe_context;
+
+typedef struct s_pipe_child_args
+{
+	char			**cmd_args;
+	char			**envp;
+	t_reds			*redirs;
+	int				stdin_fd;
+	int				stdout_fd;
+	char			*path;
+}					t_pipe_child_args;
 
 typedef struct s_parent_cleanup
 {

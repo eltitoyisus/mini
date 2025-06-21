@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 11:57:58 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 22:12:56 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,21 @@
 # include "headers.h"
 # include "struct.h"
 
-// TX
-void			init_Game(t_snake *snake, t_position *fruit, t_state *state);
-void			drawGame(const t_snake *snake, const t_position *fruit);
-void			updateSnake(t_snake *snake);
-int				checkCollision(t_snake *snake, t_position *fruit, t_state *state);
+// GAME
+void			init_game(t_snake *snake, t_position *fruit, t_state *state);
+void			draw_game(const t_snake *snake, const t_position *fruit);
+void			update_snake(t_snake *snake);
+int				check_collision(t_snake *snake, t_position *fruit,
+					t_state *state);
 int				get_botton(void);
 char			getch(void);
 char			ft_getchar(void);
 void			my_srand(unsigned int new_seed, t_state *state);
 int				my_rand(t_state *state);
 unsigned int	generate_seed(int iteration);
-int				ft_game(char *input);
 int				game_main(void);
+void			moves_snake(t_snake *snake);
+int				is_game(t_sh *sh);
 
 // UTILS TO EVERYTHING
 int				ft_error(char *msg, int ret);
@@ -143,6 +145,7 @@ char			**prepare_path_dirs(char **envp);
 char			*find_path(char **envp);
 char			*try_executable_path(char **paths, char *command);
 char			*get_path(char **envp, char *command);
+char			*clean_control_chars(char *str);
 
 // EXEC COMMAND
 int				exec_parsed_command(t_sh *sh, char **envp);
@@ -203,7 +206,7 @@ void			cleanup_redir_resources(char *path, t_reds *redirs,
 					char **clean_args, char **original_args);
 
 // BUILT INS
-int				exec_echo(char **args, char **envp);
+int				exec_echo(t_sh *sh);
 int				exec_pwd(void);
 int				exec_cd(char **args, t_sh *sh);
 int				exec_exit(t_sh *sh, char **args);
@@ -213,11 +216,41 @@ int				is_builtin(char *command);
 int				exec_builtin(char **args, char **envp, t_sh *sh);
 int				exec_env(char **args, char **envp);
 // ENV
-int				env_unset(char **argv, char **envp);
-int				env_export(char **argv, char **envp);
+int				env_unset(char **argv, t_sh *sh);
+int				env_export(char **argv, t_sh *sh);
 int				echo_var(char **argv, int index, char **envp);
+int				export_handle_no_args(char **envp);
+int				export_validate_and_create(char **argv, char **new_var);
+int				export_find_and_replace(char **envp, char *argv_var,
+					char *new_var);
 void			export_no_args(char **envp);
+int				exec_var_command(t_sh *sh, char **envp);
+int				is_var_command(char *cmd);
 void			free_env(char **env);
+char			**ft_envdup(char **envp);
+void			free_env(char **env);
+
+// ECHO
+int				check_quotes_type(char *input, int len, int *is_single_quoted,
+					int *is_double_quoted);
+char			*init_quotes_result(int len);
+void			handle_quote_char(char *input, int *i, int *in_quotes,
+					char *quote_type);
+char			*process_quotes_loop(char *result, char *input,
+					int is_single_quoted);
+void			handle_special_char(char **p);
+void			handle_exit_status(char **p);
+int				get_var_name_length(char *var_name);
+int				find_env_var(char *var_name, int var_len, char **envp);
+void			handle_env_var(char **p, char **envp);
+char			*process_quotes_content(char *input, int len,
+					int is_single_quoted);
+char			*handle_echo_quotes(char *input);
+void			process_echo_argument(t_parse *parse);
+int				parse_echo_flags(char **args, int *i);
+void			copy_char_to_result(char *input, char *result, int *i, int *j);
+void			print_exit_status(void);
+char			*insert_spaces_around_operators(const char *input);
 
 // REDIRECTION
 int				has_redirection_in_cmd(t_cmd *cmd);
@@ -225,6 +258,7 @@ char			**prepare_cmd_args(char **args);
 int				do_redir(char *command, char **envp);
 int				handle_redirs(char *command, char **envp);
 void			free_exec_params(t_exec_params *params);
+int				error_quotes(char *line, int op);
 
 // REDIRECTION 2
 void			exec_child_process(t_redir_args *redir_data);
@@ -260,6 +294,7 @@ int				open_redir(t_reds *redir);
 void			process_heredoc_input(int fd, char *delimiter);
 int				handle_heredoc_parent(pid_t pid, int fd);
 int				heredoc(char *delimiter);
+int				create_heredoc_file(int index, char **created_file);
 
 // PIPES 2
 int				is_pipe(char **args);
@@ -339,7 +374,6 @@ void			process_pipe(int *count, t_parse **current);
 
 int				exec_parsed_command(t_sh *sh, char **envp);
 t_type			*init_bools(void);
-// int		process_piped_command(t_sh *sh, char **envp);
 int				has_redirection_in_cmd(t_cmd *cmd);
 t_reds			*parse_redirection_from_cmd(t_cmd *cmd);
 char			**clean_cmd_args(t_cmd *cmd);

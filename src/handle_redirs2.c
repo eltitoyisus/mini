@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirs2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:41:53 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 11:12:53 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:24:18 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,7 @@
 
 void	free_redirs(t_reds *head)
 {
-	t_reds	*current;
-	t_reds	*next;
-
-	current = head;
-	while (current != NULL)
-	{
-		next = current->next;
-		if (current->file)
-			free(current->file);
-		if (current->delim)
-			free(current->delim);
-		free(current);
-		current = next;
-	}
+	free_red(head);
 }
 
 int	open_all_redirs(t_reds *head)

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 19:20:48 by dacastil          #+#    #+#             */
-/*   Updated: 2025/06/15 15:32:37 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:15:17 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,24 @@ static char	*remove_surrounding_quotes(char *input, int len)
 {
 	char	*result;
 
-	if (len >= 2 && ((input[0] == '\'' && input[len - 1] == '\'')
-			|| (input[0] == '\"' && input[len - 1] == '\"')))
+	if (len >= 2)
 	{
-		result = ft_substr(input, 1, len - 2);
-		return (result);
+		if (input[0] == '\'' && input[len - 1] == '\'')
+		{
+			result = malloc(len + 1);
+			if (!result)
+				return (NULL);
+			ft_memcpy(result + 1, input + 1, len - 2);
+			result[0] = '\001';
+			result[len - 2 + 1] = '\002';
+			result[len] = '\0';
+			return (result);
+		}
+		else if (input[0] == '\"' && input[len - 1] == '\"')
+		{
+			result = ft_substr(input, 1, len - 2);
+			return (result);
+		}
 	}
 	return (NULL);
 }

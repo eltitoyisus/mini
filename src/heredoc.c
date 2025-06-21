@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jramos-a <jramos-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:39:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/18 11:11:38 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:30:47 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	process_heredoc_input(int fd, char *delimiter)
 {
 	char	*line;
 
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
 		rl_clear_history();
@@ -68,6 +68,7 @@ void	process_heredoc_input(int fd, char *delimiter)
 int	handle_heredoc_parent(pid_t pid, int fd)
 {
 	int	status;
+	int	heredoc_fd;
 
 	close(fd);
 	signal(SIGINT, SIG_IGN);
@@ -75,13 +76,15 @@ int	handle_heredoc_parent(pid_t pid, int fd)
 	ft_signals();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
-		close(fd);
 		unlink("heredoc.tmp");
 		write(1, "\n", 1);
 		last_signal_code(130);
 		return (-1);
 	}
-	return (open("heredoc.tmp", O_RDONLY), close(fd));
+	heredoc_fd = open("heredoc.tmp", O_RDONLY);
+	if (heredoc_fd < 0)
+		perror("heredoc: reopening for read");
+	return (heredoc_fd);
 }
 
 int	heredoc(char *delimiter)

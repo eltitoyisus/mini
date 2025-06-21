@@ -61,7 +61,15 @@ t_sh	*shell_factory(char **envp)
 	sh->input = NULL;
 	sh->node = node_factory();
 	sh->pwd = NULL;
-	sh->env = envp;
+	sh->env = ft_envdup(envp);
+	if (!sh->env)
+	{
+		free(sh->prompt);
+		free(sh->node->cmd);
+		free(sh->node);
+		free(sh);
+		return (NULL);
+	}
 	sh->pipe_count = 0;
 	return (sh);
 }

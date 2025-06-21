@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 14:53:26 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/11 17:11:24 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:05:26 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,23 @@ int	can_op(char *file)
 		close(fd);
 		return (1);
 	}
+}
+
+int	error_quotes(char *line, int op)
+{
+	if (op == SIMPLE)
+	{
+		if ((ft_strchr(line, '\'') && ft_strchr(line, '\'')
+				== ft_strrchr(line, '\'')) || (ft_strchr(line, '\'')
+				&& ft_strchr(line, '\'') == ft_strrchr(line, '\'')))
+			return (1);
+	}
+	else if (op == DOUBLE)
+	{
+		if ((ft_strchr(line, '\"') && ft_strchr(line, '\"')
+				== ft_strrchr(line, '\"')) || (ft_strchr(line, '\'')
+				&& ft_strchr(line, '\'') == ft_strrchr(line, '\'')))
+			return (1);
+	}
+	return (0);
 }

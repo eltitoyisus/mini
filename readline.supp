@@ -80,6 +80,85 @@
 }
 
 {
+   minishell_path_strjoin_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strjoin
+   fun:try_executable_path
+   fun:get_path
+   fun:get_command_path
+}
+
+{
+   minishell_envdup_malloc_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_envdup
+   fun:shell_factory
+   fun:main
+}
+
+{
+   minishell_envdup_strdup_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:ft_envdup
+   fun:shell_factory
+   fun:main
+}
+
+{
+   CommandSegmentAllocation
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:malloc
+   fun:ft_strdup
+   fun:allocate_command_segment
+   fun:handle_command_token
+   fun:parse_command_segments
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CommandSegmentArrayLeak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:allocate_command_segment
+   fun:handle_command_token
+   fun:parse_command_segments
+   fun:process_piped_command
+   fun:handle_piped_command
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CommandFactoryNodeLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:cmd_factory
+   fun:prepare_command_node
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
    QuoteProcessingLeak
    Memcheck:Leak
    match-leak-kinds: reachable
@@ -164,6 +243,252 @@
    fun:ft_parse
    fun:parse_comm
    fun:process_input
+}
+
+{
+   CleanCmdArgsIndirectLeak
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:malloc
+   fun:ft_strdup
+   fun:clean_cmd_args
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   FtSplitCommandWithSpacesLeak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:ft_split
+   fun:process_command_with_spaces
+   fun:process_command_segment
+   fun:handle_input_character
+   fun:case_without_space
+   fun:handle_space_case
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CreateRedirectionNodeIndirectLeak
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:malloc
+   fun:ft_strdup
+   fun:create_redirection_node
+   fun:handle_redirection_op
+   fun:parse_redirection_from_cmd
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CleanCmdArgsDirectLeak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:clean_cmd_args
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CleanCmdArgsIndirectLeak
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:malloc
+   fun:ft_strdup
+   fun:clean_cmd_args
+   ...
+}
+
+{
+   CleanCmdArgsDirectLeak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:clean_cmd_args
+   ...
+}
+
+{
+   CreateRedirectionNodeDirectLeak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:create_redirection_node
+   ...
+}
+
+{
+   libreadline_still_reachable_2
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so*
+   fun:xrealloc
+   fun:rl_extend_line_buffer
+   ...
+   fun:readline
+}
+
+{
+   libreadline_still_reachable_2
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:readline
+}
+
+{
+   SubstrQuotesLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_substr
+   fun:remove_surrounding_quotes
+   fun:cut_quotes
+   fun:process_cmd_token
+   fun:fill_command_args
+   fun:build_command_args
+   fun:info_to_struct_2
+   fun:finalize_parsing
+   fun:process_with_spaces
+   fun:ft_parse
+   fun:parse_comm
+}
+
+{
+   readline_still_reachable_rl_extend_line_buffer
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so*
+   fun:xrealloc
+   fun:rl_extend_line_buffer
+   fun:rl_insert_text
+   fun:rl_bracketed_paste_begin
+   fun:_rl_dispatch_subseq
+   fun:readline_internal_char
+}
+
+{
+   readline_still_reachable_rl_extend_line_buffer
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so*
+   fun:xrealloc
+   fun:rl_extend_line_buffer
+   fun:rl_insert_text
+   fun:rl_bracketed_paste_begin
+   fun:_rl_dispatch_subseq
+   fun:readline_internal_char
+}
+
+{
+   readline_still_reachable_rl_extend_line_buffer
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so*
+   fun:xrealloc
+   fun:rl_extend_line_buffer
+   fun:rl_insert_text
+   fun:rl_bracketed_paste_begin
+   fun:_rl_dispatch_subseq
+   fun:readline_internal_char
+   ...
+}
+
+{
+   InfoToStruct2InvalidRead
+   Memcheck:Addr8
+   fun:info_to_struct_2
+   fun:finalize_parsing
+   fun:process_with_spaces
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   SaveTokensInvalidWrite
+   Memcheck:Addr8
+   fun:save_tokens
+   fun:info_to_struct_2
+   fun:finalize_parsing
+   fun:process_with_spaces
+   fun:ft_parse
+   fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   libreadline_still_reachable_2
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so*
+   fun:xrealloc
+   fun:rl_extend_line_buffer
+   ...
+   fun:readline
+}
+
+{
+   InsertSpacesAroundOperatorsLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:insert_spaces_around_operators
+   ...
+}
+
+{
+   InsertSpacesAroundOperatorsLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:insert_spaces_around_operators
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   CreateRedirectionNodeDirectLeak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:create_redirection_node
+   fun:handle_redirection_op
+   fun:parse_redirection_from_cmd
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
 }
 
 {

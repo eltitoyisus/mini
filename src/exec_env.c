@@ -6,13 +6,13 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 11:00:03 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 11:00:03 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:24:22 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-static void	execute_command_with_no_env(char *cmd, char **cmd_args, char **envp)
+void	execute_command_with_no_env(char *cmd, char **cmd_args, char **envp)
 {
 	char	*path;
 
@@ -35,7 +35,7 @@ static void	execute_command_with_no_env(char *cmd, char **cmd_args, char **envp)
 	}
 }
 
-static int	handle_env_i_command(char **args, char **envp)
+int	handle_env_i_command(char **args, char **envp)
 {
 	pid_t	pid;
 	int		status;
@@ -62,7 +62,7 @@ static int	handle_env_i_command(char **args, char **envp)
 	return (0);
 }
 
-static int	print_environment(char **envp)
+int	print_environment(char **envp)
 {
 	int	i;
 
@@ -75,7 +75,7 @@ static int	print_environment(char **envp)
 	return (0);
 }
 
-static int	print_env_args(char **args)
+int	print_env_args(char **args)
 {
 	int	i;
 

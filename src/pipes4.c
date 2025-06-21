@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:04:16 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/17 23:04:41 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:40:03 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	parse_command_segments(char ***commands, char **cmd_args, int pipe_count)
 	int					i;
 	t_token_counters	counters;
 
+	(void)commands;
 	counters.start = 0;
 	counters.cmd_idx = 0;
 	i = 0;

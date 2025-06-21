@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 19:46:52 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 17:16:41 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:29:11 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	handle_single_redirection(char *sp_input, int *i, t_parse *parse)
 void	handle_pipe(char *sp_input, int *i, t_parse *parse)
 {
 	(void)sp_input;
-	parse->type_token = PIPE;
 	parse->line = ft_strdup("|");
+	parse->type_token = PIPE;
 	ft_lstadd_back_parse(parse);
 	(*i)++;
 }

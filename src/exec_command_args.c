@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:10:11 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/14 15:06:48 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:15:36 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ void	execute_child_process(t_child_proc *proc_data)
 	}
 	if (execve(proc_data->path, proc_data->clean_args, proc_data->envp) == -1)
 	{
-		write(2, proc_data->clean_args[0], ft_strlen(proc_data->clean_args[0]));
-		write(2, ": execution failed\n", 19);
 		exit(EXIT_FAILURE);
 	}
 }

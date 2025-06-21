@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:15:19 by daniel-cast       #+#    #+#             */
-/*   Updated: 2025/06/16 21:21:35 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:39:49 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	free_shell(t_sh *sh)
 		free(sh->input);
 	if (sh->pwd)
 		free(sh->pwd);
+	if (sh->env)
+		free_env(sh->env);
 	if (sh->node)
 	{
 		if (sh->node->cmd)

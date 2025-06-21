@@ -6,27 +6,24 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:04:02 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/11 11:17:28 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:23:49 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/main.h"
 
-int	env_unset(char **argv, char **envp)
+int	remove_env_var(char **envp, char *var)
 {
-	int		i;
-	int		j;
-	char	*var;
+	int	i;
+	int	j;
 
 	i = 0;
-	if (!argv[1])
-		return (0);
-	var = argv[1];
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0
 			&& envp[i][ft_strlen(var)] == '=')
 		{
+			free(envp[i]);
 			j = i;
 			while (envp[j])
 			{
@@ -39,6 +36,13 @@ int	env_unset(char **argv, char **envp)
 	}
 	printf("unset: variable %s not found\n", var);
 	return (1);
+}
+
+int	env_unset(char **argv, t_sh *sh)
+{
+	if (!sh || !sh->env || !argv[1])
+		return (0);
+	return (remove_env_var(sh->env, argv[1]));
 }
 
 void	export_no_args(char **envp)
@@ -62,19 +66,16 @@ void	export_no_args(char **envp)
 	i++;
 }
 
-int	echo_var(char **argv, int index, char **envp)
+int	find_and_print_env_var(char *var_name, char **envp)
 {
 	int		j;
 	char	*value;
 
-	if (argv[index][0] != '$')
-		return (0);
 	j = 0;
 	while (envp[j])
 	{
-		if (ft_strncmp(&argv[index][1], envp[j],
-			ft_strlen(&argv[index][1])) == 0
-			&& envp[j][ft_strlen(&argv[index][1])] == '=')
+		if (ft_strncmp(var_name, envp[j], ft_strlen(var_name)) == 0
+			&& envp[j][ft_strlen(var_name)] == '=')
 		{
 			value = ft_strchr(envp[j], '=');
 			if (value)
@@ -84,4 +85,18 @@ int	echo_var(char **argv, int index, char **envp)
 		j++;
 	}
 	return (1);
+}
+
+int	echo_var(char **argv, int index, char **envp)
+{
+	char	*ptr;
+
+	if (argv[index][0] != '$')
+		return (0);
+	ptr = argv[index];
+	while (ptr > argv[index] - index && *ptr != '\001')
+		ptr--;
+	if (*ptr == '\001')
+		return (0);
+	return (find_and_print_env_var(&argv[index][1], envp));
 }

@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:12 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/16 19:50:37 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:21:32 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ int	execute_command(t_sh *sh, char **envp, t_exec_params *params)
 	t_exec_args	args;
 	char		**cmd_to_exec;
 
+	if (!sh->node->cmd || !sh->node->cmd->split_cmd
+		|| !sh->node->cmd->split_cmd[0])
+		return (0);
 	args.sh = sh;
 	args.envp = envp;
 	args.redirs = params->redirs;
@@ -75,6 +78,11 @@ int	exec_parsed_command(t_sh *sh, char **envp)
 	t_exec_params	params;
 	t_command_vars	vars;
 
+	if (sh->node->line_is->with_pipe)
+	{
+		process_piped_command(sh, envp);
+		return (1);
+	}
 	params.redirs = NULL;
 	params.clean_args = NULL;
 	init_command_variables(&vars);

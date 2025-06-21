@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:07:08 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/17 11:18:52 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:21:07 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	exec_builtin(char **args, char **envp, t_sh *sh)
 	if (!args || !args[0])
 		return (0);
 	if (ft_strncmp(args[0], "echo", 5) == 0)
-		return (exec_echo(args, envp));
+		return (exec_echo(sh));
 	else if (ft_strncmp(args[0], "pwd", 4) == 0)
 		return (exec_pwd());
 	else if (ft_strncmp(args[0], "exit", 5) == 0)
@@ -41,9 +41,9 @@ int	exec_builtin(char **args, char **envp, t_sh *sh)
 	else if (ft_strncmp(args[0], "env", 4) == 0)
 		return (exec_env(args, envp));
 	else if (ft_strncmp(args[0], "export", 7) == 0)
-		return (env_export(args, envp));
+		return (env_export(args, sh));
 	else if (ft_strncmp(args[0], "unset", 6) == 0)
-		return (env_unset(args, envp));
+		return (env_unset(args, sh));
 	return (0);
 }
 
