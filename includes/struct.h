@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:47 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/21 13:44:01 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 13:25:41 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,6 +288,13 @@ typedef struct s_parent_cleanup
 	t_reds			**redirs;
 	char			***clean_args;
 }					t_parent_cleanup;
+
+typedef struct s_heredoc_state
+{
+	int				active;
+	int				last_fd;
+	char			*last_filename;
+}					t_heredoc_state;
 
 typedef struct s_cleanup_args
 {

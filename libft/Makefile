@@ -38,6 +38,7 @@ SRC = ft_isalpha.c	\
 	ft_putchar_fd.c	\
 	ft_putnbr_fd.c	\
 	ft_putstr_fd.c	\
+	ft_snprintf.c	\
 	ft_putendl_fd.c
 
 # REGLA PARA COMPILAR OBJETOS

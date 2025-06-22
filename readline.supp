@@ -35,6 +35,24 @@
 }
 
 {
+   HeredocForkAndWaitLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:heredoc_fork_and_wait
+   fun:heredoc
+   fun:open_redir
+   fun:open_all_redirs
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
    tinfo_setupterm_malloc
    Memcheck:Leak
    match-leak-kinds: reachable
@@ -225,6 +243,41 @@
    fun:parse_comm
    fun:process_input
    fun:shell_loop
+}
+
+{
+   HeredocFilenameStillReachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:generate_heredoc_filename
+   fun:heredoc_open_file
+   fun:heredoc
+   fun:open_redir
+   fun:open_all_redirs
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+}
+
+{
+   HeredocFilenameLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:heredoc
+   fun:open_redir
+   fun:open_all_redirs
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
+   fun:process_input
+   fun:shell_loop
+   fun:main
 }
 
 {
@@ -425,6 +478,24 @@
    fun:process_with_spaces
    fun:ft_parse
    fun:parse_comm
+   fun:process_input
+   fun:shell_loop
+   fun:main
+}
+
+{
+   HeredocFilenameLeak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:ft_strdup
+   fun:generate_heredoc_filename
+   fun:heredoc
+   fun:open_redir
+   fun:open_all_redirs
+   fun:process_redirections
+   fun:process_command_features
+   fun:exec_parsed_command
    fun:process_input
    fun:shell_loop
    fun:main

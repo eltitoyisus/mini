@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 20:01:45 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/21 22:12:56 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 13:38:12 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,8 +292,17 @@ void			attempt_command_execution(char **cmd_args, char **envp,
 // HEREDOC
 int				open_redir(t_reds *redir);
 void			process_heredoc_input(int fd, char *delimiter);
-int				handle_heredoc_parent(pid_t pid, int fd);
-int				heredoc(char *delimiter);
+int				handle_heredoc_parent(pid_t pid, int fd, char *filename,
+					t_heredoc_state *state);
+int				heredoc(char *delimiter, t_heredoc_state *state);
+void			cleanup_heredoc_tempfiles(void);
+char			*generate_heredoc_filename(int index);
+t_heredoc_state	*get_heredoc_state(void);
+void			heredoc_cleanup_state(t_heredoc_state *state);
+int				heredoc_open_file(char **filename);
+int				heredoc_fork_and_wait(int fd, char *delimiter, char *filename,
+					t_heredoc_state *state);
+
 int				create_heredoc_file(int index, char **created_file);
 
 // PIPES 2

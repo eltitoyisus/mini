@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:39:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/20 14:30:47 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 13:41:25 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	open_redir(t_reds *redir)
 	else if (redir->type == INRED)
 		fd = open(redir->file, O_RDONLY);
 	else if (redir->type == HEREDOC)
-		fd = heredoc(redir->file);
+		fd = heredoc(redir->file, get_heredoc_state());
 	else
 		return (-1);
 	return (fd);
@@ -65,7 +65,30 @@ void	process_heredoc_input(int fd, char *delimiter)
 	close(fd);
 }
 
-int	handle_heredoc_parent(pid_t pid, int fd)
+int	heredoc(char *delimiter, t_heredoc_state *state)
+{
+	int		fd;
+	int		result;
+	char	*filename;
+
+	heredoc_cleanup_state(state);
+	while (state->active)
+		usleep(1000);
+	state->active = 1;
+	fd = heredoc_open_file(&filename);
+	if (fd < 0)
+	{
+		state->active = 0;
+		return (-1);
+	}
+	result = heredoc_fork_and_wait(fd, delimiter, filename, state);
+	free(filename);
+	state->active = 0;
+	return (result);
+}
+
+int	handle_heredoc_parent(pid_t pid, int fd, char *filename,
+		t_heredoc_state *state)
 {
 	int	status;
 	int	heredoc_fd;
@@ -76,42 +99,15 @@ int	handle_heredoc_parent(pid_t pid, int fd)
 	ft_signals();
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
-		unlink("heredoc.tmp");
+		unlink(filename);
 		write(1, "\n", 1);
 		last_signal_code(130);
+		cleanup_heredoc_tempfiles();
 		return (-1);
 	}
-	heredoc_fd = open("heredoc.tmp", O_RDONLY);
+	heredoc_fd = open(filename, O_RDONLY);
 	if (heredoc_fd < 0)
 		perror("heredoc: reopening for read");
+	state->last_fd = heredoc_fd;
 	return (heredoc_fd);
-}
-
-int	heredoc(char *delimiter)
-{
-	int		fd;
-	pid_t	pid;
-	int		result;
-
-	fd = open("heredoc.tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-	{
-		perror("heredoc: open");
-		return (-1);
-	}
-	pid = fork();
-	if (pid == 0)
-	{
-		process_heredoc_input(fd, delimiter);
-		exit(EXIT_SUCCESS);
-	}
-	else if (pid < 0)
-	{
-		perror("heredoc: fork");
-		close(fd);
-		free(delimiter);
-		return (-1);
-	}
-	result = handle_heredoc_parent(pid, fd);
-	return (result);
 }

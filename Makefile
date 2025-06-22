@@ -6,7 +6,7 @@
 #    By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 14:40:46 by jramos-a          #+#    #+#              #
-#    Updated: 2025/06/21 22:11:51 by jramos-a         ###   ########.fr        #
+#    Updated: 2025/06/22 13:39:15 by jramos-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SRC = $(SRC_DIR)main.c						\
 		$(SRC_DIR)clean_redirs.c			\
 		$(SRC_DIR)clean_redirs2.c			\
 		$(SRC_DIR)heredoc.c					\
+		$(SRC_DIR)heredoc_helper.c			\
 		$(SRC_DIR)heredoc_utils.c			\
 		$(SRC_DIR)parse_cmd.c				\
 		$(SRC_DIR)identifiers.c				\
