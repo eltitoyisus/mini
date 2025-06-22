@@ -6,7 +6,7 @@
 /*   By: jramos-a <jramos-a@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:39:59 by jramos-a          #+#    #+#             */
-/*   Updated: 2025/06/22 13:41:25 by jramos-a         ###   ########.fr       */
+/*   Updated: 2025/06/22 14:03:35 by jramos-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,21 @@ int	open_redir(t_reds *redir)
 
 void	process_heredoc_input(int fd, char *delimiter)
 {
-	char	*line;
+	char				*line;
+	t_heredoc_context	*ctx;
 
-	signal(SIGINT, SIG_DFL);
+	ctx = get_heredoc_context();
+	ctx->fd = fd;
+	signal(SIGINT, heredoc_sigint_handler);
 	while (1)
 	{
 		rl_clear_history();
 		line = readline("theredoc> ");
-		if (!line)
-		{
-			free(delimiter);
+		if (handle_heredoc_line(line, delimiter, fd))
 			break ;
-		}
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
-		{
-			free(line);
-			free(delimiter);
-			break ;
-		}
-		write_to_heredoc(fd, line);
-		free(line);
 	}
 	close(fd);
+	ctx->fd = -1;
 }
 
 int	heredoc(char *delimiter, t_heredoc_state *state)

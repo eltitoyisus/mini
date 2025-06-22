@@ -34,6 +34,24 @@ void	heredoc_cleanup_state(t_heredoc_state *state)
 	}
 }
 
+int	handle_heredoc_line(char *line, char *delimiter, int fd)
+{
+	if (!line)
+	{
+		free(delimiter);
+		return (1);
+	}
+	if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+	{
+		free(line);
+		free(delimiter);
+		return (1);
+	}
+	write_to_heredoc(fd, line);
+	free(line);
+	return (0);
+}
+
 int	heredoc_open_file(char **filename)
 {
 	int	fd;
