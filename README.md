@@ -1,5 +1,12 @@
 # minishell
 
+Sí quieres ejecutar la Minishell deberás poner estos comandos:
+
+    make
+Esto compilará todos los archivos necesarios para el funcionamiento del programa.
+
+    ./Minishell
+
 ## Visión General
 
 Minishell es un proyecto fundamental de la escuela, diseñado para replicar la funcionalidad básica de un shell UNIX como Bash. Este proyecto busca profundizar la comprensión del manejo de procesos, la gestión de descriptores de archivos, las señales y el análisis sintáctico (parsing) de la línea de comandos.
