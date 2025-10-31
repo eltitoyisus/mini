@@ -5,7 +5,7 @@ Sí quieres ejecutar la Minishell deberás poner estos comandos:
     make
 Esto compilará todos los archivos necesarios para el funcionamiento del programa.
 
-    ./Minishell
+    ./minishell
 
 ## Visión General
 
